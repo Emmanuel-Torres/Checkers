@@ -5,7 +5,7 @@ import authService from "../services/auth-service";
 export const authenticateUser = createAsyncThunk(
     'authenticateUser',
     async (token: string, thunkApi): Promise<User> => {
-        return await authService.authenticate(token);
+        return await authService.authenticateUser(token);
     }
 )
 
