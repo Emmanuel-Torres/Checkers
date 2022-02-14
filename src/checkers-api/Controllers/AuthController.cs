@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace checkers_api.Controllers;
 
 [ApiController]
-[Route("/api/[contoller]")]
+[Route("/api/[controller]")]
 [Authorize]
 public class AuthController : ControllerBase
 {
@@ -23,6 +23,8 @@ public class AuthController : ControllerBase
     [HttpGet("profile")]
     public async Task<ActionResult<User>> GetProfile([FromHeader] string authorization)
     {
+        authorization = authorization.Remove(0, 7);
+        Console.WriteLine($"Here {authorization}");
         try
         {
             return await authService.GetUserAsync(authorization);

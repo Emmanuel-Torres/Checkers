@@ -12,19 +12,19 @@ public class User
     [Required]
     public string Email { get; set; }
     [Required]
-    public string FirstName { get; set; }
+    public string GivenName { get; set; }
     [Required]
-    public string LastName { get; set; }
+    public string FamilyName { get; set; }
     [Required]
     public string Picture { get; set; }
 
     [JsonConstructor]
-    public User(string email, string firstName, string lastName, string picture, int? id = null)
+    public User(string email, string givenName, string familyName, string picture, int? id = null)
     {
         Id = id;
         Email = email;
-        FirstName = firstName;
-        LastName = lastName;
+        GivenName = givenName;
+        FamilyName = familyName;
         Picture = picture;
     }
 }
