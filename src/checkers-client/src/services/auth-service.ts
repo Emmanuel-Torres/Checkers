@@ -4,7 +4,7 @@ import User from "../models/user";
 const authUrl = '/api/auth'
 
 const authenticateUser = async (token: string): Promise<User> => {
-    const res = await axios.post<User>(authUrl, token);
+    const res = await axios.post<User>(authUrl + '/profile', token);
     return res.data;
 }
 

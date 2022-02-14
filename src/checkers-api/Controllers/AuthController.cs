@@ -1,3 +1,6 @@
+using checkers_api.Models;
+using checkers_api.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,18 +9,28 @@ namespace checkers_api.Controllers;
 [ApiController]
 [Route("/api/[contoller]")]
 [Authorize]
-public class RegistrationController : ControllerBase
+public class AuthController : ControllerBase
 {
-    private readonly ILogger<RegistrationController> _logger;
+    private readonly ILogger<AuthController> _logger;
+    private readonly IAuthService authService;
 
-    public RegistrationController(ILogger<RegistrationController> logger)
+    public AuthController(ILogger<AuthController> logger, IAuthService authService)
     {
         this._logger = logger;
+        this.authService = authService;
     }
 
-    [HttpGet("register")]
-    public Task<IActionResult> Register(string token)
+    [HttpGet("profile")]
+    public async Task<ActionResult<User>> GetProfile([FromHeader] string authorization)
     {
-        throw new NotImplementedException();
+        try
+        {
+            return await authService.GetUserAsync(authorization);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("Could not get user profile: {ex}", ex);
+            return NotFound();
+        }
     }
 }
