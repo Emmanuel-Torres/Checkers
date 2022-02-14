@@ -30,7 +30,7 @@ public class AuthController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError("Could not get user profile: {ex}", ex);
-            return NotFound();
+            return StatusCode(500);
         }
     }
 }

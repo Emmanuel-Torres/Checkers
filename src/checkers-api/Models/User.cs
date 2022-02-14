@@ -19,7 +19,7 @@ public class User
     public string Picture { get; set; }
 
     [JsonConstructor]
-    public User(string email, string firstName, string lastName, string picture, int? id)
+    public User(string email, string firstName, string lastName, string picture, int? id = null)
     {
         Id = id;
         Email = email;
