@@ -17,9 +17,19 @@ public class DbService : IDbService
 
     public async Task<User> AddUserAsync(User user)
     {
-        await dbContext.Users.AddAsync(user);
-        await dbContext.SaveChangesAsync();
-        return await dbContext.Users.FirstAsync(u => u.Id == user.Id);
+        try
+        {
+            logger.LogDebug("[{location}]: Adding user {email} to database", nameof(DbService), user.Email);
+            await dbContext.Users.AddAsync(user);
+            await dbContext.SaveChangesAsync();
+            logger.LogDebug("[{location}]: User {email} successfully added to the database", nameof(DbService), user.Email);
+            return await dbContext.Users.FirstAsync(u => u.Id == user.Id);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not add user {email} to database. Ex: {ex}", nameof(DbService), user.Email, ex);
+            throw;
+        }
     }
 
     public async Task<User?> GetUserByEmailAsync(string userEmail)
@@ -33,7 +43,7 @@ public class DbService : IDbService
         }
         catch (ArgumentNullException ex)
         {
-            logger.LogWarning("[{location}]: User profile does not exist for {email}. Ex: {ex}", nameof(DbService), userEmail, ex);
+            logger.LogWarning("[{location}]: User profile {email} does not exist. Ex: {ex}", nameof(DbService), userEmail, ex);
         }
         catch (Exception ex)
         {
@@ -44,22 +54,62 @@ public class DbService : IDbService
 
     public async Task<User?> GetUserByIdAsync(int userId)
     {
-        return await dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        try
+        {
+            logger.LogDebug("[{location}]: Retrieving user profile for id {id}", nameof(DbService), userId);
+            var user = await dbContext.Users.FirstAsync(u => u.Id == userId);
+            logger.LogDebug("[{location}]: User profile found for id {id}", nameof(DbService), userId);
+            return user;
+        }
+        catch (ArgumentNullException ex)
+        {
+            logger.LogWarning("[{location}]: User profile for id {id} does not exist. Ex: {ex}", nameof(DbService), userId, ex);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not retrieve user profile for id {id}. Ex: {ex}", nameof(DbService), userId, ex);
+        }
+        return null;
     }
 
-    public async Task<User> RemoveUserAsync(int userId)
+    public async Task<User> RemoveUserByIdAsync(int userId)
     {
-        User user = await dbContext.Users.FirstAsync(u => u.Id == userId);
-        dbContext.Users.Remove(user);
-        await dbContext.SaveChangesAsync();
-        return user;
+        try
+        {
+            logger.LogDebug("[{location}]: Removing user with id {id} from database", nameof(DbService), userId);
+            var user = await dbContext.Users.FirstAsync(u => u.Id == userId);
+            dbContext.Users.Remove(user);
+            await dbContext.SaveChangesAsync();
+            logger.LogInformation("[{location}]: User {id} was successfully removed from the database", nameof(DbService), userId);
+            return user;
+        }
+        catch (ArgumentNullException ex)
+        {
+            logger.LogWarning("[{location}]: Could not remove user with id {id} because it does not exist. Ex: {ex}", nameof(DbService), userId, ex);
+            throw;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not remove user with id {id}. Ex: {ex}", nameof(DbService), userId, ex);
+            throw;
+        }
     }
 
     public async Task<User> UpdateUserAsync(int userId, User user)
     {
-        user.Id = userId;
-        dbContext.Users.Update(user);
-        await dbContext.SaveChangesAsync();
-        return await dbContext.Users.FirstAsync(u => u.Id == userId);
+        try
+        {
+            logger.LogDebug("[{location}]: Updating user with id {id}.", nameof(DbService), userId);
+            user.Id = userId;
+            dbContext.Users.Update(user);
+            await dbContext.SaveChangesAsync();
+            logger.LogInformation("[{location}]: User {id} was successfully updated", nameof(DbService), userId);
+            return await dbContext.Users.FirstAsync(u => u.Id == userId);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not update user with id {id}. Ex: {ex}", nameof(DbService), userId, ex);
+            throw;
+        }
     }
 }
