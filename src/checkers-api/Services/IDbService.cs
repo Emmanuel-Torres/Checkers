@@ -2,7 +2,7 @@ using checkers_api.Models;
 
 namespace checkers_api.Services;
 
-public interface IDbServce
+public interface IDbService
 {
     Task<User?> GetUserByEmailAsync(string userEmail);
     Task<User?> GetUserByIdAsync(int userId);

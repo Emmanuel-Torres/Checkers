@@ -13,7 +13,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("ApplicationContext"))
 );
 
-builder.Services.AddTransient<IDbServce, DbService>();
+builder.Services.AddTransient<IDbService, DbService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

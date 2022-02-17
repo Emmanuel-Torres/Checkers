@@ -4,13 +4,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace checkers_api.Services;
 
-public class DbService : IDbServce
+public class DbService : IDbService
 {
     private readonly ApplicationDbContext dbContext;
+    private readonly ILogger<DbService> logger;
 
-    public DbService(ApplicationDbContext dbContext)
+    public DbService(ApplicationDbContext dbContext, ILogger<DbService> logger)
     {
         this.dbContext = dbContext;
+        this.logger = logger;
     }
 
     public async Task<User> AddUserAsync(User user)
@@ -22,7 +24,22 @@ public class DbService : IDbServce
 
     public async Task<User?> GetUserByEmailAsync(string userEmail)
     {
-        return await dbContext.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
+        try
+        {
+            logger.LogDebug("[{location}]: Retrieving user profile for {email}", nameof(DbService), userEmail);
+            var user = await dbContext.Users.FirstAsync(u => u.Email == userEmail);
+            logger.LogDebug("[{location}]: User profile found for {email}", nameof(DbService), userEmail);
+            return user;
+        }
+        catch (ArgumentNullException ex)
+        {
+            logger.LogWarning("[{location}]: User profile does not exist for {email}. Ex: {ex}", nameof(DbService), userEmail, ex);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not retrieve user profile for {email}. Ex: {ex}", nameof(DbService), userEmail, ex);
+        }
+        return null;
     }
 
     public async Task<User?> GetUserByIdAsync(int userId)

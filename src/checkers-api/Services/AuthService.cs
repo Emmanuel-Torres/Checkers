@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using checkers_api.Models;
 using Google.Apis.Auth;
 
@@ -5,12 +6,14 @@ namespace checkers_api.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly IDbServce dbServce;
+    private readonly IDbService dbService;
+    private readonly ILogger<AuthService> logger;
     private string clientId = "203576300472-3j2eeg1m35ahrg4ar8srm36ul8d504h5.apps.googleusercontent.com";
 
-    public AuthService(IDbServce dbServce)
+    public AuthService(IDbService dbService, ILogger<AuthService> logger)
     {
-        this.dbServce = dbServce;
+        this.dbService = dbService;
+        this.logger = logger;
     }
 
     public async Task<User> GetUserAsync(string token)
@@ -19,30 +22,49 @@ public class AuthService : IAuthService
         {
             Audience = new List<string>() { clientId }
         };
+
+        logger.LogDebug("[{location}]: Validating user token", nameof(AuthService));
         var payload = await GoogleJsonWebSignature.ValidateAsync(token, settings);
+        logger.LogInformation("[{location}]: Token was validated successfully", nameof(AuthService));
 
-        return await getUserOrDefaultAsync(payload);
+        var user = await dbService.GetUserByEmailAsync(payload.Email);
+        if (user is not null)
+        {
+            logger.LogDebug("[{location}]: Returning user profile for {email}", nameof(AuthService), payload.Email);
+            return user;
+        }
+
+        try
+        {
+            user = await registerUserAsync(payload);
+            logger.LogDebug("[{location}]: Returning new profile for {email}", nameof(AuthService), payload.Email);
+            return user;
+        }
+        catch
+        {
+            throw;
+        }
     }
-
-    public Task<User> RegisterUserAsync(string token)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<bool> ValidateTokenAsync(string token)
     {
         throw new NotImplementedException();
     }
 
-    private async Task<User> getUserOrDefaultAsync(GoogleJsonWebSignature.Payload payload)
+    private async Task<User> registerUserAsync(GoogleJsonWebSignature.Payload payload)
     {
-        User? user = await dbServce.GetUserByEmailAsync(payload.Email);
-        if (user is not null)
+        try
         {
+            logger.LogWarning("[{location}]: A user profile for {email} was not found", nameof(AuthService), payload.Email);
+            logger.LogDebug("[{location}]: Creating new user profile for {email}", nameof(AuthService), payload.Email);
+
+            var user = await dbService.AddUserAsync(new User(payload.Email, payload.GivenName, payload.FamilyName, payload.Picture));
+            logger.LogInformation("[{location}]: Profile successfully created for {email}", nameof(AuthService), payload.Email);
             return user;
         }
-
-        user = new User(payload.Email, payload.GivenName, payload.FamilyName, payload.Picture);
-        return await dbServce.AddUserAsync(user);
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not create user profile for {email}. Ex: {ex}", nameof(AuthService), payload.Email, ex);
+            throw;
+        }
     }
 }
