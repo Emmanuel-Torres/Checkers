@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace checkers_api.Controllers;
 
 [ApiController]
-[Route("/api/[controller")]
+[Route("/api/[controller]")]
 public class GameController : ControllerBase
 {
     private readonly ILogger<GameController> logger;
