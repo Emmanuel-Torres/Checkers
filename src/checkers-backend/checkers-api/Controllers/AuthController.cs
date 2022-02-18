@@ -19,8 +19,8 @@ public class AuthController : ControllerBase
         this.authService = authService;
     }
 
-    [HttpGet("validate")]
-    public async Task<ActionResult<User>> ValidateProfile([FromHeader] string authorization)
+    [HttpGet("profile")]
+    public async Task<ActionResult<User>> GetProfile([FromHeader] string authorization)
     {
         authorization = authorization.Remove(0, 7);
         try
