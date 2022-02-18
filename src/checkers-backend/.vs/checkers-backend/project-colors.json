@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "ae02ab4c-8ed9-40b2-8bec-ad3aaf8253eb": {
+      "ProjectGuid": "ae02ab4c-8ed9-40b2-8bec-ad3aaf8253eb",
+      "DisplayName": "checkers-shared",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
