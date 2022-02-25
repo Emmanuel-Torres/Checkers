@@ -14,16 +14,9 @@ public class GameController : ControllerBase
     }
 
     [HttpPost]
-    public Task<ActionResult> MatchMake()
+    public Task<ActionResult> MatchMake([FromHeader] string authorization)
     {
+        
         throw new NotImplementedException();
-        // try
-        // {
-
-        // }
-        // catch (Exception ex)
-        // {
-        //     logger.LogError("Could not matchmake player. Ex: {ex}", ex);
-        // }
     }
 }

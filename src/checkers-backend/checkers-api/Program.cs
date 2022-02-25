@@ -10,7 +10,7 @@ var clientId = "203576300472-3j2eeg1m35ahrg4ar8srm36ul8d504h5.apps.googleusercon
 // Add services to the container.
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
-    options.UseNpgsql(builder.Configuration.GetConnectionString("ApplicationContext"))
+    options.UseNpgsql(builder.Configuration["ApplicationContext"])
 );
 
 builder.Services.AddTransient<IDbService, DbService>();
