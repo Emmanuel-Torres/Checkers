@@ -26,6 +26,10 @@ const authSlice = createSlice({
     setToken(state, action: PayloadAction<string>) {
       state.userToken = action.payload;
     },
+    logout(state) {
+      state.userToken = undefined;
+      state.userProfile = undefined;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(
@@ -37,5 +41,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setToken } = authSlice.actions;
+export const { setToken, logout } = authSlice.actions;
 export default authSlice;
