@@ -2,14 +2,15 @@ import { FC } from "react";
 import GoogleLogin, { GoogleLoginResponse } from "react-google-login";
 import { useDispatch } from "react-redux"
 import { StoreDispatch } from "../../store"
-import { authenticateUser } from "../../store/auth-slice";
+import { authenticateUser, setToken } from "../../store/auth-slice";
 
 const Login: FC = (): JSX.Element => {
     const dispatch = useDispatch<StoreDispatch>();
     const clientId: string = process.env.REACT_APP_CLIENT_ID ?? "203576300472-qleefq8rh358lkekh6c1vhq3222jp8nh.apps.googleusercontent.com";
 
     const onSuccess = (res: any) => {
-        dispatch(authenticateUser(res.tokenId))
+        dispatch(setToken(res.tokenId));
+        dispatch(authenticateUser(res.tokenId));
     }
 
     const onFailure = (res: GoogleLoginResponse) => {

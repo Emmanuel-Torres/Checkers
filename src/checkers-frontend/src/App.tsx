@@ -1,16 +1,15 @@
-import Login from "./components/auth/Login";
-import Logout from "./components/auth/Logout";
+import { Route, Routes } from "react-router-dom";
+import Navbar from "./components/ui/Navbar";
 import { useStoreSelector } from "./store";
+import Home from "./views/Home";
 
 function App() {
-  const token = useStoreSelector(store => store.auth.userToken);
-
   return (
     <div className="App">
-      <Login />
-      <Logout />
-      <h2>{token}</h2>
-      <h2>Hello there how are</h2>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
     </div>
   );
 }
