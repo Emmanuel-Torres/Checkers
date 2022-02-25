@@ -1,4 +1,4 @@
-FROM node:14.17-alpine AS client_build
+FROM node:17-alpine AS client_build
 WORKDIR /usr/src/app
 COPY package.json .
 COPY package-lock.json .

@@ -9,7 +9,8 @@ function App() {
     <div className="App">
       <Login />
       <Logout />
-      {/* <h2>{token}</h2> */}
+      <h2>{token}</h2>
+      <h2>Hello there how are</h2>
     </div>
   );
 }

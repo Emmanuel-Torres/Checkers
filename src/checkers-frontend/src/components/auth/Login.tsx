@@ -6,7 +6,7 @@ import { authenticateUser } from "../../store/auth-slice";
 
 const Login: FC = (): JSX.Element => {
     const dispatch = useDispatch<StoreDispatch>();
-    const clientId: string = process.env.REACT_APP_CLIENT_ID ?? "203576300472-3j2eeg1m35ahrg4ar8srm36ul8d504h5.apps.googleusercontent.com";
+    const clientId: string = process.env.REACT_APP_CLIENT_ID ?? "203576300472-qleefq8rh358lkekh6c1vhq3222jp8nh.apps.googleusercontent.com";
 
     const onSuccess = (res: any) => {
         dispatch(authenticateUser(res.tokenId))

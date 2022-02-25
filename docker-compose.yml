@@ -18,6 +18,8 @@ services:
     build:
       context: ./src/checkers-backend/checkers-api
       dockerfile: ../../../ops/deployment/backend.Dockerfile
+    environment:
+      - ApplicationContext=Host=dev_db;Database=postgres;Username=postgres;Password=password
     depends_on:
       - db
 

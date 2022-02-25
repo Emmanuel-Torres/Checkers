@@ -16,7 +16,10 @@ public class GameController : ControllerBase
     [HttpPost]
     public Task<ActionResult> MatchMake([FromHeader] string authorization)
     {
-        
+        if (!string.IsNullOrEmpty(authorization))
+        {
+            authorization = authorization.Remove(0, 7);
+        }
         throw new NotImplementedException();
     }
 }

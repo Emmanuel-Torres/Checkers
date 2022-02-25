@@ -8,7 +8,7 @@ public class AuthService : IAuthService
 {
     private readonly IDbService dbService;
     private readonly ILogger<AuthService> logger;
-    private string clientId = "203576300472-3j2eeg1m35ahrg4ar8srm36ul8d504h5.apps.googleusercontent.com";
+    private string clientId = "203576300472-qleefq8rh358lkekh6c1vhq3222jp8nh.apps.googleusercontent.com";
 
     public AuthService(IDbService dbService, ILogger<AuthService> logger)
     {
