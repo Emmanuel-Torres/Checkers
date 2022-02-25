@@ -22,7 +22,7 @@ namespace checkers_api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("checkers_api.Models.User", b =>
+            modelBuilder.Entity("checkers_api.Models.UserProfile", b =>
                 {
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace checkers_api.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("UserProfiles");
                 });
 #pragma warning restore 612, 618
         }

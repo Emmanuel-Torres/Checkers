@@ -14,11 +14,12 @@ public class GameController : ControllerBase
     }
 
     [HttpPost]
-    public Task<ActionResult> MatchMake([FromHeader] string authorization)
+    public Task<ActionResult> MatchMake([FromHeader] string? authorization)
     {
+        authorization = authorization?.Remove(0, 7);
         if (!string.IsNullOrEmpty(authorization))
         {
-            authorization = authorization.Remove(0, 7);
+            
         }
         throw new NotImplementedException();
     }

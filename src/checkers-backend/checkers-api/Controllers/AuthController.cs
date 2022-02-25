@@ -20,7 +20,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpGet("profile")]
-    public async Task<ActionResult<User>> GetProfile([FromHeader] string authorization)
+    public async Task<ActionResult<UserProfile>> GetProfile([FromHeader] string authorization)
     {
         authorization = authorization.Remove(0, 7);
         try

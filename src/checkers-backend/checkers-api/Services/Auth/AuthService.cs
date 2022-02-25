@@ -16,32 +16,33 @@ public class AuthService : IAuthService
         this.logger = logger;
     }
 
-    public async Task<User> GetUserAsync(string token)
+    public async Task<UserProfile> GetUserAsync(string token)
     {
-        var settings = new GoogleJsonWebSignature.ValidationSettings()
-        {
-            Audience = new List<string>() { clientId }
-        };
-
-        logger.LogDebug("[{location}]: Validating user token", nameof(AuthService));
-        var payload = await GoogleJsonWebSignature.ValidateAsync(token, settings);
-        logger.LogInformation("[{location}]: Token was validated successfully", nameof(AuthService));
-
-        var user = await dbService.GetUserByEmailAsync(payload.Email);
-        if (user is not null)
-        {
-            logger.LogDebug("[{location}]: Returning user profile for {email}", nameof(AuthService), payload.Email);
-            return user;
-        }
-
         try
         {
+            var settings = new GoogleJsonWebSignature.ValidationSettings()
+            {
+                Audience = new List<string>() { clientId }
+            };
+
+            logger.LogDebug("[{location}]: Validating user token", nameof(AuthService));
+            var payload = await GoogleJsonWebSignature.ValidateAsync(token, settings);
+            logger.LogInformation("[{location}]: Token was validated successfully", nameof(AuthService));
+
+            var user = await dbService.GetUserByEmailAsync(payload.Email);
+            if (user is not null)
+            {
+                logger.LogDebug("[{location}]: Returning user profile for {email}", nameof(AuthService), payload.Email);
+                return user;
+            }
+
             user = await registerUserAsync(payload);
             logger.LogDebug("[{location}]: Returning new profile for {email}", nameof(AuthService), payload.Email);
             return user;
         }
-        catch
+        catch (Exception ex)
         {
+            logger.LogError("[{location}]: Could not get user. Ex: {ex}", nameof(AuthService), ex);
             throw;
         }
     }
@@ -50,14 +51,14 @@ public class AuthService : IAuthService
         throw new NotImplementedException();
     }
 
-    private async Task<User> registerUserAsync(GoogleJsonWebSignature.Payload payload)
+    private async Task<UserProfile> registerUserAsync(GoogleJsonWebSignature.Payload payload)
     {
         try
         {
             logger.LogWarning("[{location}]: A user profile for {email} was not found", nameof(AuthService), payload.Email);
             logger.LogDebug("[{location}]: Creating new user profile for {email}", nameof(AuthService), payload.Email);
 
-            var user = await dbService.AddUserAsync(new User(payload.Email, payload.GivenName, payload.FamilyName, payload.Picture));
+            var user = await dbService.AddUserAsync(new UserProfile(payload.Email, payload.GivenName, payload.FamilyName, payload.Picture));
             logger.LogInformation("[{location}]: Profile successfully created for {email}", nameof(AuthService), payload.Email);
             return user;
         }

@@ -12,8 +12,8 @@ using checkers_api.Data;
 namespace checkers_api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220214213406_intial")]
-    partial class intial
+    [Migration("20220225083800_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,7 @@ namespace checkers_api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("checkers_api.Models.User", b =>
+            modelBuilder.Entity("checkers_api.Models.UserProfile", b =>
                 {
                     b.Property<int?>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,7 +53,7 @@ namespace checkers_api.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("UserProfiles");
                 });
 #pragma warning restore 612, 618
         }

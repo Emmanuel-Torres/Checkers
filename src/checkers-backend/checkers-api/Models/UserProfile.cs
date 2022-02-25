@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace checkers_api.Models;
 
 [Index(nameof(Email), IsUnique = true)]
-public class User
+public class UserProfile
 {
     [Key]
     public int? Id { get; set; }
@@ -19,7 +19,7 @@ public class User
     public string Picture { get; set; }
 
     [JsonConstructor]
-    public User(string email, string givenName, string familyName, string picture, int? id = null)
+    public UserProfile(string email, string givenName, string familyName, string picture, int? id = null)
     {
         Id = id;
         Email = email;

@@ -15,15 +15,15 @@ public class DbService : IDbService
         this.logger = logger;
     }
 
-    public async Task<User> AddUserAsync(User user)
+    public async Task<UserProfile> AddUserAsync(UserProfile user)
     {
         try
         {
             logger.LogDebug("[{location}]: Adding user {email} to database", nameof(DbService), user.Email);
-            await dbContext.Users.AddAsync(user);
+            await dbContext.UserProfiles.AddAsync(user);
             await dbContext.SaveChangesAsync();
             logger.LogDebug("[{location}]: User {email} successfully added to the database", nameof(DbService), user.Email);
-            return await dbContext.Users.FirstAsync(u => u.Id == user.Id);
+            return await dbContext.UserProfiles.FirstAsync(u => u.Id == user.Id);
         }
         catch (Exception ex)
         {
@@ -32,12 +32,12 @@ public class DbService : IDbService
         }
     }
 
-    public async Task<User?> GetUserByEmailAsync(string userEmail)
+    public async Task<UserProfile?> GetUserByEmailAsync(string userEmail)
     {
         try
         {
             logger.LogDebug("[{location}]: Retrieving user profile for {email}", nameof(DbService), userEmail);
-            var user = await dbContext.Users.FirstAsync(u => u.Email == userEmail);
+            var user = await dbContext.UserProfiles.FirstAsync(u => u.Email == userEmail);
             logger.LogDebug("[{location}]: User profile found for {email}", nameof(DbService), userEmail);
             return user;
         }
@@ -52,12 +52,12 @@ public class DbService : IDbService
         return null;
     }
 
-    public async Task<User?> GetUserByIdAsync(int userId)
+    public async Task<UserProfile?> GetUserByIdAsync(int userId)
     {
         try
         {
             logger.LogDebug("[{location}]: Retrieving user profile for id {id}", nameof(DbService), userId);
-            var user = await dbContext.Users.FirstAsync(u => u.Id == userId);
+            var user = await dbContext.UserProfiles.FirstAsync(u => u.Id == userId);
             logger.LogDebug("[{location}]: User profile found for id {id}", nameof(DbService), userId);
             return user;
         }
@@ -72,13 +72,13 @@ public class DbService : IDbService
         return null;
     }
 
-    public async Task<User> RemoveUserByIdAsync(int userId)
+    public async Task<UserProfile> RemoveUserByIdAsync(int userId)
     {
         try
         {
             logger.LogDebug("[{location}]: Removing user with id {id} from database", nameof(DbService), userId);
-            var user = await dbContext.Users.FirstAsync(u => u.Id == userId);
-            dbContext.Users.Remove(user);
+            var user = await dbContext.UserProfiles.FirstAsync(u => u.Id == userId);
+            dbContext.UserProfiles.Remove(user);
             await dbContext.SaveChangesAsync();
             logger.LogInformation("[{location}]: User {id} was successfully removed from the database", nameof(DbService), userId);
             return user;
@@ -95,16 +95,16 @@ public class DbService : IDbService
         }
     }
 
-    public async Task<User> UpdateUserAsync(int userId, User user)
+    public async Task<UserProfile> UpdateUserAsync(int userId, UserProfile user)
     {
         try
         {
             logger.LogDebug("[{location}]: Updating user with id {id}.", nameof(DbService), userId);
             user.Id = userId;
-            dbContext.Users.Update(user);
+            dbContext.UserProfiles.Update(user);
             await dbContext.SaveChangesAsync();
             logger.LogInformation("[{location}]: User {id} was successfully updated", nameof(DbService), userId);
-            return await dbContext.Users.FirstAsync(u => u.Id == userId);
+            return await dbContext.UserProfiles.FirstAsync(u => u.Id == userId);
         }
         catch (Exception ex)
         {
