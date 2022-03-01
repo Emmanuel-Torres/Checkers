@@ -19,7 +19,7 @@ services:
     container_name: dev_api
     build:
       context: ../../src/checkers-api
-      dockerfile: ../../../ops/development/dev-api.Dockerfile
+      dockerfile: ../../ops/development/dev-api.Dockerfile
     environment:
       - ApplicationContext=Host=dev_db;Database=postgres;Username=postgres;Password=password
     depends_on:
