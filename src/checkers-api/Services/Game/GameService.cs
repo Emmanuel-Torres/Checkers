@@ -1,6 +1,5 @@
 using System.Collections.Concurrent;
-using checkers_game;
-
+using checkers_api.Models;
 namespace checkers_api.Services;
 
 public class GameService : IGameService

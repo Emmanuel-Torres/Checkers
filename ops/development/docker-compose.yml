@@ -4,22 +4,22 @@ services:
   dev_client:
     container_name: dev_client
     build:
-      dockerfile: ../../ops/development/dev-frontend.Dockerfile
-      context: ../../src/checkers-frontend
+      dockerfile: ../../ops/development/dev-client.Dockerfile
+      context: ../../src/checkers-client
     ports:
       - 80:3000
     environment:
       CHOKIDAR_USEPOLLING: "true"
     volumes:
-      - ../../src/checkers-frontend:/var/app/frontend
+      - ../../src/checkers-client:/var/app/client
     depends_on:
       - dev_api
   
   dev_api:
     container_name: dev_api
     build:
-      context: ../../src/checkers-backend/checkers-api
-      dockerfile: ../../../ops/development/dev-backend.Dockerfile
+      context: ../../src/checkers-api
+      dockerfile: ../../../ops/development/dev-api.Dockerfile
     environment:
       - ApplicationContext=Host=dev_db;Database=postgres;Username=postgres;Password=password
     depends_on:
