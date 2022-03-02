@@ -1,41 +1,46 @@
 using System.Collections.Concurrent;
-using checkers_api.Models;
+using checkers_api.GameModels;
 namespace checkers_api.Services;
 
 public class GameService : IGameService
 {
+    private readonly ConcurrentDictionary<string, PlayerStatus> activePlayers;
     private readonly ConcurrentQueue<Player> matchMakingQueue;
     private readonly ILogger<GameService> logger;
-    private readonly IAuthService authService;
 
-    public GameService(ILogger<GameService> logger, IAuthService authService)
+    public GameService(ILogger<GameService> logger)
     {
+        activePlayers = new ConcurrentDictionary<string, PlayerStatus>();
         matchMakingQueue = new ConcurrentQueue<Player>();
         this.logger = logger;
-        this.authService = authService;
     }
-    public async Task<Player> MatchMakeAsync(string? token)
+
+    public Player MatchMakeAsync(Player player)
     {
-        logger.LogInformation("[{location}]: Trying to matchmake new player", nameof(GameService));
-        var player = new Player(Guid.NewGuid().ToString(), "Anonymous");
+        logger.LogDebug("[{location}]: Trying to matchmake player {playerId}", nameof(GameService), player.PlayerId);
 
-        if (token is not null)
-        {
-            try
-            {
-                logger.LogDebug("[{location}]: Retrieving user profile for matchmaking.", nameof(GameService));
-                var profile = await authService.GetUserAsync(token);
-                player.Name = profile.GivenName;
-                logger.LogDebug("[{location}]: User profile successfully retrieved.", nameof(GameService));
-            }
-            catch (Exception ex)
-            {
-                logger.LogError("[{location}]: Could not retreive user profile for matchmaking. Ex: {ex}", nameof(GameService), ex);
-                throw;
-            }
-        }
-
+        // if (activePlayers.ContainsKey(player.PlayerId))
+        // {
+        //     activePlayers.
+        //     throw new Exception($"Player is already active with status {}");
+        // }
         matchMakingQueue.Enqueue(player);
+        logger.LogDebug("[{location}]: Player {playerId} was added to the queue", nameof(GameService), player.PlayerId);
         return player;
+    }
+
+    public Game GetGameByGameId(string gameId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Game GetGameByPlayerId(string playerId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public int MakeMove(string playerId, MoveRequest moveRequest)
+    {
+        throw new NotImplementedException();
     }
 }

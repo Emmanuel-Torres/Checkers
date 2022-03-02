@@ -1,3 +1,4 @@
+using checkers_api.GameModels;
 using checkers_api.Services;
 using Microsoft.AspNetCore.SignalR;
 
@@ -27,5 +28,10 @@ public class CheckersHub : Hub<ICheckersHub>
     public async Task MatchMakeAsync(string token)
     {
         await gameService.MatchMakeAsync(token);
+    }
+
+    public Task MakeMoveAsync(MoveRequest moveRequest)
+    {
+        throw new NotImplementedException();
     }
 }

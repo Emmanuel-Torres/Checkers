@@ -1,4 +1,4 @@
-﻿namespace checkers_api.Models;
+﻿namespace checkers_api.GameModels;
 public class Player
 {
     public string PlayerId { get; set; }
