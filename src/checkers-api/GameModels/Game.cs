@@ -2,7 +2,7 @@ namespace checkers_api.GameModels;
 
 public class Game : IGame
 {
-    public void AddPlayer(Player player)
+    public bool MakeMove(string playerId, MoveRequest moveRequest)
     {
         throw new NotImplementedException();
     }
