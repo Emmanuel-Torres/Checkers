@@ -25,9 +25,9 @@ public class CheckersHub : Hub<ICheckersHub>
         await base.OnDisconnectedAsync(exception);
     }
 
-    public async Task MatchMakeAsync(string token)
+    public Task MatchMakeAsync(string token)
     {
-        await gameService.MatchMakeAsync(token);
+        throw new NotImplementedException();
     }
 
     public Task MakeMoveAsync(MoveRequest moveRequest)
