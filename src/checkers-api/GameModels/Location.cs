@@ -2,12 +2,12 @@ namespace checkers_api.GameModels;
 
 public class Location
 {
-    public int Column { get; set; }
     public int Row { get; set; }
+    public int Column { get; set; }
 
-    public Location(int column, int row)
+    public Location(int row, int column)
     {
-        Column = column;
         Row = row;
+        Column = column;
     }
 }

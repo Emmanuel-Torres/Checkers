@@ -2,12 +2,13 @@ namespace checkers_api.GameModels;
 
 public class Game : IGame
 {
-    private readonly Player player1;
-    private readonly Player player2;
+    private readonly Player player1; //black pieces
+    private readonly Player player2; //white pieces
 
     public string GameId { get => throw new NotImplementedException(); }
 
     public IEnumerable<Player> Players => new List<Player>() { player1, player2 };
+    public Board gameBoard { get; set; }
 
     public Game(Player player1, Player player2)
     {
@@ -23,6 +24,18 @@ public class Game : IGame
     public IEnumerable<Location> GetValidMoves(string playerId, Location source)
     {
         throw new NotImplementedException();
+
+        var piece = gameBoard.GetPiece(source.Column, source.Row);
+        if (piece == null) throw new Exception("There is no piece in this location.");
+        if (piece.isBlack && playerId == player1.PlayerId)
+        {
+
+        }
+        if (!piece.isBlack && playerId == player2.PlayerId)
+        {
+
+        }
+        else throw new Exception("Player id is not valid");
     }
 
     public bool IsGameOver()
@@ -34,4 +47,5 @@ public class Game : IGame
     {
         throw new NotImplementedException();
     }
+
 }
