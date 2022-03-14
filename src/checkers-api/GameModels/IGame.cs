@@ -2,8 +2,7 @@ namespace checkers_api.GameModels;
 
 public interface IGame
 {
-    IEnumerable<Player> Players { get; }
-    string GameId { get; }
+    string GameId { get; set; }
     void MakeMove(string playerId, MoveRequest moveRequest);
     bool IsGameOver();
     IEnumerable<Location> GetValidMoves(string playerId, Location source);

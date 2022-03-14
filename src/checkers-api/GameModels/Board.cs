@@ -19,27 +19,48 @@ public class Board : IBoard
             {new Piece(true),null,new Piece(true),null,new Piece(true),null,new Piece(true),null}
         };
     }
-    public Piece? GetPiece(int row, int column)
+    public int GetNumberOfPiecesByColor(bool colorIsBlack)
     {
-        if (IsLocationValid(new Location(row, column)))
+        var count = 0;
+        foreach (Piece? piece in board)
         {
-            return board[row, column];
+            if (piece != null && piece.isBlack == colorIsBlack)
+            {
+                count++;
+            }
         }
-        throw new Exception("Location is invalid.");
+        return count;
+    }
+
+    public Piece?[,] GetBoard()
+    {
+        return board;
+    }
+    public Piece? GetPiece(Location location)
+    {
+        try
+        {
+            TryLocation(location);
+            return board[location.Row, location.Column];
+        }
+        catch
+        {
+            throw;
+        }
     }
     public void MakeMove(MoveRequest moveRequest)
     {
         var validMoves = GetValidMoves(moveRequest.Source);
         if (validMoves.Contains(moveRequest.Destination))
         {
-            var sourcePiece = GetPiece(moveRequest.Source.Row, moveRequest.Source.Column);
+            var sourcePiece = GetPiece(moveRequest.Source);
             int rowDifferential = moveRequest.Destination.Row - moveRequest.Source.Row;
             int columnDifferential = moveRequest.Destination.Column - moveRequest.Source.Column;
             if (sourcePiece == null)
             {
                 throw new Exception("There is no piece on your original location.");
             }
-            if (columnDifferential > 1)
+            if (columnDifferential > 1 && rowDifferential > 1)
             {
                 board[moveRequest.Destination.Row - 1, moveRequest.Destination.Column - 1] = null;
             }
@@ -54,47 +75,51 @@ public class Board : IBoard
         {
             throw new Exception("Move is invalid.");
         }
-        throw new NotImplementedException();
     }
     public IEnumerable<Location> GetValidMoves(Location originLocation)
     {
-        List<Location> validMoves = new List<Location>();
-        if (IsLocationValid(originLocation))
+        try
         {
+            List<Location> validMoves = new List<Location>();
+            TryLocation(originLocation);
             var piece = board[originLocation.Column, originLocation.Row];
             if (piece == null)
             {
-                throw new Exception("Location does not have a piece.");
+                throw new Exception("Location does not contain a piece.");
             }
             if (piece.isKing)
             {
-                for (int rowDifferential = -1; rowDifferential <= 1; rowDifferential += 2)
-                {
-                    validMoves.AddRange(GetValidHorizontallyAdjacentLocationsToRow(piece, originLocation, rowDifferential));
-                }
+                //move up and down
+                validMoves.AddRange(GetValidHorizontalLocatonsInDirection(piece, originLocation, -1));
+                validMoves.AddRange(GetValidHorizontalLocatonsInDirection(piece, originLocation, 1));
             }
             else if (piece.isBlack)
             {
-                int rowDifferential = -1;
-                validMoves.AddRange(GetValidHorizontallyAdjacentLocationsToRow(piece, originLocation, rowDifferential));
+                //move up
+                validMoves.AddRange(GetValidHorizontalLocatonsInDirection(piece, originLocation, -1));
             }
             else if (!piece.isBlack)
             {
-                int rowDifferential = 1;
-                validMoves.AddRange(GetValidHorizontallyAdjacentLocationsToRow(piece, originLocation, rowDifferential));
+                //move down
+                validMoves.AddRange(GetValidHorizontalLocatonsInDirection(piece, originLocation, 1));
             }
+            return validMoves;
         }
-        return validMoves;
+        catch
+        {
+            throw;
+        }
     }
-    private IEnumerable<Location> GetValidHorizontallyAdjacentLocationsToRow(Piece piece, Location location, int rowDifferential)
+    private IEnumerable<Location> GetValidHorizontalLocatonsInDirection(Piece piece, Location location, int rowDirection)
     {
         var validDiagonalLocations = new List<Location>();
-        for (int columnDifferential = -1; columnDifferential <= 1; columnDifferential += 2)
+        try
         {
-            var diagonalLocation = new Location(location.Row + rowDifferential, location.Column + columnDifferential);
-            if (IsLocationValid(diagonalLocation))
+            for (int columnDifferential = -1; columnDifferential <= 1; columnDifferential += 2)
             {
-                var adjacentPiece = GetPiece(diagonalLocation.Row, diagonalLocation.Column);
+                var diagonalLocation = new Location(location.Row + rowDirection, location.Column + columnDifferential);
+                TryLocation(diagonalLocation);
+                var adjacentPiece = GetPiece(diagonalLocation);
                 //can move in that direction.
                 if (adjacentPiece == null)
                 {
@@ -108,22 +133,22 @@ public class Board : IBoard
                 //check if jump is possible and append it.
                 else if (adjacentPiece.isBlack != piece.isBlack)
                 {
-                    var jumpLocation = new Location(location.Row + 2 * rowDifferential, location.Column + 2 * columnDifferential;
-                    if (IsLocationValid(jumpLocation))
-                    {
-                        validDiagonalLocations.Append(jumpLocation);
-                    }
+                    var jumpLocation = new Location(location.Row + 2 * rowDirection, location.Column + 2 * columnDifferential);
+                    TryLocation(jumpLocation);
+                    validDiagonalLocations.Append(jumpLocation);
                 }
-
             }
+            return validDiagonalLocations;
         }
-        return validDiagonalLocations;
+        catch
+        {
+            throw;
+        }
     }
-    private bool IsLocationValid(Location location)
+    private void TryLocation(Location location)
     {
         if (location.Row > board.GetLength(0) - 1 || location.Column > board.GetLength(1) - 1 || location.Row < 0 || location.Column < 0)
-            return false;
-        return true;
+            throw new Exception("Location is invalid");
     }
 }
 
