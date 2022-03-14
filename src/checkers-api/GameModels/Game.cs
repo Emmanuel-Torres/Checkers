@@ -23,19 +23,15 @@ public class Game : IGame
 
     public IEnumerable<Location> GetValidMoves(string playerId, Location source)
     {
-        throw new NotImplementedException();
 
         var piece = gameBoard.GetPiece(source.Column, source.Row);
         if (piece == null) throw new Exception("There is no piece in this location.");
-        if (piece.isBlack && playerId == player1.PlayerId)
+        if ((piece.isBlack && playerId == player1.PlayerId) || (!piece.isBlack && playerId == player2.PlayerId))
         {
-
+            return gameBoard.GetValidMoves(source);
         }
-        if (!piece.isBlack && playerId == player2.PlayerId)
-        {
-
-        }
-        else throw new Exception("Player id is not valid");
+        else throw new Exception("Player doesnt own this piece.");
+        throw new NotImplementedException();
     }
 
     public bool IsGameOver()
