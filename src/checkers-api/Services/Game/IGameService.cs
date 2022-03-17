@@ -5,6 +5,6 @@ public interface IGameService
 {
     string? MatchMakeAsync(Player player);
     int MakeMove(string playerId, MoveRequest moveRequest);
-    IGame GetGameByGameId(string gameId);
-    IGame GetGameByPlayerId(string playerId);
+    IGame? GetGameByGameId(string gameId);
+    IGame? GetGameByPlayerId(string playerId);
 }

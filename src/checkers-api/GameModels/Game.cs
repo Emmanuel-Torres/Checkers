@@ -9,9 +9,9 @@ public class Game : IGame
     private Board gameBoard;
     private GameState gameState;
 
-    public Game(string GameId, Player player1, Player player2)
+    public Game(Player player1, Player player2)
     {
-        this.GameId = GameId;
+        this.GameId = Guid.NewGuid().ToString();
         this.player1 = player1;
         this.player2 = player2;
         turnOwner = player1;

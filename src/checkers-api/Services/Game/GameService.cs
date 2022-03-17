@@ -36,18 +36,44 @@ public class GameService : IGameService
         matchMakingQueue.Enqueue(player);
         logger.LogDebug("[{location}]: Player {playerId} was added to the queue", nameof(GameService), player.PlayerId);
 
-        var gameId = tryStartGame();
+        string? gameId = tryStartGame();
         return gameId;
     }
 
-    public IGame GetGameByGameId(string gameId)
+    public IGame? GetGameByGameId(string gameId)
     {
-        throw new NotImplementedException();
+        try
+        {
+            activeGames.TryGetValue(gameId, out var game);
+            return game;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not get game with id {gameId}. Ex: {ex}", nameof(GameService), gameId, ex);
+            throw;
+        }
     }
 
-    public IGame GetGameByPlayerId(string playerId)
+    public IGame? GetGameByPlayerId(string playerId)
     {
-        throw new NotImplementedException();
+        try
+        {
+            if (playerGame.TryGetValue(playerId, out var gameId))
+            {
+                activeGames.TryGetValue(gameId, out var game);
+                return game;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not get game for player {playerId}. Ex: {ex}", nameof(GameService), playerId, ex);
+            throw;
+        }
+
     }
 
     public int MakeMove(string playerId, MoveRequest moveRequest)
@@ -57,25 +83,43 @@ public class GameService : IGameService
 
     private string? tryStartGame()
     {
-        // try
-        // {
-        //     if (matchMakingQueue.Count > 1 && matchMakingQueue.TryDequeue(out var p1) && matchMakingQueue.TryDequeue(out var p2))
-        //     {
-        //         IGame game = new Game(p1, p2);
-        //         activeGames.TryAdd(game.GameId, game);
-        //         playerGame.TryAdd(p1.PlayerId, game.GameId);
-        //         playerGame.TryAdd(p2.PlayerId, game.GameId);
-        //         activePlayers.TryUpdate(p1.PlayerId, updateValueFac);
+        try
+        {
+            Player? p1 = null;
+            Player? p2 = null;
+            if (matchMakingQueue.Count > 1 && matchMakingQueue.TryDequeue(out p1) && matchMakingQueue.TryDequeue(out p2))
+            {
+                IGame game = new Game(p1, p2);
 
-        //         return game.GameId;
-        //     }
-        //     return null;
-        // }
-        // catch (Exception ex)
-        // {
-        //     throw;
-        // }
+                activeGames.TryAdd(game.GameId, game);
+                playerGame.TryAdd(p1.PlayerId, game.GameId);
+                playerGame.TryAdd(p2.PlayerId, game.GameId);
 
-        throw new NotImplementedException();
+                activePlayers.Remove(p1.PlayerId, out var _);
+                activePlayers.Remove(p2.PlayerId, out var _);
+
+                activePlayers.TryAdd(p1.PlayerId, PlayerStatus.MatchMade);
+                activePlayers.TryAdd(p2.PlayerId, PlayerStatus.MatchMade);
+
+                return game.GameId;
+            }
+            else
+            {
+                if (p1 is not null)
+                {
+                    matchMakingQueue.Enqueue(p1);
+                }
+                if (p2 is not null)
+                {
+                    matchMakingQueue.Enqueue(p2);
+                }
+                return null;
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not start game. Ex: {ex}", nameof(GameService), ex);
+            throw;
+        }
     }
 }
