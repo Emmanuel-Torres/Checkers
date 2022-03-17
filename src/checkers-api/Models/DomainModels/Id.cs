@@ -1,6 +1,4 @@
-using System.Text.RegularExpressions;
-
-namespace checkers_api.DomainModels;
+namespace checkers_api.Models.DomainModels;
 
 public class Id : IEquatable<Id>
 {

@@ -1,25 +1,26 @@
 using System.Collections.Concurrent;
+using checkers_api.DomainModels;
 using checkers_api.GameModels;
 namespace checkers_api.Services;
 
 public class GameService : IGameService
 {
-    private readonly ConcurrentDictionary<string, PlayerStatus> activePlayers;
-    private readonly ConcurrentDictionary<string, string> playerGame;
-    private readonly ConcurrentDictionary<string, IGame> activeGames;
+    private readonly ConcurrentDictionary<Id, PlayerStatus> activePlayers;
+    private readonly ConcurrentDictionary<Id, Id> playerGame;
+    private readonly ConcurrentDictionary<Id, IGame> activeGames;
     private readonly ConcurrentQueue<Player> matchMakingQueue;
     private readonly ILogger<GameService> logger;
 
     public GameService(ILogger<GameService> logger)
     {
-        activePlayers = new ConcurrentDictionary<string, PlayerStatus>();
-        playerGame = new ConcurrentDictionary<string, string>();
-        activeGames = new ConcurrentDictionary<string, IGame>();
+        activePlayers = new ConcurrentDictionary<Id, PlayerStatus>();
+        playerGame = new ConcurrentDictionary<Id, Id>();
+        activeGames = new ConcurrentDictionary<Id, IGame>();
         matchMakingQueue = new ConcurrentQueue<Player>();
         this.logger = logger;
     }
 
-    public string? MatchMakeAsync(Player player)
+    public Id? MatchMakeAsync(Player player)
     {
         if (player is null)
         {
@@ -36,11 +37,10 @@ public class GameService : IGameService
         matchMakingQueue.Enqueue(player);
         logger.LogDebug("[{location}]: Player {playerId} was added to the queue", nameof(GameService), player.PlayerId);
 
-        string? gameId = tryStartGame();
-        return gameId;
+        return tryStartGame();
     }
 
-    public IGame? GetGameByGameId(string gameId)
+    public IGame? GetGameByGameId(Id gameId)
     {
         try
         {
@@ -54,7 +54,7 @@ public class GameService : IGameService
         }
     }
 
-    public IGame? GetGameByPlayerId(string playerId)
+    public IGame? GetGameByPlayerId(Id playerId)
     {
         try
         {
@@ -76,7 +76,7 @@ public class GameService : IGameService
 
     }
 
-    public bool TryMakeMove(string playerId, MoveRequest moveRequest)
+    public bool TryMakeMove(Id playerId, MoveRequest moveRequest)
     {
         try
         {
@@ -99,7 +99,7 @@ public class GameService : IGameService
                 {
                     throw new Exception("Could not make move. Player was not in a game.");
                 }
-                
+
                 throw new Exception("Could not make move. Game does not exist.");
             }
         }
@@ -110,13 +110,12 @@ public class GameService : IGameService
         }
     }
 
-    private string? tryStartGame()
+    private Id? tryStartGame()
     {
         try
         {
             Player? p1 = null;
-            Player? p2 = null;
-            if (matchMakingQueue.Count > 1 && matchMakingQueue.TryDequeue(out p1) && matchMakingQueue.TryDequeue(out p2))
+            if (matchMakingQueue.Count > 1 && matchMakingQueue.TryDequeue(out p1) && matchMakingQueue.TryDequeue(out var p2))
             {
                 IGame game = new Game(p1, p2);
 

@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
-namespace checkers_api.Models;
+namespace checkers_api.Models.PersistentModels;
 
 [Index(nameof(Email), IsUnique = true)]
 public class UserProfile

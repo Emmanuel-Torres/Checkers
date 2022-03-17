@@ -1,4 +1,4 @@
-namespace checkers_api.GameModels;
+namespace checkers_api.Models.GameModels;
 using System.Collections.Generic;
 public class Board : IBoard
 {

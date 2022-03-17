@@ -1,4 +1,4 @@
-namespace checkers_api.GameModels;
+namespace checkers_api.Models.GameModels;
 
 public class Location
 {
