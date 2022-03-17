@@ -76,9 +76,38 @@ public class GameService : IGameService
 
     }
 
-    public int MakeMove(string playerId, MoveRequest moveRequest)
+    public bool TryMakeMove(string playerId, MoveRequest moveRequest)
     {
-        throw new NotImplementedException();
+        try
+        {
+            if (playerId is null)
+            {
+                throw new ArgumentNullException(nameof(playerId));
+            }
+            if (moveRequest is null)
+            {
+                throw new ArgumentNullException(nameof(moveRequest));
+            }
+            if (playerGame.TryGetValue(playerId, out var gameId) && activeGames.TryGetValue(gameId, out var game))
+            {
+                game.MakeMove(playerId, moveRequest);
+                return true;
+            }
+            else
+            {
+                if (gameId is null)
+                {
+                    throw new Exception("Could not make move. Player was not in a game.");
+                }
+                
+                throw new Exception("Could not make move. Game does not exist.");
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not complete move request from player {playerId}. Ex: {ex}", nameof(GameService), playerId, ex);
+            throw;
+        }
     }
 
     private string? tryStartGame()
@@ -109,10 +138,7 @@ public class GameService : IGameService
                 {
                     matchMakingQueue.Enqueue(p1);
                 }
-                if (p2 is not null)
-                {
-                    matchMakingQueue.Enqueue(p2);
-                }
+
                 return null;
             }
         }
