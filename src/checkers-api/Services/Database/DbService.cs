@@ -1,5 +1,5 @@
 using checkers_api.Data;
-using checkers_api.Models;
+using checkers_api.Models.PersistentModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace checkers_api.Services;

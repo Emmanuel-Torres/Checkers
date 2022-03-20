@@ -1,5 +1,5 @@
-using checkers_api.DomainModels;
-using checkers_api.GameModels;
+using checkers_api.Models.DomainModels;
+using checkers_api.Models.GameModels;
 namespace checkers_api.Services;
 
 public interface IGameService

@@ -1,4 +1,4 @@
-using checkers_api.Models;
+using checkers_api.Models.PersistentModels;
 using checkers_api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

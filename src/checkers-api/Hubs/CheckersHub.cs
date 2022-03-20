@@ -1,4 +1,4 @@
-using checkers_api.GameModels;
+using checkers_api.Models.GameModels;
 using checkers_api.Services;
 using Microsoft.AspNetCore.SignalR;
 

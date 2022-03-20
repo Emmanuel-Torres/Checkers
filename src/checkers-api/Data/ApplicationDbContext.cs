@@ -1,4 +1,4 @@
-using checkers_api.PersistentModels;
+using checkers_api.Models.PersistentModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace checkers_api.Data;

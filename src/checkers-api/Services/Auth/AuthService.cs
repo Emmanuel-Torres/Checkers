@@ -1,5 +1,4 @@
-using System.Reflection.Metadata.Ecma335;
-using checkers_api.Models;
+using checkers_api.Models.PersistentModels;
 using Google.Apis.Auth;
 
 namespace checkers_api.Services;

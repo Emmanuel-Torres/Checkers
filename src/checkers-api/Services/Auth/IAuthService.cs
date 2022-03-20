@@ -1,4 +1,4 @@
-using checkers_api.Models;
+using checkers_api.Models.PersistentModels;
 
 namespace checkers_api.Services;
 
