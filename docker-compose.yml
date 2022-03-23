@@ -20,6 +20,8 @@ services:
       dockerfile: ../../ops/deployment/api.Dockerfile
     environment:
       - ApplicationContext=Host=db;Database=postgres;Username=postgres;Password=password
+      - QUEUE_CONNECTION_STRING=Endpoint=sb://checkers.servicebus.windows.net/;SharedAccessKeyName=Matchmaking;SharedAccessKey=hAqZAkLwm48aIT5mCY2d/qwqkPh++I5YBNdo4jl1J48=
+      - QUEUE_NAME=checkers-matchmaking
     depends_on:
       - db
 
