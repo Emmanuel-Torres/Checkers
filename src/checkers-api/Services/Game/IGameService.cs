@@ -8,5 +8,6 @@ public interface IGameService
     GameState TryMakeMove(Id playerId, MoveRequest moveRequest);
     IGame? GetGameByGameId(Id gameId);
     IGame? GetGameByPlayerId(Id playerId);
-    void RemovePlayerFromGame(Id playerId);
+    GameResults TerminateGame(Id gameId);
+    GameResults QuitGame(Id playerId);
 }

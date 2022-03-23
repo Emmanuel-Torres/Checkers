@@ -80,19 +80,16 @@ public class GameService : IGameService
         }
     }
 
-    //TODO: Still need to modify how make move returns true of false from move
     public GameState TryMakeMove(Id playerId, MoveRequest moveRequest)
     {
         ArgumentNullException.ThrowIfNull(playerId);
         ArgumentNullException.ThrowIfNull(moveRequest);
 
-        if (!playerGame.TryGetValue(playerId, out var gameId))
+        var game = GetGameByPlayerId(playerId);
+
+        if (game is null)
         {
-            throw new Exception("Player was not in a game");
-        }
-        if (!activeGames.TryGetValue(gameId, out var game))
-        {
-            throw new Exception("Game does not exist");
+            throw new Exception($"Player {playerId.Value} is not associated with a game");
         }
         if (game.State == GameState.GameOver)
         {
@@ -111,7 +108,65 @@ public class GameService : IGameService
         }
     }
 
-    public void RemovePlayerFromGame(Id playerId)
+    public GameResults TerminateGame(Id gameId)
+    {
+        ArgumentNullException.ThrowIfNull(gameId);
+
+        var game = GetGameByGameId(gameId);
+        if (game is null)
+        {
+            throw new Exception($"Game {gameId.Value} does not exists");
+        }
+        if (game.State == GameState.Ongoing)
+        {
+            throw new Exception($"Game {gameId.Value} is still ongoing");
+        }
+
+        var players = game.Players;
+        foreach (var p in players)
+        {
+            try
+            {
+                RemovePlayer(p.PlayerId);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError("[{location}]: Could not terminate game {gameId}. Ex: {ex}", nameof(GameService), gameId.Value, ex);
+                throw;
+            }
+        }
+
+        var results = game.GetGameResults();
+        if (results is null)
+        {
+            throw new Exception("Results were not generated");
+        }
+
+        if (!activeGames.TryRemove(gameId, out var _))
+        {
+            throw new Exception("Could not remove game from active games");
+        }
+
+        return results;
+    }
+
+    public GameResults QuitGame(Id playerId)
+    {
+        ArgumentNullException.ThrowIfNull(playerId);
+
+        var game = GetGameByPlayerId(playerId);
+
+        if (game is null)
+        {
+            throw new Exception($"Player {playerId.Value} is not associated with a game");
+        }
+
+        //Add logic to signal game that a player quited.
+
+        return TerminateGame(game.GameId);
+    }
+
+    private void RemovePlayer(Id playerId)
     {
         ArgumentNullException.ThrowIfNull(playerId);
 
@@ -120,23 +175,9 @@ public class GameService : IGameService
             throw new Exception($"Player {playerId.Value} was not active");
         }
 
-        if (!playerGame.TryRemove(playerId, out var gameId))
+        if (!playerGame.TryRemove(playerId, out var _))
         {
-            throw new Exception($"Player {playerId.Value} was not associated with any games");
-        }
-
-        if (!activeGames.TryGetValue(gameId, out var game))
-        {
-            throw new Exception($"Game {gameId} did not exist");
-        }
-
-        if (game.State == GameState.Ongoing)
-        {
-            // DO GAME OVER LOGIC
-        }
-        else
-        {
-            throw new Exception($"Game {gameId.Value} is already over");
+            throw new Exception($"Player {playerId.Value} was not associated with a game");
         }
     }
 }
