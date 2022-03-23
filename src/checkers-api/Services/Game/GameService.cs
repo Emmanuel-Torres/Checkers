@@ -80,7 +80,7 @@ public class GameService : IGameService
         }
     }
 
-    public GameState TryMakeMove(Id playerId, MoveRequest moveRequest)
+    public MoveResult MakeMove(Id playerId, MoveRequest moveRequest)
     {
         ArgumentNullException.ThrowIfNull(playerId);
         ArgumentNullException.ThrowIfNull(moveRequest);
@@ -99,16 +99,47 @@ public class GameService : IGameService
         try
         {
             game.MakeMove(playerId, moveRequest);
-            return game.State;
+            var isGameOver = game.IsGameOver();
+
+            if (isGameOver)
+            {
+                TerminateGame(game.GameId);
+            }
+
+            //TODO: How to properly return the board?
+            return new MoveResult(true, isGameOver, game.Board);
         }
         catch (Exception ex)
         {
             logger.LogError("[{location}]: Could not complete move request from player {playerId}. Ex: {ex}", nameof(GameService), playerId, ex);
-            throw;
+            return new MoveResult(false, game.IsGameOver(), game.Board);
         }
     }
 
-    public GameResults TerminateGame(Id gameId)
+    public GameResults GetGameResults(Id gameId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public GameResults QuitGame(Id playerId)
+    {
+        ArgumentNullException.ThrowIfNull(playerId);
+
+        var game = GetGameByPlayerId(playerId);
+
+        if (game is null)
+        {
+            throw new Exception($"Player {playerId.Value} is not associated with a game");
+        }
+
+        //TODO: Add logic to signal game that a player quited.
+
+        TerminateGame(game.GameId);
+
+        return GetGameResults(game.GameId);
+    }
+
+    private void TerminateGame(Id gameId)
     {
         ArgumentNullException.ThrowIfNull(gameId);
 
@@ -147,23 +178,7 @@ public class GameService : IGameService
             throw new Exception("Could not remove game from active games");
         }
 
-        return results;
-    }
-
-    public GameResults QuitGame(Id playerId)
-    {
-        ArgumentNullException.ThrowIfNull(playerId);
-
-        var game = GetGameByPlayerId(playerId);
-
-        if (game is null)
-        {
-            throw new Exception($"Player {playerId.Value} is not associated with a game");
-        }
-
-        //Add logic to signal game that a player quited.
-
-        return TerminateGame(game.GameId);
+        //TODO: Add logic to add game state
     }
 
     private void RemovePlayer(Id playerId)

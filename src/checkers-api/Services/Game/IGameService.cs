@@ -5,9 +5,9 @@ namespace checkers_api.Services;
 public interface IGameService
 {
     Id StartGame(Player player1, Player player2);
-    GameState TryMakeMove(Id playerId, MoveRequest moveRequest);
+    MoveResult MakeMove(Id playerId, MoveRequest moveRequest);
     IGame? GetGameByGameId(Id gameId);
     IGame? GetGameByPlayerId(Id playerId);
-    GameResults TerminateGame(Id gameId);
+    GameResults GetGameResults(Id gameId);
     GameResults QuitGame(Id playerId);
 }

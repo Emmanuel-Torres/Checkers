@@ -21,9 +21,10 @@ public class Game : IGame
         state = GameState.Ongoing;
     }
 
-    public Id GameId { get => gameId; }
-    public IEnumerable<Player> Players { get => new List<Player>() { player1, player2 }; }
-    public GameState State { get => state; }
+    public Id GameId => gameId;
+    public IEnumerable<Player> Players => new List<Player>() { player1, player2 };
+    public GameState State => state;
+    public Board Board => gameBoard;
 
     public GameResults? GetGameResults()
     {
