@@ -1,43 +1,60 @@
 using System.Collections.Concurrent;
 using checkers_api.Models.DomainModels;
 using checkers_api.Models.GameModels;
+
 namespace checkers_api.Services;
 
 public class GameService : IGameService
 {
-    private readonly ConcurrentDictionary<Id, PlayerStatus> activePlayers;
+    private readonly ConcurrentDictionary<Id, Player> activePlayers;
     private readonly ConcurrentDictionary<Id, Id> playerGame;
     private readonly ConcurrentDictionary<Id, IGame> activeGames;
-    private readonly ConcurrentQueue<Player> matchMakingQueue;
     private readonly ILogger<GameService> logger;
 
     public GameService(ILogger<GameService> logger)
     {
-        activePlayers = new ConcurrentDictionary<Id, PlayerStatus>();
+        activePlayers = new ConcurrentDictionary<Id, Player>();
         playerGame = new ConcurrentDictionary<Id, Id>();
         activeGames = new ConcurrentDictionary<Id, IGame>();
-        matchMakingQueue = new ConcurrentQueue<Player>();
         this.logger = logger;
     }
 
-    public Id? MatchMakeAsync(Player player)
+    public Id StartGame(Player player1, Player player2)
     {
-        if (player is null)
+        ArgumentNullException.ThrowIfNull(player1);
+        ArgumentNullException.ThrowIfNull(player2);
+
+        if (!activePlayers.TryAdd(player1.PlayerId, player1))
         {
-            throw new ArgumentException("Player object was null");
+            throw new Exception($"Player {player1.PlayerId.Value} is already active in another game");
+        }
+        if (!activePlayers.TryAdd(player2.PlayerId, player2))
+        {
+            throw new Exception($"Player {player2.PlayerId.Value} is already active in another game");
         }
 
-        logger.LogDebug("[{location}]: Trying to matchmake player {playerId}", nameof(GameService), player.PlayerId);
-
-        if (activePlayers.ContainsKey(player.PlayerId))
+        var game = new Game(player1, player2);
+        if (!activeGames.TryAdd(game.GameId, game))
         {
-            activePlayers.TryGetValue(player.PlayerId, out var status);
-            throw new Exception($"Player is already active with status {status}");
+            throw new Exception($"Game {game.GameId.Value} already exists");
         }
-        matchMakingQueue.Enqueue(player);
-        logger.LogDebug("[{location}]: Player {playerId} was added to the queue", nameof(GameService), player.PlayerId);
 
-        return tryStartGame();
+        while (!playerGame.TryAdd(player1.PlayerId, game.GameId))
+        {
+            if (!playerGame.TryRemove(player1.PlayerId, out var _))
+            {
+                throw new Exception($"Player {player1.PlayerId} could not be removed from player-game dictionary");
+            }
+        }
+        while (!playerGame.TryAdd(player2.PlayerId, game.GameId))
+        {
+            if (!playerGame.TryRemove(player2.PlayerId, out var _))
+            {
+                throw new Exception($"Player {player2.PlayerId} could not be removed from player-game dictionary");
+            }
+        }
+
+        return game.GameId;
     }
 
     public IGame? GetGameByGameId(Id gameId)
@@ -56,6 +73,8 @@ public class GameService : IGameService
 
     public IGame? GetGameByPlayerId(Id playerId)
     {
+        ArgumentNullException.ThrowIfNull(playerId);
+
         try
         {
             if (playerGame.TryGetValue(playerId, out var gameId))
@@ -73,35 +92,27 @@ public class GameService : IGameService
             logger.LogError("[{location}]: Could not get game for player {playerId}. Ex: {ex}", nameof(GameService), playerId, ex);
             throw;
         }
-
     }
 
+    //TODO: Still need to modify how make move returns true of false from move
     public bool TryMakeMove(Id playerId, MoveRequest moveRequest)
     {
+        ArgumentNullException.ThrowIfNull(playerId);
+        ArgumentNullException.ThrowIfNull(moveRequest);
+
+        if (!playerGame.TryGetValue(playerId, out var gameId))
+        {
+            throw new Exception("Could not make move. Player was not in a game.");
+        }
+        if (!activeGames.TryGetValue(gameId, out var game))
+        {
+            throw new Exception("Could not make move. Game does not exist.");
+        }
+
         try
         {
-            if (playerId is null)
-            {
-                throw new ArgumentNullException(nameof(playerId));
-            }
-            if (moveRequest is null)
-            {
-                throw new ArgumentNullException(nameof(moveRequest));
-            }
-            if (playerGame.TryGetValue(playerId, out var gameId) && activeGames.TryGetValue(gameId, out var game))
-            {
-                game.MakeMove(playerId, moveRequest);
-                return true;
-            }
-            else
-            {
-                if (gameId is null)
-                {
-                    throw new Exception("Could not make move. Player was not in a game.");
-                }
-
-                throw new Exception("Could not make move. Game does not exist.");
-            }
+            game.MakeMove(playerId, moveRequest);
+            return true;
         }
         catch (Exception ex)
         {
@@ -110,41 +121,28 @@ public class GameService : IGameService
         }
     }
 
-    private Id? tryStartGame()
+    public void QuitGame(Id playerId)
     {
-        try
+        ArgumentNullException.ThrowIfNull(playerId);
+
+        if (!activePlayers.TryRemove(playerId, out var _))
         {
-            Player? p1 = null;
-            if (matchMakingQueue.Count > 1 && matchMakingQueue.TryDequeue(out p1) && matchMakingQueue.TryDequeue(out var p2))
-            {
-                IGame game = new Game(p1, p2);
-
-                activeGames.TryAdd(game.GameId, game);
-                playerGame.TryAdd(p1.PlayerId, game.GameId);
-                playerGame.TryAdd(p2.PlayerId, game.GameId);
-
-                activePlayers.Remove(p1.PlayerId, out var _);
-                activePlayers.Remove(p2.PlayerId, out var _);
-
-                activePlayers.TryAdd(p1.PlayerId, PlayerStatus.MatchMade);
-                activePlayers.TryAdd(p2.PlayerId, PlayerStatus.MatchMade);
-
-                return game.GameId;
-            }
-            else
-            {
-                if (p1 is not null)
-                {
-                    matchMakingQueue.Enqueue(p1);
-                }
-
-                return null;
-            }
+            throw new Exception($"Player {playerId.Value} was not active");
         }
-        catch (Exception ex)
+
+        if (!playerGame.TryRemove(playerId, out var gameId))
         {
-            logger.LogError("[{location}]: Could not start game. Ex: {ex}", nameof(GameService), ex);
-            throw;
+            throw new Exception($"Player {playerId.Value} was not associated with any games");
+        }
+
+        if (!activeGames.TryRemove(gameId, out var game))
+        {
+            throw new Exception($"Game {gameId} did not exist");
+        }
+
+        if (game.State == GameState.Ongoing)
+        {
+            // DO GAME OVER LOGIC
         }
     }
 }

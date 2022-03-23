@@ -4,8 +4,9 @@ namespace checkers_api.Services;
 
 public interface IGameService
 {
-    Id? MatchMakeAsync(Player player);
+    Id StartGame(Player player1, Player player2);
     bool TryMakeMove(Id playerId, MoveRequest moveRequest);
     IGame? GetGameByGameId(Id gameId);
     IGame? GetGameByPlayerId(Id playerId);
+    void QuitGame(Id playerId);
 }
