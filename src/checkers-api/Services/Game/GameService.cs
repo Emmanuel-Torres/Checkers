@@ -59,60 +59,50 @@ public class GameService : IGameService
 
     public IGame? GetGameByGameId(Id gameId)
     {
-        try
-        {
-            activeGames.TryGetValue(gameId, out var game);
-            return game;
-        }
-        catch (Exception ex)
-        {
-            logger.LogError("[{location}]: Could not get game with id {gameId}. Ex: {ex}", nameof(GameService), gameId, ex);
-            throw;
-        }
+        ArgumentNullException.ThrowIfNull(gameId);
+
+        activeGames.TryGetValue(gameId, out var game);
+        return game;
     }
 
     public IGame? GetGameByPlayerId(Id playerId)
     {
         ArgumentNullException.ThrowIfNull(playerId);
 
-        try
+        if (playerGame.TryGetValue(playerId, out var gameId))
         {
-            if (playerGame.TryGetValue(playerId, out var gameId))
-            {
-                activeGames.TryGetValue(gameId, out var game);
-                return game;
-            }
-            else
-            {
-                return null;
-            }
+            activeGames.TryGetValue(gameId, out var game);
+            return game;
         }
-        catch (Exception ex)
+        else
         {
-            logger.LogError("[{location}]: Could not get game for player {playerId}. Ex: {ex}", nameof(GameService), playerId, ex);
-            throw;
+            return null;
         }
     }
 
     //TODO: Still need to modify how make move returns true of false from move
-    public bool TryMakeMove(Id playerId, MoveRequest moveRequest)
+    public GameState TryMakeMove(Id playerId, MoveRequest moveRequest)
     {
         ArgumentNullException.ThrowIfNull(playerId);
         ArgumentNullException.ThrowIfNull(moveRequest);
 
         if (!playerGame.TryGetValue(playerId, out var gameId))
         {
-            throw new Exception("Could not make move. Player was not in a game.");
+            throw new Exception("Player was not in a game");
         }
         if (!activeGames.TryGetValue(gameId, out var game))
         {
-            throw new Exception("Could not make move. Game does not exist.");
+            throw new Exception("Game does not exist");
+        }
+        if (game.State == GameState.GameOver)
+        {
+            throw new Exception("Game is already over");
         }
 
         try
         {
             game.MakeMove(playerId, moveRequest);
-            return true;
+            return game.State;
         }
         catch (Exception ex)
         {
@@ -121,7 +111,7 @@ public class GameService : IGameService
         }
     }
 
-    public void QuitGame(Id playerId)
+    public void RemovePlayerFromGame(Id playerId)
     {
         ArgumentNullException.ThrowIfNull(playerId);
 
@@ -135,7 +125,7 @@ public class GameService : IGameService
             throw new Exception($"Player {playerId.Value} was not associated with any games");
         }
 
-        if (!activeGames.TryRemove(gameId, out var game))
+        if (!activeGames.TryGetValue(gameId, out var game))
         {
             throw new Exception($"Game {gameId} did not exist");
         }
@@ -143,6 +133,10 @@ public class GameService : IGameService
         if (game.State == GameState.Ongoing)
         {
             // DO GAME OVER LOGIC
+        }
+        else
+        {
+            throw new Exception($"Game {gameId.Value} is already over");
         }
     }
 }
