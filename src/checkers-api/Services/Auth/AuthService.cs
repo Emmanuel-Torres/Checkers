@@ -15,7 +15,7 @@ public class AuthService : IAuthService
         this.logger = logger;
     }
 
-    public async Task<UserProfile> GetUserAsync(string token)
+    public async Task<UserProfile?> GetUserAsync(string token)
     {
         try
         {
@@ -42,7 +42,7 @@ public class AuthService : IAuthService
         catch (Exception ex)
         {
             logger.LogError("[{location}]: Could not get user. Ex: {ex}", nameof(AuthService), ex);
-            throw;
+            return null;
         }
     }
     public Task<bool> ValidateTokenAsync(string token)

@@ -2,8 +2,8 @@ namespace checkers_api.Models.GameModels;
 
 public class Location
 {
-    public int Row { get; set; }
-    public int Column { get; set; }
+    public readonly int Row;
+    public readonly int Column;
 
     public Location(int row, int column)
     {
