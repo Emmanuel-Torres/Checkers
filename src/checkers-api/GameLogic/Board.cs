@@ -8,11 +8,11 @@ public class Board
     private readonly List<Square> squares;
     public IEnumerable<Square> Squares => squares;
 
-    public Board(Id player1, Id player2)
+    public Board(Piece blackPiece, Piece whitePiece)
     {
         squares = new List<Square>();
         GenerateBoard();
-        GeneratePieces(player1, player2);
+        GeneratePieces(blackPiece, whitePiece);
     }
 
     public void PlacePiece(Location location, Piece piece)
@@ -84,11 +84,8 @@ public class Board
         }
     }
 
-    private void GeneratePieces(Id player1, Id player2)
+    private void GeneratePieces(Piece blackPiece, Piece whitePiece)
     {
-        var blackPiece = new Piece(Color.Black, player1);
-        var whitePiece = new Piece(Color.White, player2);
-
         for (int i = 0; i < 12; i++)
         {
             try

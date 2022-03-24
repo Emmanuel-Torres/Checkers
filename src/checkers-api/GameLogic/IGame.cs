@@ -6,6 +6,7 @@ namespace checkers_api.GameLogic;
 public interface IGame
 {
     Id Id { get; }
+    Id CurrentTurn { get; }
     IEnumerable<Player> Players { get; }
     GameState State { get; }
     Board Board { get; }
