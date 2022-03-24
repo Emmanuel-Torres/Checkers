@@ -1,6 +1,8 @@
 using System.Collections.Concurrent;
 using checkers_api.Models.DomainModels;
 using checkers_api.Models.GameModels;
+using checkers_api.GameLogic;
+
 
 namespace checkers_api.Services;
 
@@ -34,19 +36,19 @@ public class GameService : IGameService
         }
 
         var game = new Game(player1, player2);
-        if (!activeGames.TryAdd(game.GameId, game))
+        if (!activeGames.TryAdd(game.Id, game))
         {
-            throw new Exception($"Game {game.GameId.Value} already exists");
+            throw new Exception($"Game {game.Id.Value} already exists");
         }
 
-        while (!playerGame.TryAdd(player1.PlayerId, game.GameId))
+        while (!playerGame.TryAdd(player1.PlayerId, game.Id))
         {
             if (!playerGame.TryRemove(player1.PlayerId, out var _))
             {
                 throw new Exception($"Player {player1.PlayerId} could not be removed from player-game dictionary");
             }
         }
-        while (!playerGame.TryAdd(player2.PlayerId, game.GameId))
+        while (!playerGame.TryAdd(player2.PlayerId, game.Id))
         {
             if (!playerGame.TryRemove(player2.PlayerId, out var _))
             {
@@ -54,7 +56,7 @@ public class GameService : IGameService
             }
         }
 
-        return game.GameId;
+        return game.Id;
     }
 
     public IGame? GetGameByGameId(Id gameId)
@@ -103,16 +105,16 @@ public class GameService : IGameService
 
             if (isGameOver)
             {
-                TerminateGame(game.GameId);
+                TerminateGame(game.Id);
             }
 
             //TODO: How to properly return the board?
-            return new MoveResult(true, isGameOver, game.Board);
+            return new MoveResult(true, isGameOver, game.Board.Squares);
         }
         catch (Exception ex)
         {
             logger.LogError("[{location}]: Could not complete move request from player {playerId}. Ex: {ex}", nameof(GameService), playerId, ex);
-            return new MoveResult(false, game.IsGameOver(), game.Board);
+            return new MoveResult(false, game.IsGameOver(), game.Board.Squares);
         }
     }
 
@@ -134,9 +136,9 @@ public class GameService : IGameService
 
         //TODO: Add logic to signal game that a player quited.
 
-        TerminateGame(game.GameId);
+        TerminateGame(game.Id);
 
-        return GetGameResults(game.GameId);
+        return GetGameResults(game.Id);
     }
 
     private void TerminateGame(Id gameId)
