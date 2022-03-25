@@ -47,6 +47,11 @@ public class Board
         squares[index].Piece = null;
     }
 
+    public Square GetSquareByLocation(Location location)
+    {
+        return squares.First(l => l.Location.Column == location.Column && l.Location.Row == location.Row);
+    }
+
     public void KingPiece(Location location)
     {
         var index = GetSquareIndex(location);
