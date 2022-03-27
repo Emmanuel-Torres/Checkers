@@ -52,16 +52,16 @@ const Secure: FC = (): JSX.Element => {
 
     return (
         <>
-            {!profile && <h2>You are not authenticated</h2>}
-            {profile && (
-                <>
+            {!profile 
+                ? <h2>You are not authenticated</h2>
+                : <>
                     <h2>Profile information</h2>
-                    <p>{profile.email}</p>
-                    <p>{profile.givenName}</p>
-                    <p>{profile.bestJoke}</p>
-                    <p>{profile.pizza}</p>
-                    <p>{profile.iceCreamFlavor}</p>
-                    <p>{profile.age}</p>
+                    <p>Email: {profile.email}</p>
+                    <p>Name: {profile.givenName}</p>
+                    <p>Joke: {profile.bestJoke}</p>
+                    <p>Pizza: {profile.pizza}</p>
+                    <p>Ice Cream: {profile.iceCreamFlavor}</p>
+                    <p>Age: {profile.age}</p>
 
                     <form onSubmit={submitForm}>
                         <label>Joke</label>
@@ -75,7 +75,7 @@ const Secure: FC = (): JSX.Element => {
                         <button>submit</button>
                     </form>
                 </>
-            )}
+            }
         </>
     )
 }
