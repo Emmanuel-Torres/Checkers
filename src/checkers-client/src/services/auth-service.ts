@@ -13,7 +13,7 @@ const authenticateUser = async (token: string): Promise<User> => {
 const updateProfile = async (token: string, user: User) => {
   await axios.put(
     authUrl + "/profile",
-    { user },
+    user,
     {
       headers: { Authorization: `Bearer ${token}` },
     }

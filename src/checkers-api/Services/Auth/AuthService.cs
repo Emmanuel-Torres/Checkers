@@ -45,6 +45,27 @@ public class AuthService : IAuthService
             return null;
         }
     }
+
+    public async Task UpdateProfileAsync(string authorization, UserProfile profile)
+    {
+        try
+        {
+            // var user = await GetUserAsync(authorization);
+
+            // if (user is null)
+            // {
+            //     throw new Exception("Could not find user profile to update");
+            // }
+
+            // profile.Id = user.Id;
+            await dbService.UpdateUserAsync(profile);
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
     public Task<bool> ValidateTokenAsync(string token)
     {
         throw new NotImplementedException();

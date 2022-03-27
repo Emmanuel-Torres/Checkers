@@ -6,4 +6,5 @@ public interface IAuthService
 {
     Task<bool> ValidateTokenAsync(string token);
     Task<UserProfile?> GetUserAsync(string token);
+    Task UpdateProfileAsync(string authorization, UserProfile profile);
 }

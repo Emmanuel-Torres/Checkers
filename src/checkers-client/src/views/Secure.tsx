@@ -12,13 +12,13 @@ const Secure: FC = (): JSX.Element => {
     const [joke, setJoke] = useState<string>("");
     const [iceCream, setIceCream] = useState<string>("");
     const [pizza, setPizza] = useState<string>("");
-    const [age, setAge] = useState<string>("");
+    const [age, setAge] = useState<number>(0);
 
     const isFormValid = (
         joke.trim().length > 0 &&
         iceCream.trim().length > 0 &&
         pizza.trim().length > 0 &&
-        age.trim().length > 0
+        age > 0
     )
 
     useEffect(() => {
@@ -38,7 +38,7 @@ const Secure: FC = (): JSX.Element => {
     }
 
     const ageChanged = (e: ChangeEvent<HTMLInputElement>) => {
-        setAge(e.target.value);
+        setAge(parseInt(e.target.value));
     }
 
     const submitForm = (e: FormEvent) => {
@@ -58,9 +58,9 @@ const Secure: FC = (): JSX.Element => {
                     <h2>Profile information</h2>
                     <p>{profile.email}</p>
                     <p>{profile.givenName}</p>
-                    <p>{profile.joke}</p>
+                    <p>{profile.bestJoke}</p>
                     <p>{profile.pizza}</p>
-                    <p>{profile.iceCream}</p>
+                    <p>{profile.iceCreamFlavor}</p>
                     <p>{profile.age}</p>
 
                     <form onSubmit={submitForm}>

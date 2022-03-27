@@ -95,16 +95,16 @@ public class DbService : IDbService
         }
     }
 
-    public async Task<UserProfile> UpdateUserAsync(int userId, UserProfile user)
+    public async Task UpdateUserAsync(UserProfile user)
     {
+        var userId = user.Id;
+
         try
         {
             logger.LogDebug("[{location}]: Updating user with id {id}.", nameof(DbService), userId);
-            user.Id = userId;
             dbContext.UserProfiles.Update(user);
             await dbContext.SaveChangesAsync();
             logger.LogInformation("[{location}]: User {id} was successfully updated", nameof(DbService), userId);
-            return await dbContext.UserProfiles.FirstAsync(u => u.Id == userId);
         }
         catch (Exception ex)
         {
