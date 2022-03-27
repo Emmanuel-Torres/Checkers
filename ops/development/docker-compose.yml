@@ -11,7 +11,7 @@ services:
     environment:
       CHOKIDAR_USEPOLLING: "true"
     volumes:
-      - ../../src/checkers-client:/var/app/client
+      - ../../src/checkers-client/src:/var/app/frontend/src
     depends_on:
       - dev_api
   

@@ -10,8 +10,19 @@ const authenticateUser = async (token: string): Promise<User> => {
   return res.data;
 };
 
+const updateProfile = async (token: string, user: User) => {
+  await axios.put(
+    authUrl + "/profile",
+    { user },
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+};
+
 const authService = {
   authenticateUser,
+  updateProfile,
 };
 
 export default authService;

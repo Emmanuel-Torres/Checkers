@@ -4,10 +4,18 @@ import authService from "../services/auth-service";
 
 export const authenticateUser = createAsyncThunk(
   "authenticateUser",
-  async (token: string, thunkApi): Promise<User> => {
+  async (token: string, thunkApi: any): Promise<User> => {
     return await authService.authenticateUser(token);
   }
 );
+
+export const updateProfile = createAsyncThunk(
+  "updateProfile",
+  async (args: {token: string, user: User}, thunkApi: any): Promise<User> => {
+    await authService.updateProfile(args.token, args.user);
+    return await authService.authenticateUser(args.token);
+  }
+)
 
 interface AuthState {
   userToken?: string;
@@ -29,15 +37,16 @@ const authSlice = createSlice({
     logout(state) {
       state.userToken = undefined;
       state.userProfile = undefined;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(
-      authenticateUser.fulfilled,
-      (state, action: PayloadAction<User>) => {
+      authenticateUser.fulfilled, (state, action: PayloadAction<User>) => {
         state.userProfile = action.payload;
       }
-    );
+    ).addCase(authenticateUser.rejected, (state, action) => {
+      state.userProfile = undefined;
+    });
   },
 });
 
