@@ -2,16 +2,18 @@ namespace checkers_api.Models.GameModels;
 
 public class MoveResult
 {
-    public bool WasMoveSuccessful { get; private set; }
-    public bool IsGameOver { get; private set; }
-    public IEnumerable<Square> Board { get; private set; }
+    public string GameId { get; }
+    public bool WasMoveSuccessful { get; }
+    public bool IsGameOver { get; }
+    public IEnumerable<Square> Board { get; }
 
-    public MoveResult(bool wasMoveSuccessful, bool isGameOver, IEnumerable<Square> board)
+    public MoveResult(string gameId, bool wasMoveSuccessful, bool isGameOver, IEnumerable<Square> board)
     {
         ArgumentNullException.ThrowIfNull(wasMoveSuccessful);
         ArgumentNullException.ThrowIfNull(Board);
         ArgumentNullException.ThrowIfNull(isGameOver);
 
+        GameId = gameId;
         WasMoveSuccessful = wasMoveSuccessful;
         Board = board;
         IsGameOver = isGameOver;

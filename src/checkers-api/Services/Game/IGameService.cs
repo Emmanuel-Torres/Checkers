@@ -9,6 +9,6 @@ public interface IGameService
     MoveResult MakeMove(string playerId, MoveRequest moveRequest);
     IGame? GetGameByGameId(string gameId);
     IGame? GetGameByPlayerId(string playerId);
-    GameResults GetGameResults(string gameId);
+    GameResults TerminateGame(string gameId);
     GameResults QuitGame(string playerId);
 }

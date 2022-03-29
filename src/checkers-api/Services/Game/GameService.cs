@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
-using checkers_api.Models.GameModels;
 using checkers_api.GameLogic;
+using checkers_api.Models.GameModels;
 
 
 namespace checkers_api.Services;
@@ -102,45 +102,35 @@ public class GameService : IGameService
             game.MakeMove(playerId, moveRequest);
             var isGameOver = game.IsGameOver();
 
-            if (isGameOver)
-            {
-                TerminateGame(game.Id);
-            }
-
-            //TODO: How to properly return the board?
-            return new MoveResult(true, isGameOver, game.Board.Squares);
+            return new MoveResult(game.Id, true, isGameOver, game.Board.Squares);
         }
         catch (Exception ex)
         {
             logger.LogError("[{location}]: Could not complete move request from player {playerId}. Ex: {ex}", nameof(GameService), playerId, ex);
-            return new MoveResult(false, game.IsGameOver(), game.Board.Squares);
+            return new MoveResult(game.Id, false, game.IsGameOver(), game.Board.Squares);
         }
-    }
-
-    public GameResults GetGameResults(string gameId)
-    {
-        throw new NotImplementedException();
     }
 
     public GameResults QuitGame(string playerId)
     {
-        ArgumentNullException.ThrowIfNull(playerId);
+        // ArgumentNullException.ThrowIfNull(playerId);
 
-        var game = GetGameByPlayerId(playerId);
+        // var game = GetGameByPlayerId(playerId);
 
-        if (game is null)
-        {
-            throw new Exception($"Player {playerId} is not associated with a game");
-        }
+        // if (game is null)
+        // {
+        //     throw new Exception($"Player {playerId} is not associated with a game");
+        // }
 
-        //TODO: Add logic to signal game that a player quited.
+        // //TODO: Add logic to signal game that a player quited.
 
-        TerminateGame(game.Id);
+        // TerminateGame(game.Id);
 
-        return GetGameResults(game.Id);
+        // return GenerateGameResults(game.Id);
+        throw new NotImplementedException();
     }
 
-    private void TerminateGame(string gameId)
+    public GameResults TerminateGame(string gameId)
     {
         ArgumentNullException.ThrowIfNull(gameId);
 
@@ -179,7 +169,7 @@ public class GameService : IGameService
             throw new Exception("Could not remove game from active games");
         }
 
-        //TODO: Add logic to add game state
+        return results;
     }
 
     private void RemovePlayer(string playerId)

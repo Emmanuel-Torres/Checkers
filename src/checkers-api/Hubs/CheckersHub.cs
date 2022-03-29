@@ -1,5 +1,5 @@
+using checkers_api.GameLogic;
 using checkers_api.Models.GameModels;
-using checkers_api.Models.PersistentModels;
 using checkers_api.Services;
 using Microsoft.AspNetCore.SignalR;
 
@@ -60,21 +60,28 @@ public class CheckersHub : Hub<ICheckersHub>
         catch (Exception ex)
         {
             logger.LogError("[{location}]: Could not matchmake player {token}. Ex: {ex}", nameof(CheckersHub), Context.ConnectionId, ex);
-            //Tell the client that something went wrong.
+            await Clients.Client(Context.ConnectionId).SendMessage("Matchmaking failed");
         }
     }
 
     public async Task MakeMoveAsync(MoveRequest moveRequest)
     {
-        try 
+        try
         {
             var res = gameService.MakeMove(Context.ConnectionId, moveRequest);
 
+            if (res.IsGameOver)
+            {
+                await EndGame(res.GameId);
+                return;
+            }
             if (res.WasMoveSuccessful)
             {
                 await Clients.Client(Context.ConnectionId).MoveSuccessful(res.Board);
                 return;
             }
+
+            await Clients.Client(Context.ConnectionId).SendMessage("Move was not successful");
         }
         catch (Exception ex)
         {
@@ -98,6 +105,22 @@ public class CheckersHub : Hub<ICheckersHub>
         catch (Exception ex)
         {
             logger.LogError("[{location}]: Could not start game for players {p1} and {p2}. Ex: {ex}", nameof(CheckersHub), p1.PlayerId, p2.PlayerId, ex);
+        }
+    }
+
+    private async Task EndGame(string gameId)
+    {
+        try
+        {
+            var results = gameService.TerminateGame(gameId);
+            foreach (var p in results.Players)
+            {
+                await Clients.Client(p.PlayerId).GameOver(results);
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not end game properly. Ex: {ex}", nameof(CheckersHub), ex);
         }
     }
 }
