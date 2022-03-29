@@ -11,7 +11,7 @@ services:
     environment:
       CHOKIDAR_USEPOLLING: "true"
     volumes:
-      - ../../src/checkers-client:/var/app/client
+      - ../../src/checkers-client/src:/var/app/frontend/src
     depends_on:
       - dev_api
   
@@ -22,6 +22,8 @@ services:
       dockerfile: ../../ops/development/dev-api.Dockerfile
     environment:
       - ApplicationContext=Host=dev_db;Database=postgres;Username=postgres;Password=password
+      - QUEUE_CONNECTION_STRING=Endpoint=sb://checkers.servicebus.windows.net/;SharedAccessKeyName=Matchmaking;SharedAccessKey=hAqZAkLwm48aIT5mCY2d/qwqkPh++I5YBNdo4jl1J48=
+      - QUEUE_NAME=checkers-matchmaking
     depends_on:
       - dev_db
 

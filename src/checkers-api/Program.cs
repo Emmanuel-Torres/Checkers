@@ -69,7 +69,7 @@ using (var scope = app.Services.CreateScope())
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapHub<CheckersHub>("/checkers");
+app.MapHub<CheckersHub>("/hubs/checkers");
 app.MapControllers();
 
 app.Run();

@@ -1,4 +1,3 @@
-using checkers_api.GameLogic;
 using checkers_api.Models.GameModels;
 using checkers_api.Services;
 using Microsoft.AspNetCore.SignalR;
@@ -19,11 +18,13 @@ public class CheckersHub : Hub<ICheckersHub>
         this.matchmakingService = matchmakingService;
         this.authService = authService;
         this.matchmakingService.ConfigureQueue(StartGame);
+
+        this.logger.LogInformation("[{location}]: Successfully created hub", nameof(CheckersHub));
     }
 
     public override async Task OnConnectedAsync()
     {
-        logger.LogDebug("[{location}]: Player {token} connected to the server", nameof(CheckersHub), Context.ConnectionId);
+        logger.LogInformation("[{location}]: Player {token} connected to the server", nameof(CheckersHub), Context.ConnectionId);
         await base.OnConnectedAsync();
     }
 
