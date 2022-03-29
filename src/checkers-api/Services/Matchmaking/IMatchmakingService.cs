@@ -7,4 +7,5 @@ public interface IMatchmakingService
 {
     Task MatchMakeAsync(Player player);
     bool CancelMatchMaking(Id playerId);
+    Task ConfigureQueue(Action<Player, Player> startGame);
 }

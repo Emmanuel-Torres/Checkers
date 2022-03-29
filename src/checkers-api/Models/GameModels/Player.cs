@@ -8,9 +8,9 @@ public class Player
     public Id PlayerId { get => playerId; }
     public string Name { get => name;  }
 
-    public Player(Id playerId, string name)
+    public Player(string playerId, string name)
     {
-        this.playerId = playerId;
+        this.playerId = new Id(playerId);
         this.name = name;
     }
 }

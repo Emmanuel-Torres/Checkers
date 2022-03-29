@@ -19,6 +19,8 @@ public class AuthService : IAuthService
     {
         try
         {
+            ArgumentNullException.ThrowIfNull(token);
+
             var settings = new GoogleJsonWebSignature.ValidationSettings()
             {
                 Audience = new List<string>() { clientId }

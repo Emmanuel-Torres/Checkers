@@ -10,8 +10,24 @@ public class Id : IEquatable<Id>
         id = Guid.NewGuid().ToString("N");
     }
 
+    public Id (string id)
+    {
+        ArgumentNullException.ThrowIfNull(id);
+        if (!IsIdValid(id))
+        {
+            throw new ArgumentException("Id was not valid");
+        }
+
+        this.id = id;
+    }
+
     public bool Equals(Id? other)
     {
         return other is not null && other.Value == this.id;
+    }
+
+    private bool IsIdValid(string id)
+    {
+        return true;
     }
 }

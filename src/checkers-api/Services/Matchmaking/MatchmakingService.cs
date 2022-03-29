@@ -29,6 +29,16 @@ public class MatchmakingService : IMatchmakingService
         startGame = null;
     }
 
+    public async Task ConfigureQueue(Action<Player, Player> startGame)
+    {
+        this.startGame = startGame;
+        var processor = serviceBusClient.CreateProcessor(queueName, new ServiceBusProcessorOptions());
+        processor.ProcessMessageAsync += MessageHandler;
+        processor.ProcessErrorAsync += ErrorHandler;
+        await processor.StartProcessingAsync();
+        logger.LogInformation("[{location}]: Service bus queue was set up correctly", nameof(MatchmakingService));
+    }
+
     public bool CancelMatchMaking(Id playerId)
     {
         throw new NotImplementedException();
@@ -49,20 +59,10 @@ public class MatchmakingService : IMatchmakingService
         }
         catch (Exception ex)
         {
-            logger.LogError("[{location}]: Could not send player {playerId} to service bus. Exception: {ex}", 
+            logger.LogError("[{location}]: Could not send player {playerId} to service bus. Exception: {ex}",
                 nameof(MatchmakingService), player.PlayerId.Value, ex);
             throw;
         }
-    }
-
-    public async Task ConfigureQueue(Action<Player, Player> startGame)
-    {
-        this.startGame = startGame;
-        var processor = serviceBusClient.CreateProcessor(queueName, new ServiceBusProcessorOptions());
-        processor.ProcessMessageAsync += MessageHandler;
-        processor.ProcessErrorAsync += ErrorHandler;
-        await processor.StartProcessingAsync();
-        logger.LogInformation("[{location}]: Service bus queue was set up correctly", nameof(MatchmakingService));
     }
 
     private async Task MessageHandler(ProcessMessageEventArgs args)
