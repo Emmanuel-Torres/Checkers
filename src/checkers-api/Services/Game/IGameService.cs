@@ -1,4 +1,3 @@
-using checkers_api.Models.DomainModels;
 using checkers_api.Models.GameModels;
 using checkers_api.GameLogic;
 
@@ -6,10 +5,10 @@ namespace checkers_api.Services;
 
 public interface IGameService
 {
-    Id StartGame(Player player1, Player player2);
-    MoveResult MakeMove(Id playerId, MoveRequest moveRequest);
-    IGame? GetGameByGameId(Id gameId);
-    IGame? GetGameByPlayerId(Id playerId);
-    GameResults GetGameResults(Id gameId);
-    GameResults QuitGame(Id playerId);
+    string StartGame(Player player1, Player player2);
+    MoveResult MakeMove(string playerId, MoveRequest moveRequest);
+    IGame? GetGameByGameId(string gameId);
+    IGame? GetGameByPlayerId(string playerId);
+    GameResults GetGameResults(string gameId);
+    GameResults QuitGame(string playerId);
 }

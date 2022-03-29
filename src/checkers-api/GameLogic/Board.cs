@@ -1,4 +1,3 @@
-using checkers_api.Models.DomainModels;
 using checkers_api.Models.GameModels;
 
 namespace checkers_api.GameLogic;

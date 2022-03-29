@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using checkers_api.Models.DomainModels;
 using checkers_api.Models.GameModels;
 using checkers_api.GameLogic;
 
@@ -8,37 +7,37 @@ namespace checkers_api.Services;
 
 public class GameService : IGameService
 {
-    private readonly ConcurrentDictionary<Id, Player> activePlayers;
-    private readonly ConcurrentDictionary<Id, Id> playerGame;
-    private readonly ConcurrentDictionary<Id, IGame> activeGames;
+    private readonly ConcurrentDictionary<string, Player> activePlayers;
+    private readonly ConcurrentDictionary<string, string> playerGame;
+    private readonly ConcurrentDictionary<string, IGame> activeGames;
     private readonly ILogger<GameService> logger;
 
     public GameService(ILogger<GameService> logger)
     {
-        activePlayers = new ConcurrentDictionary<Id, Player>();
-        playerGame = new ConcurrentDictionary<Id, Id>();
-        activeGames = new ConcurrentDictionary<Id, IGame>();
+        activePlayers = new ConcurrentDictionary<string, Player>();
+        playerGame = new ConcurrentDictionary<string, string>();
+        activeGames = new ConcurrentDictionary<string, IGame>();
         this.logger = logger;
     }
 
-    public Id StartGame(Player player1, Player player2)
+    public string StartGame(Player player1, Player player2)
     {
         ArgumentNullException.ThrowIfNull(player1);
         ArgumentNullException.ThrowIfNull(player2);
 
         if (!activePlayers.TryAdd(player1.PlayerId, player1))
         {
-            throw new Exception($"Player {player1.PlayerId.Value} is already active in another game");
+            throw new Exception($"Player {player1.PlayerId} is already active in another game");
         }
         if (!activePlayers.TryAdd(player2.PlayerId, player2))
         {
-            throw new Exception($"Player {player2.PlayerId.Value} is already active in another game");
+            throw new Exception($"Player {player2.PlayerId} is already active in another game");
         }
 
         var game = new Game(player1, player2);
         if (!activeGames.TryAdd(game.Id, game))
         {
-            throw new Exception($"Game {game.Id.Value} already exists");
+            throw new Exception($"Game {game.Id} already exists");
         }
 
         while (!playerGame.TryAdd(player1.PlayerId, game.Id))
@@ -59,7 +58,7 @@ public class GameService : IGameService
         return game.Id;
     }
 
-    public IGame? GetGameByGameId(Id gameId)
+    public IGame? GetGameByGameId(string gameId)
     {
         ArgumentNullException.ThrowIfNull(gameId);
 
@@ -67,7 +66,7 @@ public class GameService : IGameService
         return game;
     }
 
-    public IGame? GetGameByPlayerId(Id playerId)
+    public IGame? GetGameByPlayerId(string playerId)
     {
         ArgumentNullException.ThrowIfNull(playerId);
 
@@ -82,7 +81,7 @@ public class GameService : IGameService
         }
     }
 
-    public MoveResult MakeMove(Id playerId, MoveRequest moveRequest)
+    public MoveResult MakeMove(string playerId, MoveRequest moveRequest)
     {
         ArgumentNullException.ThrowIfNull(playerId);
         ArgumentNullException.ThrowIfNull(moveRequest);
@@ -91,7 +90,7 @@ public class GameService : IGameService
 
         if (game is null)
         {
-            throw new Exception($"Player {playerId.Value} is not associated with a game");
+            throw new Exception($"Player {playerId} is not associated with a game");
         }
         if (game.State == GameState.GameOver)
         {
@@ -118,12 +117,12 @@ public class GameService : IGameService
         }
     }
 
-    public GameResults GetGameResults(Id gameId)
+    public GameResults GetGameResults(string gameId)
     {
         throw new NotImplementedException();
     }
 
-    public GameResults QuitGame(Id playerId)
+    public GameResults QuitGame(string playerId)
     {
         ArgumentNullException.ThrowIfNull(playerId);
 
@@ -131,7 +130,7 @@ public class GameService : IGameService
 
         if (game is null)
         {
-            throw new Exception($"Player {playerId.Value} is not associated with a game");
+            throw new Exception($"Player {playerId} is not associated with a game");
         }
 
         //TODO: Add logic to signal game that a player quited.
@@ -141,18 +140,18 @@ public class GameService : IGameService
         return GetGameResults(game.Id);
     }
 
-    private void TerminateGame(Id gameId)
+    private void TerminateGame(string gameId)
     {
         ArgumentNullException.ThrowIfNull(gameId);
 
         var game = GetGameByGameId(gameId);
         if (game is null)
         {
-            throw new Exception($"Game {gameId.Value} does not exists");
+            throw new Exception($"Game {gameId} does not exists");
         }
         if (game.State == GameState.Ongoing)
         {
-            throw new Exception($"Game {gameId.Value} is still ongoing");
+            throw new Exception($"Game {gameId} is still ongoing");
         }
 
         var players = game.Players;
@@ -164,7 +163,7 @@ public class GameService : IGameService
             }
             catch (Exception ex)
             {
-                logger.LogError("[{location}]: Could not terminate game {gameId}. Ex: {ex}", nameof(GameService), gameId.Value, ex);
+                logger.LogError("[{location}]: Could not terminate game {gameId}. Ex: {ex}", nameof(GameService), gameId, ex);
                 throw;
             }
         }
@@ -183,18 +182,18 @@ public class GameService : IGameService
         //TODO: Add logic to add game state
     }
 
-    private void RemovePlayer(Id playerId)
+    private void RemovePlayer(string playerId)
     {
         ArgumentNullException.ThrowIfNull(playerId);
 
         if (!activePlayers.TryRemove(playerId, out var _))
         {
-            throw new Exception($"Player {playerId.Value} was not active");
+            throw new Exception($"Player {playerId} was not active");
         }
 
         if (!playerGame.TryRemove(playerId, out var _))
         {
-            throw new Exception($"Player {playerId.Value} was not associated with a game");
+            throw new Exception($"Player {playerId} was not associated with a game");
         }
     }
 }

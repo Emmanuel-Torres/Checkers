@@ -1,4 +1,3 @@
-using checkers_api.Models.DomainModels;
 using checkers_api.Models.GameModels;
 
 namespace checkers_api.Services;
@@ -6,6 +5,6 @@ namespace checkers_api.Services;
 public interface IMatchmakingService
 {
     Task MatchMakeAsync(Player player);
-    bool CancelMatchMaking(Id playerId);
-    Task ConfigureQueue(Action<Player, Player> startGame);
+    bool CancelMatchMaking(string playerId);
+    Task ConfigureQueue(Func<Player, Player, Task> startGame);
 }

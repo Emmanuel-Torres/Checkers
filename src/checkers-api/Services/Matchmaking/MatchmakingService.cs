@@ -2,7 +2,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Text;
 using Azure.Messaging.ServiceBus;
-using checkers_api.Models.DomainModels;
 using checkers_api.Models.GameModels;
 using Newtonsoft.Json;
 
@@ -16,7 +15,7 @@ public class MatchmakingService : IMatchmakingService
     private readonly ConcurrentQueue<Player> matchMakingQueue;
     private readonly string serviceBusConnectionString;
     private readonly string queueName;
-    private Action<Player, Player>? startGame;
+    private Func<Player, Player, Task>? startGame;
 
     public MatchmakingService(ILogger<MatchmakingService> logger, IConfiguration configuration)
     {
@@ -29,7 +28,7 @@ public class MatchmakingService : IMatchmakingService
         startGame = null;
     }
 
-    public async Task ConfigureQueue(Action<Player, Player> startGame)
+    public async Task ConfigureQueue(Func<Player, Player, Task> startGame)
     {
         this.startGame = startGame;
         var processor = serviceBusClient.CreateProcessor(queueName, new ServiceBusProcessorOptions());
@@ -39,7 +38,7 @@ public class MatchmakingService : IMatchmakingService
         logger.LogInformation("[{location}]: Service bus queue was set up correctly", nameof(MatchmakingService));
     }
 
-    public bool CancelMatchMaking(Id playerId)
+    public bool CancelMatchMaking(string playerId)
     {
         throw new NotImplementedException();
     }
@@ -60,7 +59,7 @@ public class MatchmakingService : IMatchmakingService
         catch (Exception ex)
         {
             logger.LogError("[{location}]: Could not send player {playerId} to service bus. Exception: {ex}",
-                nameof(MatchmakingService), player.PlayerId.Value, ex);
+                nameof(MatchmakingService), player.PlayerId, ex);
             throw;
         }
     }
@@ -81,7 +80,7 @@ public class MatchmakingService : IMatchmakingService
 
         matchMakingQueue.Enqueue(player);
 
-        TryStartGame();
+        await TryStartGame();
     }
 
     private Task ErrorHandler(ProcessErrorEventArgs args)
@@ -89,7 +88,7 @@ public class MatchmakingService : IMatchmakingService
         return Task.CompletedTask;
     }
 
-    private void TryStartGame()
+    private async Task TryStartGame()
     {
         while (matchMakingQueue.Count > 1)
         {
@@ -104,7 +103,7 @@ public class MatchmakingService : IMatchmakingService
             }
 
             //Logic to start one game
-            startGame!(p1, p2);
+            await startGame!(p1, p2);
         }
     }
 }

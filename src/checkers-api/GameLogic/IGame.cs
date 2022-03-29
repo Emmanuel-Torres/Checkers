@@ -1,18 +1,17 @@
-using checkers_api.Models.DomainModels;
 using checkers_api.Models.GameModels;
 
 namespace checkers_api.GameLogic;
 
 public interface IGame
 {
-    Id Id { get; }
-    Id CurrentTurn { get; }
+    string Id { get; }
+    string CurrentTurn { get; }
     IEnumerable<Player> Players { get; }
     GameState State { get; }
     Board Board { get; }
 
-    void MakeMove(Id playerId, MoveRequest moveRequest);
+    void MakeMove(string playerId, MoveRequest moveRequest);
     bool IsGameOver();
-    IEnumerable<Location> GetValidMoves(Id playerId, Location source);
+    IEnumerable<Location> GetValidMoves(string playerId, Location source);
     GameResults? GetGameResults();
 }

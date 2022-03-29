@@ -55,7 +55,7 @@ public class CheckersHub : Hub<ICheckersHub>
                 await matchmakingService.MatchMakeAsync(new Player(Context.ConnectionId, "Guest"));
             }
 
-            // Tell client that matchmaking succeeded.
+            await Clients.Client(Context.ConnectionId).SendMessage("You are matchmaking");
         }
         catch (Exception ex)
         {
@@ -64,12 +64,25 @@ public class CheckersHub : Hub<ICheckersHub>
         }
     }
 
-    public Task MakeMoveAsync(MoveRequest moveRequest)
+    public async Task MakeMoveAsync(MoveRequest moveRequest)
     {
-        throw new NotImplementedException();
+        try 
+        {
+            var res = gameService.MakeMove(Context.ConnectionId, moveRequest);
+
+            if (res.WasMoveSuccessful)
+            {
+                await Clients.Client(Context.ConnectionId).MoveSuccessful(res.Board);
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not make move. Ex: {ex}", nameof(CheckersHub), ex);
+        }
     }
 
-    private void StartGame(Player p1, Player p2)
+    private async Task StartGame(Player p1, Player p2)
     {
         try
         {
@@ -78,12 +91,13 @@ public class CheckersHub : Hub<ICheckersHub>
 
             foreach (var p in game!.Players)
             {
-                Clients.Client(p.PlayerId.Value).SendMessage("You were successfully matchmade");
+                await Clients.Client(p.PlayerId).SendMessage("You were successfully matchmade");
+                await Clients.Client(p.PlayerId).JoinConfirmation(p.Name, game.Board.Squares);
             }
         }
         catch (Exception ex)
         {
-            logger.LogError("[{location}]: Could not start game for players {p1} and {p2}. Ex: {ex}", nameof(CheckersHub), p1.PlayerId.Value, p2.PlayerId.Value, ex);
+            logger.LogError("[{location}]: Could not start game for players {p1} and {p2}. Ex: {ex}", nameof(CheckersHub), p1.PlayerId, p2.PlayerId, ex);
         }
     }
 }

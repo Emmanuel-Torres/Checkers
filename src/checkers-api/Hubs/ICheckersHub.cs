@@ -10,8 +10,9 @@ public interface ICheckersHub
     Task QuitGameAsync();
     Task YourTurnToMove();
     Task SendValidMoveLocations();
-    Task MoveSuccessful();
+    Task MoveSuccessful(IEnumerable<Square> board);
     Task MoveCompleted();
     Task GameOver(string winner);
     Task SendMessage(string message);
+    Task JoinConfirmation(string name, IEnumerable<Square> board);
 }

@@ -1,14 +1,12 @@
-using checkers_api.Models.DomainModels;
-
 namespace checkers_api.Models.GameModels;
 
 public class Piece
 {
     public readonly Color Color;
-    public readonly Id OwnerId;
+    public readonly string OwnerId;
     public PieceState State { get; private set; }
 
-    public Piece(Color color, Id ownerId)
+    public Piece(Color color, string ownerId)
     {
         Color = color;
         OwnerId = ownerId;

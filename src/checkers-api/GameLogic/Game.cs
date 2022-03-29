@@ -1,4 +1,3 @@
-using checkers_api.Models.DomainModels;
 using checkers_api.Models.GameModels;
 using Microsoft.Azure.Amqp.Framing;
 
@@ -8,12 +7,12 @@ public class Game : IGame
 {
     private const int BLACK_PIECES_HOME_ROW = 7;
     private const int WHITE_PIECES_HOME_ROW = 0;
-    private readonly Id id;
+    private readonly string id;
     private readonly Player player1;
     private readonly Player player2;
     private readonly Board board;
     private GameState state;
-    private Id currentTurn;
+    private string currentTurn;
     public Game(Player player1, Player player2)
     {
         this.player1 = player1;
@@ -23,16 +22,16 @@ public class Game : IGame
         var whitePiece = new Piece(Color.White, player2.PlayerId);
         board = new Board(blackPiece, whitePiece);
         state = GameState.Ongoing;
-        id = new Id();
+        id = Guid.NewGuid().ToString();
     }
 
-    public Id Id => id;
-    public Id CurrentTurn => currentTurn;
+    public string Id => id;
+    public string CurrentTurn => currentTurn;
     public IEnumerable<Player> Players => new List<Player>() { player1, player2 };
     public GameState State => state;
     public Board Board => board;
 
-    public void MakeMove(Id playerId, MoveRequest moveRequest)
+    public void MakeMove(string playerId, MoveRequest moveRequest)
     {
         if (playerId != currentTurn)
         {
@@ -68,7 +67,7 @@ public class Game : IGame
         throw new NotImplementedException();
     }
 
-    public IEnumerable<Location> GetValidMoves(Id playerId, Location location)
+    public IEnumerable<Location> GetValidMoves(string playerId, Location location)
     {
         ArgumentNullException.ThrowIfNull(playerId);
         ArgumentNullException.ThrowIfNull(location);
@@ -148,7 +147,7 @@ public class Game : IGame
         }
     }
 
-    private bool IsMoveValid(Square source, Square destination, Id playerId)
+    private bool IsMoveValid(Square source, Square destination, string playerId)
     {
         if (source.Piece is not null &&
             source.Piece.OwnerId == playerId &&
