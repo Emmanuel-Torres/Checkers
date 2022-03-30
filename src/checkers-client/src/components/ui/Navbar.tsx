@@ -1,12 +1,22 @@
 import { FC } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const Navbar: FC = (): JSX.Element => {
     return (
-        <nav>
-            <NavLink to='/'>Checker's</NavLink>
-            <div>
-                <NavLink to='/'>Home</NavLink>
+        <nav className="navbar navbar-expand navbar-dark bg-dark shadow">
+            <div className="container-fluid">
+                <Link className="navbar-brand" to="/">Checker's</Link>
+                <div className="navbar-nav">
+                    <div className='nav-item'>
+                        <Link className="nav-link" to="/">Home</Link>
+                    </div>
+                    <div className='nav-item'>
+                        <Link className="nav-link" to="/game">Play</Link>
+                    </div>
+                    <div className='nav-item'>
+                        <Link className="nav-link" to="/login">Login</Link>
+                    </div>
+                </div>
             </div>
         </nav>
     )
