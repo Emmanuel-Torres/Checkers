@@ -11,4 +11,5 @@ public interface IGameService
     IGame? GetGameByPlayerId(string playerId);
     GameResults TerminateGame(string gameId);
     GameResults QuitGame(string playerId);
+    IEnumerable<Location> GetValidMoves(string playerId, Location location);
 }

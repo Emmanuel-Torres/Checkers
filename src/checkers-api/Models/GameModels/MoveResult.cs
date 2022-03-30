@@ -9,6 +9,7 @@ public class MoveResult
 
     public MoveResult(string gameId, bool wasMoveSuccessful, bool isGameOver, IEnumerable<Square> board)
     {
+        ArgumentNullException.ThrowIfNull(gameId);
         ArgumentNullException.ThrowIfNull(wasMoveSuccessful);
         ArgumentNullException.ThrowIfNull(Board);
         ArgumentNullException.ThrowIfNull(isGameOver);

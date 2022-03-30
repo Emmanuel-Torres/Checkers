@@ -111,6 +111,10 @@ public class GameService : IGameService
         }
     }
 
+    public IEnumerable<Location> GetValidMoves(string playerId, Location location)
+    {
+        throw new NotImplementedException();
+    }
     public GameResults QuitGame(string playerId)
     {
         // ArgumentNullException.ThrowIfNull(playerId);

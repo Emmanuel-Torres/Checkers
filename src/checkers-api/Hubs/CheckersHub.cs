@@ -90,6 +90,18 @@ public class CheckersHub : Hub<ICheckersHub>
         }
     }
 
+    public async Task GetValidMovesAsync(Location source)
+    {
+        try
+        {
+            
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not get valid moves for source ({column}, {row}). Ex: {ex}", nameof(CheckersHub), source.Column, source.Row, ex);
+        }
+    }
+
     private async Task StartGameAsync(Player p1, Player p2)
     {
         try
