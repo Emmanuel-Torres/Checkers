@@ -1,7 +1,9 @@
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
+import { connect } from "http2";
 import { FC, useEffect, useState } from "react";
 import BoardComponent from "../components/game/board/BoardComponent";
-import MatchMake from "../components/matchmake/MatchMake";
+import MoveRequest from "../game-models/moveRequest";
+import MoveResult from "../game-models/moveResult";
 import Square from "../game-models/square";
 import HubMethods from "../models/hub-methods";
 
@@ -27,7 +29,10 @@ const GameView: FC = (): JSX.Element => {
             }).catch(err => {
                 console.error("Connection failed: ", err);
             });
-
+            connection.on(HubMethods.moveSuccessful, (moveResult: MoveResult) => {
+                setBoard(moveResult.board);                
+            })
+            
             connection.on(HubMethods.sendJoinConfirmation, (name: string, board: Square[]) => {
                 console.log(name);
                 console.log(JSON.stringify(board));
@@ -48,6 +53,15 @@ const GameView: FC = (): JSX.Element => {
         try {
             setIsMatchMaking(true);
             await connection?.send(HubMethods.matchMake, undefined);
+
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+    const makeMove = async (moveRequest : MoveRequest) => {
+        try {
+            await connection?.send(HubMethods.makeMove, moveRequest);
         }
         catch (e) {
             console.error(e);
