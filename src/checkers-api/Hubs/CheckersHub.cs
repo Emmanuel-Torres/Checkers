@@ -17,7 +17,7 @@ public class CheckersHub : Hub<ICheckersHub>
         this.gameService = gameService;
         this.matchmakingService = matchmakingService;
         this.authService = authService;
-        this.matchmakingService.ConfigureQueue(StartGame);
+        this.matchmakingService.ConfigureQueue(StartGameAsync);
 
         this.logger.LogInformation("[{location}]: Successfully created hub", nameof(CheckersHub));
     }
@@ -56,12 +56,12 @@ public class CheckersHub : Hub<ICheckersHub>
                 await matchmakingService.MatchMakeAsync(new Player(Context.ConnectionId, "Guest"));
             }
 
-            await Clients.Client(Context.ConnectionId).SendMessage("You are matchmaking");
+            await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "You are matchmaking");
         }
         catch (Exception ex)
         {
             logger.LogError("[{location}]: Could not matchmake player {token}. Ex: {ex}", nameof(CheckersHub), Context.ConnectionId, ex);
-            await Clients.Client(Context.ConnectionId).SendMessage("Matchmaking failed");
+            await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "Matchmaking failed");
         }
     }
 
@@ -73,16 +73,16 @@ public class CheckersHub : Hub<ICheckersHub>
 
             if (res.IsGameOver)
             {
-                await EndGame(res.GameId);
+                await EndGameAsync(res.GameId);
                 return;
             }
             if (res.WasMoveSuccessful)
             {
-                await Clients.Client(Context.ConnectionId).MoveSuccessful(res.Board);
+                await Clients.Client(Context.ConnectionId).MoveSuccessfulAsync(res.Board);
                 return;
             }
 
-            await Clients.Client(Context.ConnectionId).SendMessage("Move was not successful");
+            await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "Move was not successful");
         }
         catch (Exception ex)
         {
@@ -90,7 +90,7 @@ public class CheckersHub : Hub<ICheckersHub>
         }
     }
 
-    private async Task StartGame(Player p1, Player p2)
+    private async Task StartGameAsync(Player p1, Player p2)
     {
         try
         {
@@ -99,8 +99,8 @@ public class CheckersHub : Hub<ICheckersHub>
 
             foreach (var p in game!.Players)
             {
-                await Clients.Client(p.PlayerId).SendMessage("You were successfully matchmade");
-                await Clients.Client(p.PlayerId).JoinConfirmation(p.Name, game.Board.Squares);
+                await Clients.Client(p.PlayerId).SendMessageAsync("server", "You were successfully matchmade");
+                await Clients.Client(p.PlayerId).SendJoinConfirmationAsync(p.Name, game.Board.Squares);
             }
         }
         catch (Exception ex)
@@ -109,14 +109,14 @@ public class CheckersHub : Hub<ICheckersHub>
         }
     }
 
-    private async Task EndGame(string gameId)
+    private async Task EndGameAsync(string gameId)
     {
         try
         {
             var results = gameService.TerminateGame(gameId);
             foreach (var p in results.Players)
             {
-                await Clients.Client(p.PlayerId).GameOver(results);
+                await Clients.Client(p.PlayerId).GameOverAsync(results);
             }
         }
         catch (Exception ex)
