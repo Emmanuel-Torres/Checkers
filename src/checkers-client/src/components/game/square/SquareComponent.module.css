@@ -1,0 +1,35 @@
+.square {
+  color: white;
+  aspect-ratio: 1/1;
+  padding: 5px;
+}
+
+.piece {
+  aspect-ratio: 1/1;
+  border: solid .15rem #ff0000;
+  border-radius: 100%;
+}
+
+.bg-White {
+  background-color: #dadada;
+}
+
+.bg-Black {
+  background-color: #705036;
+}
+
+.piece-White {
+    background-color: #ffffff;
+}
+.piece-Black {
+    background-color: rgb(0, 0, 0);
+}
+
+@media screen and (min-width: 600px) {
+    .square {
+        padding: 1.25rem;
+    }
+    .piece {
+        border-width: .25rem;
+    }
+}

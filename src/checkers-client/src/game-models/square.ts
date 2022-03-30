@@ -6,9 +6,9 @@ export default class Square {
   public readonly isOccupied: boolean;
   public readonly piece?: Piece;
 
-  constructor(location: Location, color: number, isOccupied: boolean, piece?: Piece) {
+  constructor(location: Location, color: string, isOccupied: boolean, piece?: Piece) {
     this.location = location;
-    this.color = color == 0 ? "white" : "black";
+    this.color = color;
     this.isOccupied = isOccupied;
     this.piece = piece;
   }

@@ -5,7 +5,6 @@ public class Square
     public Location Location { get; }
     public Color Color { get; }
     public Piece? Piece { get; set; }
-    public string StringColor => Color.ToString();
     public bool IsOccupied => Piece is not null;
 
     public Square(Location location, Color color)
