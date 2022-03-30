@@ -100,7 +100,7 @@ public class CheckersHub : Hub<ICheckersHub>
             foreach (var p in game!.Players)
             {
                 await Clients.Client(p.PlayerId).SendMessageAsync("server", "You were successfully matchmade");
-                await Clients.Client(p.PlayerId).SendJoinConfirmationAsync(p.Name, game.Board.Squares);
+                await Clients.Client(p.PlayerId).SendJoinConfirmationAsync(p.Name + p.PlayerId, game.Board.Squares);
             }
         }
         catch (Exception ex)

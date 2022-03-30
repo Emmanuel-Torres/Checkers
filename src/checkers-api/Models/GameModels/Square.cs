@@ -2,8 +2,8 @@ namespace checkers_api.Models.GameModels;
 
 public class Square
 {
-    public readonly Location Location;
-    public readonly Color Color;
+    public Location Location { get; }
+    public Color Color { get; }
     public Piece? Piece { get; set; }
     public string StringColor => Color.ToString();
     public bool IsOccupied => Piece is not null;

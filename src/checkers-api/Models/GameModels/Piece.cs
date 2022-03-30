@@ -2,8 +2,8 @@ namespace checkers_api.Models.GameModels;
 
 public class Piece
 {
-    public readonly Color Color;
-    public readonly string OwnerId;
+    public Color Color { get; }
+    public string OwnerId { get; }
     public PieceState State { get; private set; }
 
     public Piece(Color color, string ownerId)

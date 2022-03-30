@@ -23,8 +23,9 @@ const GameView: FC = (): JSX.Element => {
                 console.error("Connection failed: ", err);
             });
 
-            connection.on(HubMethods.sendJoinConfirmation, (name: string, data: Square[]) => {
+            connection.on(HubMethods.sendJoinConfirmation, (name: string, board) => {
                 console.log(name);
+                console.log(board);
             })
 
             connection.on(HubMethods.sendMessage, (sender: string, message: string) => {
