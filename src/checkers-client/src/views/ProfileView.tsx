@@ -4,7 +4,7 @@ import User from "../models/user";
 import { StoreDispatch, useStoreSelector } from "../store";
 import { authenticateUser, updateProfile } from "../store/auth-slice";
 
-const Secure: FC = (): JSX.Element => {
+const ProfileView: FC = (): JSX.Element => {
     const dispatch = useDispatch<StoreDispatch>();
     const token = useStoreSelector(store => store.auth.userToken)
     const profile = useStoreSelector(store => store.auth.userProfile);
@@ -80,4 +80,4 @@ const Secure: FC = (): JSX.Element => {
     )
 }
 
-export default Secure;
+export default ProfileView;

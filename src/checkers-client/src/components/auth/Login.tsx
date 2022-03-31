@@ -3,6 +3,7 @@ import GoogleLogin, { GoogleLoginResponse } from "react-google-login";
 import { useDispatch } from "react-redux"
 import { StoreDispatch } from "../../store"
 import { authenticateUser, setToken } from "../../store/auth-slice";
+import { refreshTokenSetup } from "../../services/refresh-token";
 
 const Login: FC = (): JSX.Element => {
     const dispatch = useDispatch<StoreDispatch>();
@@ -11,6 +12,8 @@ const Login: FC = (): JSX.Element => {
     const onSuccess = (res: any) => {
         dispatch(setToken(res.tokenId));
         dispatch(authenticateUser(res.tokenId));
+
+        refreshTokenSetup(res);
     }
 
     const onFailure = (res: GoogleLoginResponse) => {
