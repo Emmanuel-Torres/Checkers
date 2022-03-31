@@ -12,8 +12,9 @@ const Login: FC = (): JSX.Element => {
     const onSuccess = (res: any) => {
         dispatch(setToken(res.tokenId));
         dispatch(authenticateUser(res.tokenId));
+        console.log(res);
 
-        refreshTokenSetup(res);
+        // refreshTokenSetup(res);
     }
 
     const onFailure = (res: GoogleLoginResponse) => {
