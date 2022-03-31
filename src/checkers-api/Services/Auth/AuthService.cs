@@ -48,6 +48,11 @@ public class AuthService : IAuthService
         }
     }
 
+    public Task Logout(string token)
+    {
+        throw new NotImplementedException();
+    }
+
     public async Task UpdateProfileAsync(string authorization, UserProfile profile)
     {
         try

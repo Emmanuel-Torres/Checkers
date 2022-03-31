@@ -11,18 +11,21 @@ const authenticateUser = async (token: string): Promise<User> => {
 };
 
 const updateProfile = async (token: string, user: User) => {
-  await axios.put(
-    authUrl + "/profile",
-    user,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  );
+  await axios.put(authUrl + "/profile", user, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+const logout = async (token: string) => {
+  await axios.post(authUrl + "/logout", token, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 };
 
 const authService = {
   authenticateUser,
   updateProfile,
+  logout
 };
 
 export default authService;

@@ -11,11 +11,18 @@ export const authenticateUser = createAsyncThunk(
 
 export const updateProfile = createAsyncThunk(
   "updateProfile",
-  async (args: {token: string, user: User}, thunkApi: any): Promise<User> => {
+  async (args: { token: string; user: User }, thunkApi: any): Promise<User> => {
     await authService.updateProfile(args.token, args.user);
     return await authService.authenticateUser(args.token);
   }
-)
+);
+
+export const logout = createAsyncThunk(
+  "logout",
+  async (token: string, thunkApi: any) => {
+    await authService.logout(token);
+  }
+);
 
 interface AuthState {
   userToken?: string;
@@ -34,21 +41,24 @@ const authSlice = createSlice({
     setToken(state, action: PayloadAction<string>) {
       state.userToken = action.payload;
     },
-    logout(state) {
-      state.userToken = undefined;
-      state.userProfile = undefined;
-    },
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      authenticateUser.fulfilled, (state, action: PayloadAction<User>) => {
-        state.userProfile = action.payload;
-      }
-    ).addCase(authenticateUser.rejected, (state, action) => {
-      state.userProfile = undefined;
-    });
+    builder
+      .addCase(
+        authenticateUser.fulfilled,
+        (state, action: PayloadAction<User>) => {
+          state.userProfile = action.payload;
+        }
+      )
+      .addCase(authenticateUser.rejected, (state) => {
+        state.userProfile = undefined;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.userProfile = undefined;
+        state.userToken = undefined;
+      });
   },
 });
 
-export const { setToken, logout } = authSlice.actions;
+export const { setToken } = authSlice.actions;
 export default authSlice;

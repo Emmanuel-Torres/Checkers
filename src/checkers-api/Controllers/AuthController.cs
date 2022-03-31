@@ -56,4 +56,20 @@ public class AuthController : ControllerBase
             return StatusCode(500);
         }
     }
+
+    // [HttpPost("logout")]
+    // public async Task<ActionResult> Logout([FromHeader] string authorization)
+    // {
+    //     try
+    //     {
+    //         authorization = authorization.Remove(0, 7);
+    //         await authService.Logout(authorization);
+    //         return Ok();
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         logger.LogError("[{location}]: Could not logout user. Ex: {ex}", nameof(AuthController), ex);
+    //         return StatusCode(500);
+    //     }
+    // }
 }
