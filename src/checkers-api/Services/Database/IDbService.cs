@@ -9,5 +9,5 @@ public interface IDbService
     Task<UserProfile> AddUserAsync(UserProfile user);
     Task<UserProfile> RemoveUserByIdAsync(int userId);
     // Task<User> RemoveUserByEmailAsync(string userEmail);
-    Task<UserProfile> UpdateUserAsync(int userId, UserProfile user);
+    Task UpdateUserAsync(UserProfile user);
 }
