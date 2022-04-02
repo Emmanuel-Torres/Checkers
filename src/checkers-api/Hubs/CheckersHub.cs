@@ -100,6 +100,26 @@ public class CheckersHub : Hub<ICheckersHub>
         }
     }
 
+    public async Task MoveCompletedAsync()
+    {
+        try
+        {
+            var game = gameService.GetGameByPlayerId(Context.ConnectionId);
+            if (game is null)
+            {
+                throw new Exception("Player is not in a game");
+            }
+            var currentTurn = game.Players.First(p => p.PlayerId != Context.ConnectionId);
+
+            logger.LogDebug("[{location}]: Player {p1} is done moving. Passing turn to {p2}", nameof(CheckersHub), Context.ConnectionId, currentTurn.PlayerId);
+            await Clients.Client(currentTurn.PlayerId).YourTurnToMoveAsync(game.Board.Squares);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could complete move for player {token}. Ex: {ex}", nameof(CheckersHub), Context.ConnectionId, ex);
+        }
+    }
+
     public async Task GetValidMovesAsync(Location source)
     {
         try

@@ -7,4 +7,6 @@ export default class HubMethods {
     static makeMove = "MakeMoveAsync";
     static getValidMoves = "GetValidMovesAsync";
     static sendValidMoveLocations = "SendValidMoveLocationsAsync";
+    static moveCompleted = "MoveCompletedAsync";
+    static yourTurnToMove = "YourTurnToMoveAsync";
 }

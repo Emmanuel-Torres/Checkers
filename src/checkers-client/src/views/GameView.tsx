@@ -31,12 +31,11 @@ const GameView: FC = (): JSX.Element => {
             });
 
             connection.on(HubMethods.moveSuccessful, (board: Square[]) => {
-                console.log(board);
                 setBoard(board);
+                connection.send(HubMethods.moveCompleted);
             });
             connection.on(HubMethods.sendJoinConfirmation, (name: string, board: Square[]) => {
                 console.log(name);
-                console.log(JSON.stringify(board));
                 setIsMatchMaking(false);
                 setInGame(true);
                 setBoard(board);
@@ -48,6 +47,9 @@ const GameView: FC = (): JSX.Element => {
             connection.on(HubMethods.sendMessage, (sender: string, message: string) => {
                 console.log(message);
             });
+            connection.on(HubMethods.yourTurnToMove, (board: Square[]) => {
+                setBoard(board);
+            })
 
             setIsLoading(false);
         }
