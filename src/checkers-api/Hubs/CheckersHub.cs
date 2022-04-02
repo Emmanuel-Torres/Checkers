@@ -13,20 +13,14 @@ public class CheckersHub : Hub<ICheckersHub>
     private readonly ILogger<CheckersHub> logger;
     private readonly IGameService gameService;
     private readonly IAuthService authService;
-    private readonly IConfiguration configuration;
-    private readonly ServiceBusClient serviceBusClient;
-    private readonly ConcurrentQueue<Player> matchMakingQueue;
-
-    public CheckersHub(ILogger<CheckersHub> logger, IGameService gameService, IAuthService authService, IConfiguration configuration)
+    private readonly IMatchmakingService matchmakingService;
+    public CheckersHub(ILogger<CheckersHub> logger, IGameService gameService, IAuthService authService, IMatchmakingService matchmakingService)
     {
         this.logger = logger;
         this.gameService = gameService;
         this.authService = authService;
-        this.configuration = configuration;
-        this.serviceBusClient = new(configuration["QUEUE_CONNECTION_STRING"]);
-        this.matchMakingQueue = new();
-        this.logger.LogInformation("[{location}]: Successfully created hub", nameof(CheckersHub));
-        ConfigureQueue();
+        this.matchmakingService = matchmakingService;
+        this.matchmakingService.ConfigureQueue(StartGameAsync);
     }
 
     public override async Task OnConnectedAsync()
@@ -58,12 +52,12 @@ public class CheckersHub : Hub<ICheckersHub>
             if (profile is not null)
             {
                 logger.LogDebug("[{location}]: User profile was found for player {token}. Matchmaking as {name}", nameof(CheckersHub), Context.ConnectionId, profile.GivenName);
-                await MatchMakeAsync(new Player(Context.ConnectionId, profile.GivenName));
+                await matchmakingService.MatchMakeAsync(new Player(Context.ConnectionId, profile.GivenName));
             }
             else
             {
                 logger.LogDebug("[{location}]: User profile was not found for player {token}. Matchmaking as guest.", nameof(CheckersHub), Context.ConnectionId);
-                await MatchMakeAsync(new Player(Context.ConnectionId, "Guest"));
+                await matchmakingService.MatchMakeAsync(new Player(Context.ConnectionId, "Guest"));
             }
 
             await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "You are matchmaking");
@@ -114,36 +108,14 @@ public class CheckersHub : Hub<ICheckersHub>
         }
     }
 
-    private async Task MatchMakeAsync(Player player)
-    {
-        ArgumentNullException.ThrowIfNull(player);
-
-        var p = JsonConvert.SerializeObject(player);
-
-        try
-        {
-            var sender = serviceBusClient.CreateSender(configuration["QUEUE_NAME"]);
-            var message = new ServiceBusMessage(p);
-
-            await sender.SendMessageAsync(message);
-            logger.LogDebug("[{location}]: Player {playerId} was successfully sent to service bus queue", nameof(CheckersHub), player.PlayerId);
-        }
-        catch (Exception ex)
-        {
-            logger.LogError("[{location}]: Could not send player {playerId} to service bus. Exception: {ex}",
-                nameof(CheckersHub), player.PlayerId, ex);
-            throw;
-        }
-    }
-
     private async Task StartGameAsync(Player p1, Player p2)
     {
         try
         {
+            logger.LogInformation("[{location}]: Starting game for players {p1} and {p2}", nameof(CheckersHub), p1.PlayerId, p2.PlayerId);
+
             var gameId = gameService.StartGame(p1, p2);
             var game = gameService.GetGameByGameId(gameId);
-
-            logger.LogInformation("[{location}]: Starting game {gameId} with players {p1} and {p2}", nameof(CheckersHub), gameId, p1.PlayerId, p2.PlayerId);
 
             foreach (var p in game!.Players)
             {
@@ -170,51 +142,6 @@ public class CheckersHub : Hub<ICheckersHub>
         catch (Exception ex)
         {
             logger.LogError("[{location}]: Could not end game properly. Ex: {ex}", nameof(CheckersHub), ex);
-        }
-    }
-
-    private async Task ConfigureQueue()
-    {
-        var processor = serviceBusClient.CreateProcessor(configuration["QUEUE_NAME"], new ServiceBusProcessorOptions());
-        processor.ProcessMessageAsync += MessageHandler;
-        await processor.StartProcessingAsync();
-        logger.LogInformation("[{location}]: Service bus queue was set up correctly", nameof(CheckersHub));
-    }
-
-    private async Task MessageHandler(ProcessMessageEventArgs args)
-    {
-        logger.LogDebug("[{location}]: Received a message from service bus", nameof(CheckersHub));
-
-        var body = Encoding.ASCII.GetString(args.Message.Body);
-        var player = JsonConvert.DeserializeObject<Player>(body);
-
-        await args.CompleteMessageAsync(args.Message);
-
-        if (player is null)
-        {
-            throw new NullReferenceException(nameof(player));
-        }
-
-        matchMakingQueue.Enqueue(player);
-
-        await TryStartGame();
-    }
-
-    private async Task TryStartGame()
-    {
-        while (matchMakingQueue.Count > 1)
-        {
-            if (!matchMakingQueue.TryDequeue(out var p1))
-            {
-                break;
-            }
-            if (!matchMakingQueue.TryDequeue(out var p2))
-            {
-                matchMakingQueue.Enqueue(p1);
-                break;
-            }
-
-            await StartGameAsync(p1, p2);
         }
     }
 }
