@@ -10,13 +10,15 @@ public class Game : IGame
     private readonly string id;
     private readonly Player player1;
     private readonly Player player2;
+    private readonly ILogger<Game> logger;
     private readonly Board board;
     private GameState state;
     private string currentTurn;
-    public Game(Player player1, Player player2)
+    public Game(Player player1, Player player2, ILogger<Game> logger)
     {
         this.player1 = player1;
         this.player2 = player2;
+        this.logger = logger;
         currentTurn = player1.PlayerId;
         var blackPiece = new Piece(Color.Black, player1.PlayerId);
         var whitePiece = new Piece(Color.White, player2.PlayerId);
@@ -72,35 +74,56 @@ public class Game : IGame
         ArgumentNullException.ThrowIfNull(playerId);
         ArgumentNullException.ThrowIfNull(location);
 
-        var square = Board.GetSquareByLocation(location);
-
-        if (square.Piece is null ||
-            square.Piece.OwnerId != playerId)
+        try
         {
-            return new List<Location>();
-        }
+            var square = Board.GetSquareByLocation(location);
 
-        var neighborSquares = GetNeighbors(square.Piece.Color, location);
-        var availableLocations = neighborSquares.Where(s => s.Piece is null).Select(x => x.Location);
-        var occupiedSquares = neighborSquares.Where(s => s.Piece is not null && s.Piece.OwnerId != playerId);
-        var nextLocations = new List<Location>();
-
-        if (occupiedSquares.Any())
-        {
-            foreach (var s in occupiedSquares)
+            if (currentTurn != playerId)
             {
-                var nextSquare = GetNeighbors(square.Piece.Color, s.Location)
-                                    .Where(x => x.IsOccupied == false)
-                                    .FirstOrDefault(x => x.Location.Column != square.Location.Column);
-
-                if (nextSquare != null)
-                {
-                    nextLocations.Add(nextSquare.Location);
-                }
+                throw new Exception("Is not this player's turn");
             }
-        }
+            if (square.Piece is null)
+            {
+                throw new Exception("Square is does not have a piece");
+            }
+            if (square.Piece.OwnerId != playerId)
+            {
+                throw new Exception("Player does not own this piece");
+            }
 
-        return availableLocations.Union(nextLocations);
+            var neighborSquares = GetNeighbors(square.Piece.Color, location);
+            logger.LogDebug("[{location}]: Found {count} neighbor squares", nameof(Game), neighborSquares.Count());
+
+            var availableLocations = neighborSquares.Where(s => s.Piece is null).Select(x => x.Location);
+            logger.LogDebug("[{location}]: Found {count} available locations", nameof(Game), availableLocations.Count());
+
+            var occupiedSquares = neighborSquares.Where(s => s.Piece is not null && s.Piece.OwnerId != playerId);
+            logger.LogDebug("[{location}]: Found {count} occupied locations", nameof(Game), occupiedSquares.Count());
+
+            var nextLocations = new List<Location>();
+
+            if (occupiedSquares.Any())
+            {
+                foreach (var s in occupiedSquares)
+                {
+                    var nextSquare = GetNeighbors(square.Piece.Color, s.Location)
+                                        .Where(x => x.IsOccupied == false)
+                                        .FirstOrDefault(x => x.Location.Column != square.Location.Column);
+
+                    if (nextSquare != null)
+                    {
+                        nextLocations.Add(nextSquare.Location);
+                    }
+                }
+                logger.LogDebug("[{location}]: Found {count} available attack locations", nameof(Game), nextLocations.Count);
+            }
+
+            return availableLocations.Union(nextLocations);
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     public bool IsGameOver()
@@ -233,8 +256,8 @@ public class Game : IGame
     {
         var neighborLocations = new[]
         {
-            new Location (location.Row - 1, location.Column + 1 ),
-            new Location (location.Row - 1, location.Column - 1 ),
+            new Location (location.Row - 1, location.Column + 1),
+            new Location (location.Row - 1, location.Column - 1),
             new Location (location.Row + 1, location.Column + 1),
             new Location (location.Row + 1, location.Column - 1)
         };
@@ -243,7 +266,6 @@ public class Game : IGame
         {
             return board.Squares.Where(s => neighborLocations.Contains(s.Location));
         }
-
         if (color == Color.Black)
         {
             return board.Squares.Where(s => s.Location.Row < location.Row).Where(s => neighborLocations.Contains(s.Location));

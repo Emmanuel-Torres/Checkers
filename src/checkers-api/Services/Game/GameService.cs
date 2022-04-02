@@ -11,13 +11,15 @@ public class GameService : IGameService
     private readonly ConcurrentDictionary<string, string> playerGame;
     private readonly ConcurrentDictionary<string, IGame> activeGames;
     private readonly ILogger<GameService> logger;
+    private readonly ILoggerFactory loggerFactory;
 
-    public GameService(ILogger<GameService> logger)
+    public GameService(ILogger<GameService> logger, ILoggerFactory loggerFactory)
     {
         activePlayers = new ConcurrentDictionary<string, Player>();
         playerGame = new ConcurrentDictionary<string, string>();
         activeGames = new ConcurrentDictionary<string, IGame>();
         this.logger = logger;
+        this.loggerFactory = loggerFactory;
     }
 
     public string StartGame(Player player1, Player player2)
@@ -34,7 +36,7 @@ public class GameService : IGameService
             throw new Exception($"Player {player2.PlayerId} is already active in another game");
         }
 
-        var game = new Game(player1, player2);
+        var game = new Game(player1, player2, loggerFactory.CreateLogger<Game>());
         if (!activeGames.TryAdd(game.Id, game))
         {
             throw new Exception($"Game {game.Id} already exists");
