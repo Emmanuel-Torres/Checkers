@@ -172,13 +172,8 @@ public class Game : IGame
 
     private bool IsMoveValid(Square source, Square destination, string playerId)
     {
-        if (source.Piece is not null &&
-            source.Piece.OwnerId == playerId &&
-            IsPieceGoingForward(source, destination) &&
-            destination.Piece is null &&
-            Math.Abs(source.Location.Row - destination.Location.Row) <= 2 &&
-            Math.Abs(source.Location.Column - destination.Location.Column) <= 2 &&
-            IsMoveRegularOrAttack(source, destination))
+        var validMoves = GetValidMoves(playerId, source.Location);
+        if (validMoves.Any(m => m == destination.Location))
         {
             return true;
         }

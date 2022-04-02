@@ -74,6 +74,9 @@ public class CheckersHub : Hub<ICheckersHub>
     {
         try
         {
+            logger.LogDebug("[{location}]: Player {token} made a move request from ({sRow}, {sCol}) to ({dRow}, {dCol})",
+                nameof(CheckersHub), Context.ConnectionId, moveRequest.Source.Row, moveRequest.Source.Column, moveRequest.Destination.Row, moveRequest.Destination.Column);
+
             var res = gameService.MakeMove(Context.ConnectionId, moveRequest);
 
             if (res.IsGameOver)
@@ -83,6 +86,7 @@ public class CheckersHub : Hub<ICheckersHub>
             }
             if (res.WasMoveSuccessful)
             {
+                logger.LogDebug("[{location}]: Move request from player {token} was successful", nameof(CheckersHub), Context.ConnectionId);
                 await Clients.Client(Context.ConnectionId).MoveSuccessfulAsync(res.Board);
                 return;
             }
@@ -92,6 +96,7 @@ public class CheckersHub : Hub<ICheckersHub>
         catch (Exception ex)
         {
             logger.LogError("[{location}]: Could not make move. Ex: {ex}", nameof(CheckersHub), ex);
+            await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "Something went wrong when making your move");
         }
     }
 

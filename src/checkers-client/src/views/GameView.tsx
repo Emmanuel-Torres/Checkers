@@ -3,7 +3,6 @@ import { FC, useEffect, useState } from "react";
 import BoardComponent from "../components/game/board/BoardComponent";
 import BoardLocation from "../game-models/location";
 import MoveRequest from "../game-models/moveRequest";
-import MoveResult from "../game-models/moveResult";
 import Square from "../game-models/square";
 import HubMethods from "../models/hub-methods";
 
@@ -31,8 +30,9 @@ const GameView: FC = (): JSX.Element => {
                 console.error("Connection failed: ", err);
             });
 
-            connection.on(HubMethods.moveSuccessful, (moveResult: MoveResult) => {
-                setBoard(moveResult.board);
+            connection.on(HubMethods.moveSuccessful, (board: Square[]) => {
+                console.log(board);
+                setBoard(board);
             });
             connection.on(HubMethods.sendJoinConfirmation, (name: string, board: Square[]) => {
                 console.log(name);
@@ -65,6 +65,7 @@ const GameView: FC = (): JSX.Element => {
     }
     const makeMove = async (moveRequest: MoveRequest) => {
         try {
+            console.log(moveRequest);
             await connection?.send(HubMethods.makeMove, moveRequest);
         }
         catch (e) {
@@ -87,7 +88,7 @@ const GameView: FC = (): JSX.Element => {
             {isMatchMaking && <h2>You are MatchMaking, please wait</h2>}
             {inGame && <>
                 <h2>You are currently in a game</h2>
-                <BoardComponent board={board} validLocations={validLocations} onGetValidMoves={getValidMoves}/>
+                <BoardComponent board={board} validLocations={validLocations} onGetValidMoves={getValidMoves} onMakeMove={makeMove}/>
             </>}
         </>
     )

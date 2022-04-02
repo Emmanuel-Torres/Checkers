@@ -89,6 +89,7 @@ public class GameService : IGameService
         ArgumentNullException.ThrowIfNull(moveRequest);
 
         var game = GetGameByPlayerId(playerId);
+        var moveSuccessful = false;
 
         if (game is null)
         {
@@ -102,15 +103,15 @@ public class GameService : IGameService
         try
         {
             game.MakeMove(playerId, moveRequest);
-            var isGameOver = game.IsGameOver();
-
-            return new MoveResult(game.Id, true, isGameOver, game.Board.Squares);
+            moveSuccessful = true;
         }
         catch (Exception ex)
         {
-            logger.LogError("[{location}]: Could not complete move request from player {playerId}. Ex: {ex}", nameof(GameService), playerId, ex);
-            return new MoveResult(game.Id, false, game.IsGameOver(), game.Board.Squares);
+            logger.LogWarning("[{location}]: Could not complete move request from player {playerId}. Ex: {ex}", nameof(GameService), playerId, ex);
+            moveSuccessful = false;
         }
+
+        return new MoveResult(game.Id, moveSuccessful, game.IsGameOver(), game.Board.Squares);
     }
 
     public IEnumerable<Location> GetValidMoves(string playerId, Location location)
@@ -127,7 +128,7 @@ public class GameService : IGameService
         }
         catch (Exception ex)
         {
-            logger.LogError("[{location}]: Could not get valid moves for location ({row}. {column}). Ex: {ex}", nameof(GameService), location.Row, location.Column, ex);
+            logger.LogWarning("[{location}]: Could not get valid moves for location ({row}. {column}). Ex: {ex}", nameof(GameService), location.Row, location.Column, ex);
             return new List<Location>();
         }
     }

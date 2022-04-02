@@ -11,8 +11,8 @@ public class MoveResult
     {
         ArgumentNullException.ThrowIfNull(gameId);
         ArgumentNullException.ThrowIfNull(wasMoveSuccessful);
-        ArgumentNullException.ThrowIfNull(Board);
         ArgumentNullException.ThrowIfNull(isGameOver);
+        ArgumentNullException.ThrowIfNull(board);
 
         GameId = gameId;
         WasMoveSuccessful = wasMoveSuccessful;

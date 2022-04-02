@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import Square from "../../../game-models/square";
 import BoardLocation from "../../../game-models/location";
 import SquareComponent from "../square/SquareComponent";
@@ -9,21 +9,23 @@ type Props = {
     board: Square[];
     validLocations: BoardLocation[];
     onGetValidMoves: (location: BoardLocation) => void;
-    // onMakeMove: (request: MoveRequest) => void;
+    onMakeMove: (request: MoveRequest) => void;
 }
 
 const BoardComponent: FC<Props> = (props): JSX.Element => {
     const [source, setSource] = useState<Square>();
-    // const [validLocations, setValidLocation] = useState<BoardLocation[]>([]);
+
+    // const validIndices = props.board.filter(s => props.validLocations)
 
     const squareSelected = (square: Square) => {
-        console.log("Here", source, props.validLocations);
         if (!source ||
             !props.validLocations.find(l => square.location.row === l.row && square.location.column === l.column)) {
             setSource(square);
             props.onGetValidMoves(square.location);
             return;
         }
+
+        props.onMakeMove(new MoveRequest(source.location, square.location));
     }
 
     return (
