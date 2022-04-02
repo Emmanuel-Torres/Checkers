@@ -9,13 +9,13 @@ public interface ICheckersHub
     Task MakeMoveAsync(MoveRequest moveRequest);
     Task GetValidMovesAsync(Location source);
     Task QuitGameAsync();
-    Task YourTurnToMoveAsync();
-    Task SendValidMoveLocationsAsync(IEnumerable<Location> validLocations);
     Task MoveCompletedAsync();
 
     //Client methods
+    Task YourTurnToMoveAsync();
     Task MoveSuccessfulAsync(IEnumerable<Square> board);
     Task GameOverAsync(GameResults results);
     Task SendMessageAsync(string sender, string message);
     Task SendJoinConfirmationAsync(string name, IEnumerable<Square> board);
+    Task SendValidMoveLocationsAsync(IEnumerable<Location> validLocations);
 }

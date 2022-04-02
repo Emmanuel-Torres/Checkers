@@ -99,7 +99,10 @@ public class CheckersHub : Hub<ICheckersHub>
     {
         try
         {
+            logger.LogDebug("[{location}]: Getting valid locations for ({row}, {column})", nameof(CheckersHub), source.Row, source.Column);
             var res = gameService.GetValidMoves(Context.ConnectionId, source);
+            logger.LogDebug("[{location}]: Found {count} valid locations for ({row}, {column})", nameof(CheckersHub), res.Count(), source.Row, source.Column);
+
             await Clients.Client(Context.ConnectionId).SendValidMoveLocationsAsync(res);
         }
         catch (Exception ex)

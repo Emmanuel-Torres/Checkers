@@ -5,5 +5,6 @@ export default class HubMethods {
     static sendJoinConfirmation = "SendJoinConfirmationAsync";
     static matchMake = "MatchMakeAsync";
     static makeMove = "MakeMoveAsync";
-    static getValidMoves = "GetValidMovesAsync"
+    static getValidMoves = "GetValidMovesAsync";
+    static sendValidMoveLocations = "SendValidMoveLocationsAsync";
 }

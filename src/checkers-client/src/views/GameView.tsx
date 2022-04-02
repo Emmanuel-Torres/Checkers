@@ -30,18 +30,21 @@ const GameView: FC = (): JSX.Element => {
             }).catch(err => {
                 console.error("Connection failed: ", err);
             });
+
             connection.on(HubMethods.moveSuccessful, (moveResult: MoveResult) => {
                 setBoard(moveResult.board);
-            })
-
+            });
             connection.on(HubMethods.sendJoinConfirmation, (name: string, board: Square[]) => {
                 console.log(name);
                 console.log(JSON.stringify(board));
                 setIsMatchMaking(false);
                 setInGame(true);
                 setBoard(board);
-            })
-
+            });
+            connection.on(HubMethods.sendValidMoveLocations, (locations: BoardLocation[]) => {
+                console.log(locations);
+                setValidMoves(locations);
+            });
             connection.on(HubMethods.sendMessage, (sender: string, message: string) => {
                 console.log(message);
             });
@@ -70,6 +73,7 @@ const GameView: FC = (): JSX.Element => {
     }
     const getValidMoves = async (source: BoardLocation) => {
         try {
+            console.log("Getting locations for", source);
             await connection?.send(HubMethods.getValidMoves, source);
         }
         catch (e) {

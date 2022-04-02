@@ -17,14 +17,12 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
     // const [validLocations, setValidLocation] = useState<BoardLocation[]>([]);
 
     const squareSelected = (square: Square) => {
-        if (!source) {
+        console.log("Here", source, props.validLocations);
+        if (!source ||
+            !props.validLocations.find(l => square.location.row === l.row && square.location.column === l.column)) {
             setSource(square);
             props.onGetValidMoves(square.location);
             return;
-        }
-
-        if (props.validLocations.find(l => square.location.row === l.row && square.location.column === l.column)) {
-            // props.onMakeMove(new MoveRequest(source.location, square.location))
         }
     }
 
