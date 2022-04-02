@@ -15,7 +15,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 );
 
 builder.Services.AddSingleton<IGameService, GameService>();
-builder.Services.AddSingleton<IMatchmakingService, MatchmakingService>();
 builder.Services.AddTransient<IDbService, DbService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
