@@ -182,7 +182,7 @@ public class CheckersHub : Hub<ICheckersHub>
 
     private async Task MessageHandler(ProcessMessageEventArgs args)
     {
-        logger.LogDebug("[{location}]: Received a message from service bus", nameof(MatchmakingService));
+        logger.LogDebug("[{location}]: Received a message from service bus", nameof(CheckersHub));
 
         var body = Encoding.ASCII.GetString(args.Message.Body);
         var player = JsonConvert.DeserializeObject<Player>(body);
