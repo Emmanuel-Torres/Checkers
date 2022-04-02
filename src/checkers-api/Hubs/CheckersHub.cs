@@ -26,7 +26,7 @@ public class CheckersHub : Hub<ICheckersHub>
         this.serviceBusClient = new(configuration["QUEUE_CONNECTION_STRING"]);
         this.matchMakingQueue = new();
         this.logger.LogInformation("[{location}]: Successfully created hub", nameof(CheckersHub));
-        Task.Run(() => ConfigureQueue()).Wait();
+        ConfigureQueue();
     }
 
     public override async Task OnConnectedAsync()
