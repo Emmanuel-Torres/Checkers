@@ -113,7 +113,21 @@ public class GameService : IGameService
 
     public IEnumerable<Location> GetValidMoves(string playerId, Location location)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var game = GetGameByPlayerId(playerId);
+            if (game is null)
+            {
+                throw new Exception("Game does not exist");
+            }
+
+            return game.GetValidMoves(playerId, location);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not get valid moves for location ({row}. {column}). Ex: {ex}", nameof(GameService), location.Row, location.Column, ex);
+            return new List<Location>();
+        }
     }
     public GameResults QuitGame(string playerId)
     {

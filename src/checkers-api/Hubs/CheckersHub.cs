@@ -94,7 +94,8 @@ public class CheckersHub : Hub<ICheckersHub>
     {
         try
         {
-            
+            var res = gameService.GetValidMoves(Context.ConnectionId, source);
+            await Clients.Client(Context.ConnectionId).SendValidMoveLocationsAsync(res);
         }
         catch (Exception ex)
         {

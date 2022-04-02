@@ -10,7 +10,7 @@ public interface ICheckersHub
     Task GetValidMovesAsync(Location source);
     Task QuitGameAsync();
     Task YourTurnToMoveAsync();
-    Task SendValidMoveLocationsAsync();
+    Task SendValidMoveLocationsAsync(IEnumerable<Location> validLocations);
     Task MoveCompletedAsync();
 
     //Client methods
