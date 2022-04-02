@@ -55,6 +55,7 @@ public class MatchmakingService : IMatchmakingService
             var message = new ServiceBusMessage(p);
 
             await sender.SendMessageAsync(message);
+            logger.LogDebug("[{location}]: Player {playerId} was successfully sent to service bus queue", nameof(MatchmakingService), player.PlayerId);
         }
         catch (Exception ex)
         {
@@ -85,6 +86,7 @@ public class MatchmakingService : IMatchmakingService
 
     private Task ErrorHandler(ProcessErrorEventArgs args)
     {
+        logger.LogError("[{location}]: Something went wrong. Ex: {ex}", nameof(MatchmakingService), args.Exception);
         return Task.CompletedTask;
     }
 

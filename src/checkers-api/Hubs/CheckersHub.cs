@@ -24,7 +24,7 @@ public class CheckersHub : Hub<ICheckersHub>
 
     public override async Task OnConnectedAsync()
     {
-        logger.LogInformation("[{location}]: Player {token} connected to the server", nameof(CheckersHub), Context.ConnectionId);
+        logger.LogDebug("[{location}]: Player {token} connected to the server", nameof(CheckersHub), Context.ConnectionId);
         await base.OnConnectedAsync();
     }
 
@@ -46,17 +46,21 @@ public class CheckersHub : Hub<ICheckersHub>
     {
         try
         {
+            logger.LogDebug("[{location}]: Player {token} requested matchmaking", nameof(CheckersHub), Context.ConnectionId);
             var profile = await authService.GetUserAsync(token ?? "");
             if (profile is not null)
             {
+                logger.LogDebug("[{location}]: User profile was found for player {token}. Matchmaking as {name}", nameof(CheckersHub), Context.ConnectionId, profile.GivenName);
                 await matchmakingService.MatchMakeAsync(new Player(Context.ConnectionId, profile.GivenName));
             }
             else
             {
+                logger.LogDebug("[{location}]: User profile was not found for player {token}. Matchmaking as guest.", nameof(CheckersHub), Context.ConnectionId);
                 await matchmakingService.MatchMakeAsync(new Player(Context.ConnectionId, "Guest"));
             }
 
             await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "You are matchmaking");
+            logger.LogDebug("[{location}]: Player {token} is matchmaking successfully", nameof(CheckersHub), Context.ConnectionId);
         }
         catch (Exception ex)
         {
