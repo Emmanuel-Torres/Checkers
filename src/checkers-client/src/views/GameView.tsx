@@ -1,7 +1,7 @@
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
-import { connect } from "http2";
 import { FC, useEffect, useState } from "react";
 import BoardComponent from "../components/game/board/BoardComponent";
+import BoardLocation from "../game-models/location";
 import MoveRequest from "../game-models/moveRequest";
 import MoveResult from "../game-models/moveResult";
 import Square from "../game-models/square";
@@ -13,6 +13,7 @@ const GameView: FC = (): JSX.Element => {
     const [inGame, setInGame] = useState<boolean>(false);
     const [connection, setConnection] = useState<HubConnection>();
     const [board, setBoard] = useState<Square[]>([]);
+    const [validLocations, setValidMoves] = useState<BoardLocation[]>([]);
 
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
@@ -30,9 +31,9 @@ const GameView: FC = (): JSX.Element => {
                 console.error("Connection failed: ", err);
             });
             connection.on(HubMethods.moveSuccessful, (moveResult: MoveResult) => {
-                setBoard(moveResult.board);                
+                setBoard(moveResult.board);
             })
-            
+
             connection.on(HubMethods.sendJoinConfirmation, (name: string, board: Square[]) => {
                 console.log(name);
                 console.log(JSON.stringify(board));
@@ -59,9 +60,17 @@ const GameView: FC = (): JSX.Element => {
             console.error(e);
         }
     }
-    const makeMove = async (moveRequest : MoveRequest) => {
+    const makeMove = async (moveRequest: MoveRequest) => {
         try {
             await connection?.send(HubMethods.makeMove, moveRequest);
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+    const getValidMoves = async (source: BoardLocation) => {
+        try {
+            await connection?.send(HubMethods.getValidMoves, source);
         }
         catch (e) {
             console.error(e);
@@ -74,7 +83,7 @@ const GameView: FC = (): JSX.Element => {
             {isMatchMaking && <h2>You are MatchMaking, please wait</h2>}
             {inGame && <>
                 <h2>You are currently in a game</h2>
-                <BoardComponent board={board} />
+                <BoardComponent board={board} validLocations={validLocations} onGetValidMoves={getValidMoves}/>
             </>}
         </>
     )

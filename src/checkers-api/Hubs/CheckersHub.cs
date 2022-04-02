@@ -110,6 +110,8 @@ public class CheckersHub : Hub<ICheckersHub>
             var gameId = gameService.StartGame(p1, p2);
             var game = gameService.GetGameByGameId(gameId);
 
+            logger.LogInformation("[{location}]: Starting game {gameId} with players {p1} and {p2}", nameof(CheckersHub), gameId, p1.PlayerId, p2.PlayerId);
+
             foreach (var p in game!.Players)
             {
                 await Clients.Client(p.PlayerId).SendMessageAsync("server", "You were successfully matchmade");

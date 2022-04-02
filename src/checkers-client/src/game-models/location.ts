@@ -1,4 +1,4 @@
-export default class Location {
+export default class BoardLocation {
   public readonly row: number;
   public readonly column: number;
 
