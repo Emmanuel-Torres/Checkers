@@ -13,6 +13,8 @@ const GameView: FC = (): JSX.Element => {
     const [connection, setConnection] = useState<HubConnection>();
     const [board, setBoard] = useState<Square[]>([]);
     const [validLocations, setValidMoves] = useState<BoardLocation[]>([]);
+    const [yourTurn, setYourTurn] = useState<boolean>(false);
+    const [yourColor, setYourColor] = useState("");
 
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
@@ -31,13 +33,14 @@ const GameView: FC = (): JSX.Element => {
             });
 
             connection.on(HubMethods.moveSuccessful, (board: Square[]) => {
+                setYourTurn(false);
                 setBoard(board);
                 connection.send(HubMethods.moveCompleted);
             });
-            connection.on(HubMethods.sendJoinConfirmation, (name: string, board: Square[]) => {
-                console.log(name);
+            connection.on(HubMethods.sendJoinConfirmation, (name: string, color: string, board: Square[]) => {
                 setIsMatchMaking(false);
                 setInGame(true);
+                setYourColor(color);
                 setBoard(board);
             });
             connection.on(HubMethods.sendValidMoveLocations, (locations: BoardLocation[]) => {
@@ -48,6 +51,7 @@ const GameView: FC = (): JSX.Element => {
                 console.log(message);
             });
             connection.on(HubMethods.yourTurnToMove, (board: Square[]) => {
+                setYourTurn(true);
                 setBoard(board);
             })
 
@@ -67,8 +71,9 @@ const GameView: FC = (): JSX.Element => {
     }
     const makeMove = async (moveRequest: MoveRequest) => {
         try {
-            console.log(moveRequest);
-            await connection?.send(HubMethods.makeMove, moveRequest);
+            if (yourTurn) {
+                await connection?.send(HubMethods.makeMove, moveRequest);
+            }
         }
         catch (e) {
             console.error(e);
@@ -76,8 +81,9 @@ const GameView: FC = (): JSX.Element => {
     }
     const getValidMoves = async (source: BoardLocation) => {
         try {
-            console.log("Getting locations for", source);
-            await connection?.send(HubMethods.getValidMoves, source);
+            if (yourTurn) {
+                await connection?.send(HubMethods.getValidMoves, source);
+            }
         }
         catch (e) {
             console.error(e);
@@ -89,8 +95,9 @@ const GameView: FC = (): JSX.Element => {
             {!isLoading && !isMatchMaking && !inGame && <button type="button" onClick={matchMake}>Match Make</button>}
             {isMatchMaking && <h2>You are MatchMaking, please wait</h2>}
             {inGame && <>
-                <h2>You are currently in a game</h2>
-                <BoardComponent board={board} validLocations={validLocations} onGetValidMoves={getValidMoves} onMakeMove={makeMove}/>
+                <h2>You are playing {yourColor} pieces</h2>
+                <h2>{yourTurn ? "Its your turn" : "Waiting for opponent"}</h2>
+                <BoardComponent board={board} validLocations={validLocations} onGetValidMoves={getValidMoves} onMakeMove={makeMove} />
             </>}
         </>
     )

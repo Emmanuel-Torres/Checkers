@@ -79,15 +79,15 @@ public class CheckersHub : Hub<ICheckersHub>
 
             var res = gameService.MakeMove(Context.ConnectionId, moveRequest);
 
-            if (res.IsGameOver)
-            {
-                await EndGameAsync(res.GameId);
-                return;
-            }
             if (res.WasMoveSuccessful)
             {
                 logger.LogDebug("[{location}]: Move request from player {token} was successful", nameof(CheckersHub), Context.ConnectionId);
                 await Clients.Client(Context.ConnectionId).MoveSuccessfulAsync(res.Board);
+
+                if (res.IsGameOver)
+                {
+                    await EndGameAsync(res.GameId);
+                }
                 return;
             }
 
@@ -147,9 +147,12 @@ public class CheckersHub : Hub<ICheckersHub>
 
             foreach (var p in game!.Players)
             {
+                var color = p.PlayerId == p1.PlayerId ? Color.Black : Color.White;
                 await Clients.Client(p.PlayerId).SendMessageAsync("server", "You were successfully matchmade");
-                await Clients.Client(p.PlayerId).SendJoinConfirmationAsync(p.Name + p.PlayerId, game.Board);
+                await Clients.Client(p.PlayerId).SendJoinConfirmationAsync(p.Name + p.PlayerId, color, game.Board);
             }
+
+            await Clients.Client(p1.PlayerId).YourTurnToMoveAsync(game.Board);
         }
         catch (Exception ex)
         {

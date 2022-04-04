@@ -16,6 +16,6 @@ public interface ICheckersHub
     Task MoveSuccessfulAsync(IEnumerable<Square> board);
     Task GameOverAsync(GameResults results);
     Task SendMessageAsync(string sender, string message);
-    Task SendJoinConfirmationAsync(string name, IEnumerable<Square> board);
+    Task SendJoinConfirmationAsync(string name, Color color, IEnumerable<Square> board);
     Task SendValidMoveLocationsAsync(IEnumerable<Location> validLocations);
 }
