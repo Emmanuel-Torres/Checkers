@@ -78,16 +78,16 @@ public class CheckersHub : Hub<ICheckersHub>
                 nameof(CheckersHub), Context.ConnectionId, moveRequest.Source.Row, moveRequest.Source.Column, moveRequest.Destination.Row, moveRequest.Destination.Column);
 
             var res = gameService.MakeMove(Context.ConnectionId, moveRequest);
-
+            if (res.IsGameOver)
+            {
+                logger.LogInformation("[{location}]: Move request from player {token} successfully won the game", nameof(CheckersHub), Context.ConnectionId);
+                await EndGameAsync(res.GameId);
+                return;
+            }
             if (res.WasMoveSuccessful)
             {
                 logger.LogDebug("[{location}]: Move request from player {token} was successful", nameof(CheckersHub), Context.ConnectionId);
                 await Clients.Client(Context.ConnectionId).MoveSuccessfulAsync(res.Board);
-
-                if (res.IsGameOver)
-                {
-                    await EndGameAsync(res.GameId);
-                }
                 return;
             }
 
@@ -149,7 +149,7 @@ public class CheckersHub : Hub<ICheckersHub>
             {
                 var color = p.PlayerId == p1.PlayerId ? Color.Black : Color.White;
                 await Clients.Client(p.PlayerId).SendMessageAsync("server", "You were successfully matchmade");
-                await Clients.Client(p.PlayerId).SendJoinConfirmationAsync(p.Name + p.PlayerId, color, game.Board);
+                await Clients.Client(p.PlayerId).SendJoinConfirmationAsync(p.Name, color, game.Board);
             }
 
             await Clients.Client(p1.PlayerId).YourTurnToMoveAsync(game.Board);
@@ -164,11 +164,14 @@ public class CheckersHub : Hub<ICheckersHub>
     {
         try
         {
+            logger.LogDebug("[{location}]: Ending game {id}", nameof(CheckersHub), gameId);
             var results = gameService.TerminateGame(gameId);
             foreach (var p in results.Players)
             {
-                await Clients.Client(p.PlayerId).GameOverAsync(results);
+                await Clients.Client(p.PlayerId).GameOverAsync(results.Winner.Name, results.Board);
             }
+
+            logger.LogInformation("[{location}]: Game {id} was successfully terminated. Winner {token}", nameof(CheckersHub), gameId, results.Winner.PlayerId);
         }
         catch (Exception ex)
         {

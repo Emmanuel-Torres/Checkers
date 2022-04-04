@@ -27,8 +27,6 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
         }
     }
 
-    console.log(validIndices);
-
     const squareSelected = (square: Square) => {
         if (!source ||
             !props.validLocations.find(l => square.location.row === l.row && square.location.column === l.column)) {

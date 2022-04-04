@@ -10,11 +10,13 @@ const GameView: FC = (): JSX.Element => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isMatchMaking, setIsMatchMaking] = useState<boolean>(false);
     const [inGame, setInGame] = useState<boolean>(false);
+    const [isGameOver, setIsGameOver] = useState<boolean>(false);
     const [connection, setConnection] = useState<HubConnection>();
     const [board, setBoard] = useState<Square[]>([]);
     const [validLocations, setValidMoves] = useState<BoardLocation[]>([]);
     const [yourTurn, setYourTurn] = useState<boolean>(false);
     const [yourColor, setYourColor] = useState<string>("");
+    const [winner, setWinner] = useState<string>("");
 
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
@@ -53,7 +55,12 @@ const GameView: FC = (): JSX.Element => {
             connection.on(HubMethods.yourTurnToMove, (board: Square[]) => {
                 setYourTurn(true);
                 setBoard(board);
-            })
+            });
+            connection.on(HubMethods.gameOver, (winner: string, board: Square[]) => {
+                setIsGameOver(true);
+                setWinner(winner);
+                setBoard(board);
+            });
 
             setIsLoading(false);
         }
@@ -63,7 +70,6 @@ const GameView: FC = (): JSX.Element => {
         try {
             setIsMatchMaking(true);
             await connection?.send(HubMethods.matchMake, undefined);
-
         }
         catch (e) {
             console.error(e);
@@ -71,7 +77,7 @@ const GameView: FC = (): JSX.Element => {
     }
     const makeMove = async (moveRequest: MoveRequest) => {
         try {
-            if (yourTurn) {
+            if (yourTurn && !isGameOver) {
                 await connection?.send(HubMethods.makeMove, moveRequest);
             }
         }
@@ -81,7 +87,7 @@ const GameView: FC = (): JSX.Element => {
     }
     const getValidMoves = async (source: BoardLocation) => {
         try {
-            if (yourTurn) {
+            if (yourTurn && !isGameOver) {
                 await connection?.send(HubMethods.getValidMoves, source);
             }
         }
@@ -99,6 +105,7 @@ const GameView: FC = (): JSX.Element => {
                 <h2>{yourTurn ? "Its your turn" : "Waiting for opponent"}</h2>
                 <BoardComponent board={board} validLocations={validLocations} onGetValidMoves={getValidMoves} onMakeMove={makeMove} />
             </>}
+            {isGameOver && <h2>Player {winner} won!</h2>}
         </>
     )
 }

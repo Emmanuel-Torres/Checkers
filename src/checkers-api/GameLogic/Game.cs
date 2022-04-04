@@ -64,7 +64,12 @@ public class Game : IGame
 
     public GameResults? GetGameResults()
     {
-        throw new NotImplementedException();
+        if (state == GameState.Ongoing)
+        {
+            return null;
+        }
+
+        return new GameResults(Id, Players.First(p => p.PlayerId != currentTurn), Players.First(p => p.PlayerId == currentTurn), Board);
     }
 
     public IEnumerable<Location> GetValidMoves(string playerId, Location location)
