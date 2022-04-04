@@ -20,9 +20,7 @@ public class Game : IGame
         this.player2 = player2;
         this.logger = logger;
         currentTurn = player1.PlayerId;
-        var blackPiece = new Piece(Color.Black, player1.PlayerId);
-        var whitePiece = new Piece(Color.White, player2.PlayerId);
-        board = new Board(blackPiece, whitePiece);
+        board = new Board(player1.PlayerId, player2.PlayerId);
         state = GameState.Ongoing;
         id = Guid.NewGuid().ToString();
     }
@@ -31,7 +29,7 @@ public class Game : IGame
     public string CurrentTurn => currentTurn;
     public IEnumerable<Player> Players => new List<Player>() { player1, player2 };
     public GameState State => state;
-    public Board Board => board;
+    public IEnumerable<Square> Board => board.Squares;
 
     public void MakeMove(string playerId, MoveRequest moveRequest)
     {
@@ -76,7 +74,7 @@ public class Game : IGame
 
         try
         {
-            var square = Board.GetSquareByLocation(location);
+            var square = board.GetSquareByLocation(location);
 
             if (currentTurn != playerId)
             {
@@ -117,7 +115,7 @@ public class Game : IGame
 
     public bool IsGameOver()
     {
-        var ownedSquares = Board.Squares.Where(s => s.Piece is not null && s.Piece.OwnerId == currentTurn);
+        var ownedSquares = board.Squares.Where(s => s.Piece is not null && s.Piece.OwnerId == currentTurn);
 
         if (!ownedSquares.Any())
         {
@@ -140,17 +138,18 @@ public class Game : IGame
         try
         {
             var piece = source.Piece!;
-            Board.RemovePiece(source.Location);
-            Board.PlacePiece(destination.Location, piece);
+            board.RemovePiece(source.Location);
+            board.PlacePiece(destination.Location, piece);
 
             if (IsMoveAnAttack(source, destination))
             {
                 var midLocation = GetMiddleLocation(source.Location, destination.Location);
-                Board.RemovePiece(midLocation);
+                board.RemovePiece(midLocation);
             }
             if (CanKingPiece(destination.Location, piece))
             {
-                Board.KingPiece(destination.Location);
+                logger.LogDebug("[{location}]: Piece at location ({row}, {column}) can be kinged", nameof(Game), destination.Location.Row, destination.Location.Column);
+                board.KingPiece(destination.Location);
             }
         }
         catch
@@ -179,30 +178,10 @@ public class Game : IGame
         return false;
     }
 
-    private bool IsPieceGoingForward(Square source, Square destination)
-    {
-        var distance = destination.Location.Row - source.Location.Row;
-
-        if (source.Piece?.State == PieceState.King)
-        {
-            return false;
-        }
-        if (source.Piece?.Color == Color.Black)
-        {
-            return distance > 0;
-        }
-        if (source.Piece?.Color == Color.White)
-        {
-            return distance < 0;
-        }
-
-        return false;
-    }
-
     private bool IsAttackValid(Square source, Square destination)
     {
         var midLocation = GetMiddleLocation(source.Location, destination.Location);
-        var midSquare = Board.GetSquareByLocation(midLocation);
+        var midSquare = board.GetSquareByLocation(midLocation);
         if (!midSquare.IsOccupied)
         {
             return false;

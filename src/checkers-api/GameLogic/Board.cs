@@ -7,11 +7,11 @@ public class Board
     private readonly List<Square> squares;
     public IEnumerable<Square> Squares => squares;
 
-    public Board(Piece blackPiece, Piece whitePiece)
+    public Board(string blackOwnerId, string whiteOwnerId)
     {
         squares = new List<Square>();
         GenerateBoard();
-        GeneratePieces(blackPiece, whitePiece);
+        GeneratePieces(blackOwnerId, whiteOwnerId);
     }
 
     public void PlacePiece(Location location, Piece piece)
@@ -88,14 +88,14 @@ public class Board
         }
     }
 
-    private void GeneratePieces(Piece blackPiece, Piece whitePiece)
+    private void GeneratePieces(string blackOwnerId, string whiteOwnerId)
     {
         for (int i = 0; i < 12; i++)
         {
             try
             {
                 var square = squares.First(s => s.Color == Color.Black && s.IsOccupied == false);
-                PlacePiece(square.Location, whitePiece);
+                PlacePiece(square.Location, new Piece(Color.White, whiteOwnerId));
             }
             catch
             {
@@ -108,7 +108,7 @@ public class Board
             try
             {
                 var square = squares.First(s => s.Color == Color.Black && s.IsOccupied == false && s.Location.Row >= 5);
-                PlacePiece(square.Location, blackPiece);
+                PlacePiece(square.Location, new Piece(Color.Black, blackOwnerId));
             }
             catch
             {

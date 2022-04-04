@@ -8,7 +8,7 @@ public interface IGame
     string CurrentTurn { get; }
     IEnumerable<Player> Players { get; }
     GameState State { get; }
-    Board Board { get; }
+    IEnumerable<Square> Board { get; }
 
     void MakeMove(string playerId, MoveRequest moveRequest);
     bool IsGameOver();

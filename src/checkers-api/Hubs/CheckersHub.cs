@@ -112,7 +112,7 @@ public class CheckersHub : Hub<ICheckersHub>
             var currentTurn = game.Players.First(p => p.PlayerId != Context.ConnectionId);
 
             logger.LogDebug("[{location}]: Player {p1} is done moving. Passing turn to {p2}", nameof(CheckersHub), Context.ConnectionId, currentTurn.PlayerId);
-            await Clients.Client(currentTurn.PlayerId).YourTurnToMoveAsync(game.Board.Squares);
+            await Clients.Client(currentTurn.PlayerId).YourTurnToMoveAsync(game.Board);
         }
         catch (Exception ex)
         {
@@ -148,7 +148,7 @@ public class CheckersHub : Hub<ICheckersHub>
             foreach (var p in game!.Players)
             {
                 await Clients.Client(p.PlayerId).SendMessageAsync("server", "You were successfully matchmade");
-                await Clients.Client(p.PlayerId).SendJoinConfirmationAsync(p.Name + p.PlayerId, game.Board.Squares);
+                await Clients.Client(p.PlayerId).SendJoinConfirmationAsync(p.Name + p.PlayerId, game.Board);
             }
         }
         catch (Exception ex)

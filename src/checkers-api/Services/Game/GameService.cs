@@ -111,7 +111,7 @@ public class GameService : IGameService
             moveSuccessful = false;
         }
 
-        return new MoveResult(game.Id, moveSuccessful, game.IsGameOver(), game.Board.Squares);
+        return new MoveResult(game.Id, moveSuccessful, game.IsGameOver(), game.Board);
     }
 
     public IEnumerable<Location> GetValidMoves(string playerId, Location location)
