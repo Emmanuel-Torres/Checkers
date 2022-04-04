@@ -1,5 +1,5 @@
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import BoardComponent from "../components/game/board/BoardComponent";
 import BoardLocation from "../game-models/location";
 import MoveRequest from "../game-models/moveRequest";

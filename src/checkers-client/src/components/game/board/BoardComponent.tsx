@@ -15,7 +15,19 @@ type Props = {
 const BoardComponent: FC<Props> = (props): JSX.Element => {
     const [source, setSource] = useState<Square>();
 
-    // const validIndices = props.board.filter(s => props.validLocations)
+    const validIndices: number[] = [];
+
+    for(let i = 0; i < props.validLocations.length; i++) {
+        const location = props.validLocations[i];
+        for(let j = 0; j < props.board.length; j++) {
+            const square = props.board[j];
+            if (square.location.row === location.row && square.location.column === location.column) {
+                validIndices.push(j);
+            }
+        }
+    }
+
+    console.log(validIndices);
 
     const squareSelected = (square: Square) => {
         if (!source ||
@@ -31,7 +43,7 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
     return (
         <div className={styles.board}>
             {props.board.map((s, i) => {
-                return <SquareComponent square={s} onSquareClicked={squareSelected} />
+                return <SquareComponent key={i} square={s} onSquareClicked={squareSelected} isValidMoveLocation={validIndices.includes(i)}/>
             })}
         </div>
     )

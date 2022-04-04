@@ -8,7 +8,7 @@ export default function LoginView() {
   return (
     <div className='container border border-dark border-5 rounded p-3 my-2 shadow text-center'>
       {
-        userToken == undefined?
+        userToken === undefined?
           <>
             <h1>Login</h1>
             <Login />

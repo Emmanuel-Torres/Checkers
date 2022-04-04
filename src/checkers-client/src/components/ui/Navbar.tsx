@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Navbar: FC = (): JSX.Element => {
     return (
