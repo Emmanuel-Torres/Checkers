@@ -1,5 +1,5 @@
 import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import BoardComponent from "../components/game/board/BoardComponent";
 import BoardLocation from "../game-models/location";
 import MoveRequest from "../game-models/moveRequest";
@@ -14,7 +14,7 @@ const GameView: FC = (): JSX.Element => {
     const [board, setBoard] = useState<Square[]>([]);
     const [validLocations, setValidMoves] = useState<BoardLocation[]>([]);
     const [yourTurn, setYourTurn] = useState<boolean>(false);
-    const [yourColor, setYourColor] = useState("");
+    const [yourColor, setYourColor] = useState<string>("");
 
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
@@ -35,6 +35,7 @@ const GameView: FC = (): JSX.Element => {
             connection.on(HubMethods.moveSuccessful, (board: Square[]) => {
                 setYourTurn(false);
                 setBoard(board);
+                setValidMoves([]);
                 connection.send(HubMethods.moveCompleted);
             });
             connection.on(HubMethods.sendJoinConfirmation, (name: string, color: string, board: Square[]) => {
@@ -44,7 +45,6 @@ const GameView: FC = (): JSX.Element => {
                 setBoard(board);
             });
             connection.on(HubMethods.sendValidMoveLocations, (locations: BoardLocation[]) => {
-                console.log(locations);
                 setValidMoves(locations);
             });
             connection.on(HubMethods.sendMessage, (sender: string, message: string) => {
