@@ -5,8 +5,6 @@
 1. Project's Description
 2. Game Rules
 3. Technologies
-    - Backend
-    - Frontend
 4. Next Features
 
 ## Project's Description
