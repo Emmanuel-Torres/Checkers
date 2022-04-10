@@ -1,4 +1,5 @@
 import axios from "axios";
+import UpdateProfileRequest from "../models/update-proflie-request";
 import User from "../models/user";
 
 const authUrl = "/api/auth";
@@ -10,9 +11,13 @@ const authenticateUser = async (token: string): Promise<User> => {
   return res.data;
 };
 
-const updateProfile = async (token: string, user: User) => {
-  await axios.put(authUrl + "/profile", user, {
-    headers: { Authorization: `Bearer ${token}` },
+const updateProfile = async (token: string, update: UpdateProfileRequest) => {
+  console.log(update);
+  await axios.put(authUrl + "/profile", update, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
   });
 };
 
@@ -25,7 +30,7 @@ const logout = async (token: string) => {
 const authService = {
   authenticateUser,
   updateProfile,
-  logout
+  logout,
 };
 
 export default authService;

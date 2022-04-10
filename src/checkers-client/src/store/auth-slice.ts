@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import UpdateProfileRequest from "../models/update-proflie-request";
 import User from "../models/user";
 import authService from "../services/auth-service";
 
@@ -11,8 +12,8 @@ export const authenticateUser = createAsyncThunk(
 
 export const updateProfile = createAsyncThunk(
   "updateProfile",
-  async (args: { token: string; user: User }, thunkApi: any): Promise<User> => {
-    await authService.updateProfile(args.token, args.user);
+  async (args: { token: string; update: UpdateProfileRequest }, thunkApi: any): Promise<User> => {
+    await authService.updateProfile(args.token, args.update);
     return await authService.authenticateUser(args.token);
   }
 );
@@ -53,6 +54,12 @@ const authSlice = createSlice({
       .addCase(authenticateUser.rejected, (state) => {
         state.userProfile = undefined;
       })
+      .addCase(
+        updateProfile.fulfilled,
+        (state, action: PayloadAction<User>) => {
+          state.userProfile = action.payload;
+        }
+      )
       .addCase(logout.fulfilled, (state) => {
         state.userProfile = undefined;
         state.userToken = undefined;
