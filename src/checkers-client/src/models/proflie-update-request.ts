@@ -1,4 +1,4 @@
-export default class UpdateProfileRequest {
+export default class ProfileUpdateRequest {
   picture?: File;
   bestJoke?: string;
   iceCreamFlavor?: string;

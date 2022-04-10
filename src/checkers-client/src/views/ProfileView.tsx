@@ -2,7 +2,7 @@ import { FC, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import ProfileDetails from "../components/profile/ProfileDetails";
 import ProfileForm from "../components/profile/UserProfileForm";
-import UpdateProfileRequest from "../models/update-proflie-request";
+import ProfileUpdateRequest from "../models/proflie-update-request";
 import { StoreDispatch, useStoreSelector } from "../store";
 import { authenticateUser, updateProfile } from "../store/auth-slice";
 
@@ -15,7 +15,7 @@ const ProfileView: FC = (): JSX.Element => {
         dispatch(authenticateUser(token ?? ''));
     }, [dispatch, token]);
 
-    const submitForm = (update: UpdateProfileRequest) => {
+    const submitForm = (update: ProfileUpdateRequest) => {
         if (update && token) {
             dispatch(updateProfile({ update, token }));
         }

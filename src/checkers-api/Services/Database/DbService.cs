@@ -37,7 +37,7 @@ public class DbService : IDbService
         try
         {
             logger.LogDebug("[{location}]: Retrieving user profile for {email}", nameof(DbService), userEmail);
-            var user = await dbContext.UserProfiles.FirstAsync(u => u.Email == userEmail);
+            var user = await dbContext.UserProfiles.AsNoTracking().FirstAsync(u => u.Email == userEmail);
             logger.LogDebug("[{location}]: User profile found for {email}", nameof(DbService), userEmail);
             return user;
         }

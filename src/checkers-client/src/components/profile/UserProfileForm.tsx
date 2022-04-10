@@ -1,10 +1,10 @@
 import { ChangeEvent, FC, FormEvent, useState } from "react"
-import UpdateProfileRequest from "../../models/update-proflie-request";
+import ProfileUpdateRequest from "../../models/proflie-update-request";
 import User from "../../models/user";
 
 type Props = {
     profile: User;
-    onSubmit: (update: UpdateProfileRequest) => void;
+    onSubmit: (update: ProfileUpdateRequest) => void;
 }
 
 const ProfileForm: FC<Props> = (props): JSX.Element => {
@@ -47,7 +47,7 @@ const ProfileForm: FC<Props> = (props): JSX.Element => {
         e.preventDefault();
 
         if (isFormValid) {
-            props.onSubmit(new UpdateProfileRequest(joke, iceCream, pizza, age, image));
+            props.onSubmit(new ProfileUpdateRequest(joke, iceCream, pizza, age, image));
         }
     }
 

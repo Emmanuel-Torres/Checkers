@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using checkers_api.Models.ExternalModels;
 using checkers_api.Models.PersistentModels;
 using checkers_api.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -37,17 +38,19 @@ public class AuthController : ControllerBase
     }
 
     [HttpPut("profile")]
-    public async Task<ActionResult> UpdateProfile(UserProfile profile)
+    public async Task<ActionResult> UpdateProfile([FromForm] ProfileUpdateRequest request)
     {
         try
         {
+            logger.LogDebug("[{location}]: Received a request to update a profile", nameof(AuthController));
             var authorization = HttpContext.Request.Headers.Authorization;
             if (!AuthenticationHeaderValue.TryParse(authorization, out var token))
             {
                 throw new Exception("Not a valid token");
             }
 
-            await authService.UpdateProfileAsync(token.Parameter!, profile);
+            await authService.UpdateProfileAsync(token.Parameter!, request);
+            logger.LogInformation("[{location}]: Successfully updated profile", nameof(AuthController));
             return Ok();
         }
         catch (Exception ex)

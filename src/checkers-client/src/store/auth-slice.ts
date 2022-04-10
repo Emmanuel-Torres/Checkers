@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import UpdateProfileRequest from "../models/update-proflie-request";
+import ProfileUpdateRequest from "../models/proflie-update-request";
 import User from "../models/user";
 import authService from "../services/auth-service";
 
@@ -12,7 +12,7 @@ export const authenticateUser = createAsyncThunk(
 
 export const updateProfile = createAsyncThunk(
   "updateProfile",
-  async (args: { token: string; update: UpdateProfileRequest }, thunkApi: any): Promise<User> => {
+  async (args: { token: string; update: ProfileUpdateRequest }, thunkApi: any): Promise<User> => {
     await authService.updateProfile(args.token, args.update);
     return await authService.authenticateUser(args.token);
   }

@@ -1,3 +1,4 @@
+using checkers_api.Models.ExternalModels;
 using checkers_api.Models.PersistentModels;
 using Google.Apis.Auth;
 
@@ -37,7 +38,7 @@ public class AuthService : IAuthService
                 return user;
             }
 
-            user = await registerUserAsync(payload);
+            user = await RegisterUserAsync(payload);
             logger.LogDebug("[{location}]: Returning new profile for {email}", nameof(AuthService), payload.Email);
             return user;
         }
@@ -53,19 +54,20 @@ public class AuthService : IAuthService
         throw new NotImplementedException();
     }
 
-    public async Task UpdateProfileAsync(string authorization, UserProfile profile)
+    public async Task UpdateProfileAsync(string token, ProfileUpdateRequest request)
     {
         try
         {
-            // var user = await GetUserAsync(authorization);
+            var user = await GetUserAsync(token);
 
-            // if (user is null)
-            // {
-            //     throw new Exception("Could not find user profile to update");
-            // }
+            if (user is null)
+            {
+                throw new Exception("Could not find user profile to update");
+            }
 
-            // profile.Id = user.Id;
-            await dbService.UpdateUserAsync(profile);
+            logger.LogDebug("[{location}]: User profile for user {email} was found", nameof(AuthService), user.Email);
+            var updated = new UserProfile(user.Email, user.GivenName, user.FamilyName, user.Picture, request.BestJoke, request.IceCreamFlavor, request.Pizza, request.Age, user.Id);
+            await dbService.UpdateUserAsync(updated);
         }
         catch
         {
@@ -78,7 +80,7 @@ public class AuthService : IAuthService
         throw new NotImplementedException();
     }
 
-    private async Task<UserProfile> registerUserAsync(GoogleJsonWebSignature.Payload payload)
+    private async Task<UserProfile> RegisterUserAsync(GoogleJsonWebSignature.Payload payload)
     {
         try
         {

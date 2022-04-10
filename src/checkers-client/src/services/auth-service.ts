@@ -1,5 +1,5 @@
 import axios from "axios";
-import UpdateProfileRequest from "../models/update-proflie-request";
+import ProfileUpdateRequest from "../models/proflie-update-request";
 import User from "../models/user";
 
 const authUrl = "/api/auth";
@@ -11,12 +11,16 @@ const authenticateUser = async (token: string): Promise<User> => {
   return res.data;
 };
 
-const updateProfile = async (token: string, update: UpdateProfileRequest) => {
-  console.log(update);
-  await axios.put(authUrl + "/profile", update, {
+const updateProfile = async (token: string, update: ProfileUpdateRequest) => {
+  const formData = new FormData();
+  formData.append("bestJoke", update.bestJoke ?? "");
+  formData.append("iceCreamFlavor", update.iceCreamFlavor ?? "");
+  formData.append("pizza", update.pizza ?? "");
+  formData.append("picture", update.picture ?? "");
+  formData.append("age", update.age?.toString() ?? "0");
+  await axios.put(authUrl + "/profile", formData, {
     headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`
     },
   });
 };
