@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Amazon.S3;
 using checkers_api.Data;
 using checkers_api.Hubs;
 using checkers_api.Services;
@@ -13,9 +14,9 @@ var clientId = "203576300472-qleefq8rh358lkekh6c1vhq3222jp8nh.apps.googleusercon
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration["ApplicationContext"])
 );
-
 builder.Services.AddSingleton<IGameService, GameService>();
 builder.Services.AddSingleton<IMatchmakingService, MatchmakingService>();
+builder.Services.AddSingleton<IImageService, ImageService>();
 builder.Services.AddTransient<IDbService, DbService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();

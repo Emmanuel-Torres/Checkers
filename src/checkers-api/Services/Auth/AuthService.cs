@@ -8,12 +8,14 @@ public class AuthService : IAuthService
 {
     private readonly IDbService dbService;
     private readonly ILogger<AuthService> logger;
-    private string clientId = "203576300472-qleefq8rh358lkekh6c1vhq3222jp8nh.apps.googleusercontent.com";
+    private readonly IImageService imageService;
+    private readonly string clientId = "203576300472-qleefq8rh358lkekh6c1vhq3222jp8nh.apps.googleusercontent.com";
 
-    public AuthService(IDbService dbService, ILogger<AuthService> logger)
+    public AuthService(IDbService dbService, ILogger<AuthService> logger, IImageService imageService)
     {
         this.dbService = dbService;
         this.logger = logger;
+        this.imageService = imageService;
     }
 
     public async Task<UserProfile?> GetUserAsync(string token)
@@ -65,8 +67,14 @@ public class AuthService : IAuthService
                 throw new Exception("Could not find user profile to update");
             }
 
+            var imageUrl = user.Picture;
+            if (request.Picture is not null)
+            {
+                imageUrl = await imageService.SaveImageAsync(request.Picture);
+            }
+
             logger.LogDebug("[{location}]: User profile for user {email} was found", nameof(AuthService), user.Email);
-            var updated = new UserProfile(user.Email, user.GivenName, user.FamilyName, user.Picture, request.BestJoke, request.IceCreamFlavor, request.Pizza, request.Age, user.Id);
+            var updated = new UserProfile(user.Email, user.GivenName, user.FamilyName, imageUrl, request.BestJoke, request.IceCreamFlavor, request.Pizza, request.Age, user.Id);
             await dbService.UpdateUserAsync(updated);
         }
         catch

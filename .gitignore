@@ -1,1 +1,3 @@
 /.vscode
+.gitsecret/keys/random_seed
+src/checkers-db/.env
