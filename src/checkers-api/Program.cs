@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
-var clientId = "203576300472-qleefq8rh358lkekh6c1vhq3222jp8nh.apps.googleusercontent.com";
+var clientId = builder.Configuration["GOOGLE-CLIENT-ID"];
 // Add services to the container.
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration["ApplicationContext"])
+    options.UseNpgsql(builder.Configuration["APPLICATION-CONTEXT"])
 );
 builder.Services.AddSingleton<IGameService, GameService>();
 builder.Services.AddSingleton<IMatchmakingService, MatchmakingService>();
