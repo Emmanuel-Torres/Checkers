@@ -11,7 +11,11 @@ jobs:
     steps:
       - name: checkout repo
         uses: actions/checkout@v2.4.0
-      
+
+      - name: reveal secrets
+        run: |
+          git secret reveal
+
       - name: build docker compose
         run: |
           docker-compose up --build -d
