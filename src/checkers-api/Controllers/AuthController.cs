@@ -22,7 +22,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpGet("profile")]
-    public async Task<ActionResult<UserProfile?>> GetProfile([FromHeader] string authorization)
+    public async Task<ActionResult<DbProfile?>> GetProfile([FromHeader] string authorization)
     {
         try
         {

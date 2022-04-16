@@ -6,19 +6,19 @@ namespace checkers_api.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly IDbService dbService;
+    private readonly IUserDbService dbService;
     private readonly ILogger<AuthService> logger;
     private readonly IImageService imageService;
     private readonly string clientId = "203576300472-qleefq8rh358lkekh6c1vhq3222jp8nh.apps.googleusercontent.com";
 
-    public AuthService(IDbService dbService, ILogger<AuthService> logger, IImageService imageService)
+    public AuthService(IUserDbService dbService, ILogger<AuthService> logger, IImageService imageService)
     {
         this.dbService = dbService;
         this.logger = logger;
         this.imageService = imageService;
     }
 
-    public async Task<UserProfile?> GetUserAsync(string token)
+    public async Task<DbProfile?> GetUserAsync(string token)
     {
         try
         {
@@ -58,29 +58,30 @@ public class AuthService : IAuthService
 
     public async Task UpdateProfileAsync(string token, ProfileUpdateRequest request)
     {
-        try
-        {
-            var user = await GetUserAsync(token);
+        throw new NotImplementedException();
+        // try
+        // {
+        //     var user = await GetUserAsync(token);
 
-            if (user is null)
-            {
-                throw new Exception("Could not find user profile to update");
-            }
+        //     if (user is null)
+        //     {
+        //         throw new Exception("Could not find user profile to update");
+        //     }
 
-            var imageUrl = user.Picture;
-            if (request.Picture is not null)
-            {
-                imageUrl = await imageService.SaveImageAsync(request.Picture);
-            }
+        //     var imageUrl = user.Picture;
+        //     if (request.Picture is not null)
+        //     {
+        //         imageUrl = await imageService.SaveImageAsync(request.Picture);
+        //     }
 
-            logger.LogDebug("[{location}]: User profile for user {email} was found", nameof(AuthService), user.Email);
-            var updated = new UserProfile(user.Email, user.GivenName, user.FamilyName, imageUrl, request.BestJoke, request.IceCreamFlavor, request.Pizza, request.Age, user.Id);
-            await dbService.UpdateUserAsync(updated);
-        }
-        catch
-        {
-            throw;
-        }
+        //     logger.LogDebug("[{location}]: User profile for user {email} was found", nameof(AuthService), user.Email);
+        //     var updated = new UserProfile(user.Email, user.GivenName, user.FamilyName, imageUrl, request.BestJoke, request.IceCreamFlavor, request.Pizza, request.Age, user.Id);
+        //     await dbService.UpdateUserAsync(updated);
+        // }
+        // catch
+        // {
+        //     throw;
+        // }
     }
 
     public Task<bool> ValidateTokenAsync(string token)
@@ -88,16 +89,18 @@ public class AuthService : IAuthService
         throw new NotImplementedException();
     }
 
-    private async Task<UserProfile> RegisterUserAsync(GoogleJsonWebSignature.Payload payload)
+    private async Task<DbProfile> RegisterUserAsync(GoogleJsonWebSignature.Payload payload)
     {
         try
         {
             logger.LogWarning("[{location}]: A user profile for {email} was not found", nameof(AuthService), payload.Email);
             logger.LogDebug("[{location}]: Creating new user profile for {email}", nameof(AuthService), payload.Email);
 
-            var user = await dbService.AddUserAsync(new UserProfile(payload.Email, payload.GivenName, payload.FamilyName, payload.Picture));
+            var id = IdGenerator.GetId();
+            await dbService.AddUserAsync(new DbProfile(id, payload.Email, payload.GivenName, payload.FamilyName, payload.Picture));
+            var profile = await dbService.GetUserByIdAsync(id);
             logger.LogInformation("[{location}]: Profile successfully created for {email}", nameof(AuthService), payload.Email);
-            return user;
+            return profile!;
         }
         catch (Exception ex)
         {

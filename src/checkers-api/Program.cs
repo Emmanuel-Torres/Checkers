@@ -1,6 +1,5 @@
 using System.Text.Json.Serialization;
 using Amazon.S3;
-using checkers_api.Data;
 using checkers_api.Hubs;
 using checkers_api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -11,13 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 var clientId = builder.Configuration["GOOGLE-CLIENT-ID"];
 // Add services to the container.
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration["APPLICATION-CONTEXT"])
-);
 builder.Services.AddSingleton<IGameService, GameService>();
 builder.Services.AddSingleton<IMatchmakingService, MatchmakingService>();
 builder.Services.AddSingleton<IImageService, ImageService>();
-builder.Services.AddTransient<IDbService, DbService>();
+builder.Services.AddTransient<IUserDbService, UserDbService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -59,14 +55,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseDeveloperExceptionPage();
     app.UseMigrationsEndPoint();
-}
-
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ApplicationDbContext>();
-    context.Database.Migrate();
-    // context.Database.EnsureCreated();
 }
 
 // app.UseHttpsRedirection();

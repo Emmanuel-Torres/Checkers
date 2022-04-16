@@ -5,6 +5,7 @@ import GameView from "./views/GameView";
 import HomeView from "./views/HomeView";
 import LoginView from "./views/LoginView";
 import ProfileView from "./views/ProfileView";
+import ReviewView from "./views/ReviewView";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/login" element={<LoginView />} />
         <Route path="/demo" element={<DemoView />} />
         <Route path="/profile" element={<ProfileView />} />
+        <Route path="/reviews" element={<ReviewView />} />
       </Routes>
     </div>
   );
