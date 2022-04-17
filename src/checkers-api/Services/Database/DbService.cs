@@ -139,13 +139,13 @@ public class DbService : IDbService, IAsyncDisposable
         try
         {
             var reviews = new List<Review>();
-            var query = "SELECT * FROM checkers.review";
+            var query = "SELECT r.review_id, COALESCE(p.given_name, 'Anonymous'), r.content, r.posted_on FROM checkers.review r LEFT JOIN checkers.player p ON (r.player_id = p.player_id)";
 
             await using var cmd = new NpgsqlCommand(query, connection);
             await using var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                var review = new Review(reader.GetString(0), reader.IsDBNull(1) ? null : reader.GetString(1), reader.GetString(2), reader.GetDateTime(3));
+                var review = new Review(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetDateTime(3));
                 reviews.Add(review);
             }
 
@@ -158,16 +158,16 @@ public class DbService : IDbService, IAsyncDisposable
         }
     }
 
-    public async Task AddReviewAsync(Review review)
+    public async Task AddReviewAsync(string content, string? playerId)
     {
         try
         {
             var query = "INSERT INTO checkers.review (review_id, player_id, content, posted_on) VALUES (@review_id, @player_id, @content, @posted_on)";
             await using var cmd = new NpgsqlCommand(query, connection);
-            cmd.Parameters.Add(new NpgsqlParameter<string>("review_id", review.Id));
-            cmd.Parameters.Add(new NpgsqlParameter<string?>("player_id", review.PlayerId));
-            cmd.Parameters.Add(new NpgsqlParameter<string>("content", review.Content));
-            cmd.Parameters.Add(new NpgsqlParameter<DateTime>("posted_on", review.PostedOn));
+            cmd.Parameters.Add(new NpgsqlParameter<string>("review_id", IdGenerator.GetId()));
+            cmd.Parameters.Add(new NpgsqlParameter<string?>("player_id", playerId));
+            cmd.Parameters.Add(new NpgsqlParameter<string>("content", content));
+            cmd.Parameters.Add(new NpgsqlParameter<DateTime>("posted_on", DateTime.Now));
             await cmd.ExecuteNonQueryAsync();
         }
         catch (Exception ex)

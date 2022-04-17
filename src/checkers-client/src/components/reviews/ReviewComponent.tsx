@@ -7,7 +7,7 @@ type Props = {
 
 const ReviewComponent: FC<Props> = (props): JSX.Element => {
     return <>
-        <p>Author: {props.review.playerId}</p>
+        <p>Author: {props.review.playerName}</p>
         <p>{props.review.content}</p>
     </>
 }

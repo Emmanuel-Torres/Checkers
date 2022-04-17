@@ -10,5 +10,5 @@ public interface IDbService
     Task RemoveUserByIdAsync(int userId);
     Task UpdateUserAsync(Profile user);
     Task<IEnumerable<Review>> GetReviewsAsync();
-    Task AddReviewAsync(Review comment);
+    Task AddReviewAsync(string content, string? playerId);
 }

@@ -10,6 +10,8 @@ const ReviewView: FC = (): JSX.Element => {
     const [reviews, setReviews] = useState<Review[]>([]);
     const [review, setReview] = useState("");
 
+    console.log(reviews);
+
     useEffect(() => {
         reviewService.getReviews().then(r => setReviews(r));
     }, []);

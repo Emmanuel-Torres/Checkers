@@ -48,7 +48,7 @@ public class ReviewController : ControllerBase
                 logger.LogDebug("[{location}]: User profile was found. Id {id}", nameof(ReviewController), playerId);
             }
 
-            await dbService.AddReviewAsync(new Review(IdGenerator.GetId(), playerId, content, DateTime.Now));
+            await dbService.AddReviewAsync(content, playerId);
             return Ok();
         }
         catch(Exception ex)

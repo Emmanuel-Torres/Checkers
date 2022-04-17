@@ -1,12 +1,12 @@
 export default class Review {
     id: string;
-    playerId?: string;
+    playerName: string;
     content: string;
     postedOn: string;
 
-    constructor(id: string, content: string, postedOn: string, playerId?: string) {
+    constructor(id: string, playerName: string, content: string, postedOn: string) {
         this.id = id;
-        this.playerId = playerId;
+        this.playerName = playerName;
         this.content = content;
         this.postedOn = postedOn;
     }

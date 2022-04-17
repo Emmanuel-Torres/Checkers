@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Review from "../../models/review";
-import ReviewComponent from "./Review";
+import ReviewComponent from "./ReviewComponent";
 
 type Props = {
     reviews: Review[]

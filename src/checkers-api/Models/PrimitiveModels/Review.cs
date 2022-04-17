@@ -3,14 +3,14 @@ namespace checkers_api.Models.PrimitiveModels;
 public class Review
 {
     public string Id { get; }
-    public string? PlayerId { get; }
+    public string PlayerName { get; }
     public string Content { get; }
     public DateTime PostedOn { get; }
 
-    public Review(string id, string? playerId, string content, DateTime postedOn)
+    public Review(string id, string playerName, string content, DateTime postedOn)
     {
         Id = id;
-        PlayerId = playerId;
+        PlayerName = playerName;
         Content = content;
         PostedOn = postedOn;
     }
