@@ -19,6 +19,9 @@ const Navbar: FC = (): JSX.Element => {
                     <div className="nav-item">
                         <Link className="nav-link" to="/profile">Profile</Link>
                     </div>
+                    <div className="nav-item">
+                        <Link className="nav-link" to="/reviews">Reviews</Link>
+                    </div>
                 </div>
             </div>
         </nav>
