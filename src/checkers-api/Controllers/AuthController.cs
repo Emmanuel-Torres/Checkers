@@ -1,6 +1,6 @@
 using System.Net.Http.Headers;
 using checkers_api.Models.ExternalModels;
-using checkers_api.Models.PersistentModels;
+using checkers_api.Models.PrimitiveModels;
 using checkers_api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +22,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpGet("profile")]
-    public async Task<ActionResult<DbProfile?>> GetProfile([FromHeader] string authorization)
+    public async Task<ActionResult<Profile?>> GetProfile([FromHeader] string authorization)
     {
         try
         {

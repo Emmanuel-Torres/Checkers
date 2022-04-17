@@ -1,6 +1,6 @@
-namespace checkers_api.Models.PersistentModels;
+namespace checkers_api.Models.PrimitiveModels;
 
-public class DbProfile
+public class Profile
 {
     public string Id { get; }
     public string Email { get; }
@@ -8,7 +8,7 @@ public class DbProfile
     public string FamilyName { get; }
     public string Picture { get; }
 
-    public DbProfile(string id, string email, string givenName, string familyName, string picture)
+    public Profile(string id, string email, string givenName, string familyName, string picture)
     {
         Id = id;
         Email = email;

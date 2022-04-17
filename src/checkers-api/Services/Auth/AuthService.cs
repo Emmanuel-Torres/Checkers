@@ -1,5 +1,5 @@
 using checkers_api.Models.ExternalModels;
-using checkers_api.Models.PersistentModels;
+using checkers_api.Models.PrimitiveModels;
 using Google.Apis.Auth;
 
 namespace checkers_api.Services;
@@ -18,7 +18,7 @@ public class AuthService : IAuthService
         this.imageService = imageService;
     }
 
-    public async Task<DbProfile?> GetUserAsync(string token)
+    public async Task<Profile?> GetUserAsync(string token)
     {
         try
         {
@@ -56,7 +56,7 @@ public class AuthService : IAuthService
         throw new NotImplementedException();
     }
 
-    public async Task UpdateProfileAsync(string token, ProfileUpdateRequest request)
+    public Task UpdateProfileAsync(string token, ProfileUpdateRequest request)
     {
         throw new NotImplementedException();
         // try
@@ -89,7 +89,7 @@ public class AuthService : IAuthService
         throw new NotImplementedException();
     }
 
-    private async Task<DbProfile> RegisterUserAsync(GoogleJsonWebSignature.Payload payload)
+    private async Task<Profile> RegisterUserAsync(GoogleJsonWebSignature.Payload payload)
     {
         try
         {
@@ -97,7 +97,7 @@ public class AuthService : IAuthService
             logger.LogDebug("[{location}]: Creating new user profile for {email}", nameof(AuthService), payload.Email);
 
             var id = IdGenerator.GetId();
-            await dbService.AddUserAsync(new DbProfile(id, payload.Email, payload.GivenName, payload.FamilyName, payload.Picture));
+            await dbService.AddUserAsync(new Profile(id, payload.Email, payload.GivenName, payload.FamilyName, payload.Picture));
             var profile = await dbService.GetUserByIdAsync(id);
             logger.LogInformation("[{location}]: Profile successfully created for {email}", nameof(AuthService), payload.Email);
             return profile!;

@@ -48,3 +48,5 @@ services:
     restart: always
     env_file:
       - ./src/checkers-db/.env
+    volumes:
+      - ./src/checkers-db/checkers-db.sql:/docker-entrypoint-initdb.d/checkers-db.sql

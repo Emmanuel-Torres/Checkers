@@ -1,4 +1,4 @@
-using checkers_api.Models.PersistentModels;
+using checkers_api.Models.PrimitiveModels;
 using Npgsql;
 
 namespace checkers_api.Services;
@@ -15,7 +15,7 @@ public class DbService : IDbService, IAsyncDisposable
         connection.Open();
     }
 
-    public async Task AddUserAsync(DbProfile user)
+    public async Task AddUserAsync(Profile user)
     {
         try
         {
@@ -41,7 +41,7 @@ public class DbService : IDbService, IAsyncDisposable
     }
 
 
-    public async Task<DbProfile?> GetUserByEmailAsync(string email)
+    public async Task<Profile?> GetUserByEmailAsync(string email)
     {
         try
         {
@@ -54,7 +54,7 @@ public class DbService : IDbService, IAsyncDisposable
 
             while (await reader.ReadAsync())
             {
-                var profile = new DbProfile(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
+                var profile = new Profile(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
                 logger.LogDebug("[{location}]: User profile found for {email}", nameof(DbService), email);
                 return profile;
             }
@@ -66,7 +66,7 @@ public class DbService : IDbService, IAsyncDisposable
         return null;
     }
 
-    public async Task<DbProfile?> GetUserByIdAsync(string playerId)
+    public async Task<Profile?> GetUserByIdAsync(string playerId)
     {
         try
         {
@@ -79,7 +79,7 @@ public class DbService : IDbService, IAsyncDisposable
 
             while (await reader.ReadAsync())
             {
-                var profile = new DbProfile(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
+                var profile = new Profile(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
                 logger.LogDebug("[{location}]: User profile found for id {id}", nameof(DbService), playerId);
                 return profile;
             }
@@ -116,7 +116,7 @@ public class DbService : IDbService, IAsyncDisposable
         // }
     }
 
-    public Task UpdateUserAsync(DbProfile user)
+    public Task UpdateUserAsync(Profile user)
     {
         throw new NotImplementedException();
         // var userId = user.Id;
@@ -134,18 +134,18 @@ public class DbService : IDbService, IAsyncDisposable
     }
 
     //TODO: add logging
-    public async Task<IEnumerable<DbReview>> GetReviewsAsync()
+    public async Task<IEnumerable<Review>> GetReviewsAsync()
     {
         try
         {
-            var reviews = new List<DbReview>();
-            var query = "SELECT * FROM checkers.reviews";
+            var reviews = new List<Review>();
+            var query = "SELECT * FROM checkers.review";
 
             await using var cmd = new NpgsqlCommand(query, connection);
             await using var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                var review = new DbReview(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetDateTime(3));
+                var review = new Review(reader.GetString(0), reader.IsDBNull(1) ? null : reader.GetString(1), reader.GetString(2), reader.GetDateTime(3));
                 reviews.Add(review);
             }
 
@@ -158,16 +158,16 @@ public class DbService : IDbService, IAsyncDisposable
         }
     }
 
-    public async Task AddReviewAsync(DbReview review)
+    public async Task AddReviewAsync(Review review)
     {
         try
         {
             var query = "INSERT INTO checkers.review (review_id, player_id, content, posted_on) VALUES (@review_id, @player_id, @content, @posted_on)";
             await using var cmd = new NpgsqlCommand(query, connection);
-            cmd.Parameters.AddWithValue("review_id", review.Id);
-            cmd.Parameters.AddWithValue("player_id", review.PlayerId);
-            cmd.Parameters.AddWithValue("content", review.Content);
-            cmd.Parameters.AddWithValue("posted_on", review.PostedOn);
+            cmd.Parameters.Add(new NpgsqlParameter<string>("review_id", review.Id));
+            cmd.Parameters.Add(new NpgsqlParameter<string?>("player_id", review.PlayerId));
+            cmd.Parameters.Add(new NpgsqlParameter<string>("content", review.Content));
+            cmd.Parameters.Add(new NpgsqlParameter<DateTime>("posted_on", review.PostedOn));
             await cmd.ExecuteNonQueryAsync();
         }
         catch (Exception ex)
@@ -179,6 +179,7 @@ public class DbService : IDbService, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
+        GC.SuppressFinalize(this);
         await connection.DisposeAsync();
     }
 }
