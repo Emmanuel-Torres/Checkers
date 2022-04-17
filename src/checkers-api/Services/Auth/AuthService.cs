@@ -6,12 +6,12 @@ namespace checkers_api.Services;
 
 public class AuthService : IAuthService
 {
-    private readonly IUserDbService dbService;
+    private readonly IDbService dbService;
     private readonly ILogger<AuthService> logger;
     private readonly IImageService imageService;
     private readonly string clientId = "203576300472-qleefq8rh358lkekh6c1vhq3222jp8nh.apps.googleusercontent.com";
 
-    public AuthService(IUserDbService dbService, ILogger<AuthService> logger, IImageService imageService)
+    public AuthService(IDbService dbService, ILogger<AuthService> logger, IImageService imageService)
     {
         this.dbService = dbService;
         this.logger = logger;

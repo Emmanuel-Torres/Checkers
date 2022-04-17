@@ -3,12 +3,12 @@ using Npgsql;
 
 namespace checkers_api.Services;
 
-public class UserDbService : IUserDbService, IAsyncDisposable
+public class DbService : IDbService, IAsyncDisposable
 {
-    private readonly ILogger<UserDbService> logger;
+    private readonly ILogger<DbService> logger;
     private readonly NpgsqlConnection connection;
 
-    public UserDbService(ILogger<UserDbService> logger, IConfiguration configuration)
+    public DbService(ILogger<DbService> logger, IConfiguration configuration)
     {
         this.logger = logger;
         connection = new(configuration["CONNECTION_STRING"]);
@@ -19,24 +19,23 @@ public class UserDbService : IUserDbService, IAsyncDisposable
     {
         try
         {
-            logger.LogDebug("[{location}]: Adding user {email} to database", nameof(UserDbService), user.Email);
+            logger.LogDebug("[{location}]: Adding user {email} to database", nameof(DbService), user.Email);
 
             var query = "INSERT INTO checkers.player (player_id, email, given_name, family_name, picture_url) VALUES (@player_id, @email, @given_name, @family_name, @picture_url)";
-            await using (var cmd = new NpgsqlCommand(query, connection))
-            {
-                cmd.Parameters.AddWithValue("player_id", user.Id);
-                cmd.Parameters.AddWithValue("email", user.Email);
-                cmd.Parameters.AddWithValue("given_name", user.GivenName);
-                cmd.Parameters.AddWithValue("family_name", user.FamilyName);
-                cmd.Parameters.AddWithValue("picture_url", user.Picture);
-                await cmd.ExecuteNonQueryAsync();
-            }
 
-            logger.LogDebug("[{location}]: User {email} successfully added to the database", nameof(UserDbService), user.Email);
+            await using var cmd = new NpgsqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("player_id", user.Id);
+            cmd.Parameters.AddWithValue("email", user.Email);
+            cmd.Parameters.AddWithValue("given_name", user.GivenName);
+            cmd.Parameters.AddWithValue("family_name", user.FamilyName);
+            cmd.Parameters.AddWithValue("picture_url", user.Picture);
+            await cmd.ExecuteNonQueryAsync();
+
+            logger.LogDebug("[{location}]: User {email} successfully added to the database", nameof(DbService), user.Email);
         }
         catch (Exception ex)
         {
-            logger.LogError("[{location}]: Could not add user {email} to database. Ex: {ex}", nameof(UserDbService), user.Email, ex);
+            logger.LogError("[{location}]: Could not add user {email} to database. Ex: {ex}", nameof(DbService), user.Email, ex);
             throw;
         }
     }
@@ -46,7 +45,7 @@ public class UserDbService : IUserDbService, IAsyncDisposable
     {
         try
         {
-            logger.LogDebug("[{location}]: Retrieving user profile for {email}", nameof(UserDbService), email);
+            logger.LogDebug("[{location}]: Retrieving user profile for {email}", nameof(DbService), email);
 
             var query = "SELECT * FROM checkers.player WHERE email=@email";
             await using var cmd = new NpgsqlCommand(query, connection);
@@ -56,13 +55,13 @@ public class UserDbService : IUserDbService, IAsyncDisposable
             while (await reader.ReadAsync())
             {
                 var profile = new DbProfile(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
-                logger.LogDebug("[{location}]: User profile found for {email}", nameof(UserDbService), email);
+                logger.LogDebug("[{location}]: User profile found for {email}", nameof(DbService), email);
                 return profile;
             }
         }
         catch (Exception ex)
         {
-            logger.LogError("[{location}]: Could not retrieve user profile for {email}. Ex: {ex}", nameof(UserDbService), email, ex);
+            logger.LogError("[{location}]: Could not retrieve user profile for {email}. Ex: {ex}", nameof(DbService), email, ex);
         }
         return null;
     }
@@ -71,7 +70,7 @@ public class UserDbService : IUserDbService, IAsyncDisposable
     {
         try
         {
-            logger.LogDebug("[{location}]: Retrieving user profile for id {id}", nameof(UserDbService), playerId);
+            logger.LogDebug("[{location}]: Retrieving user profile for id {id}", nameof(DbService), playerId);
 
             var query = "SELECT * FROM checkers.player WHERE player_id=@player_id";
             await using var cmd = new NpgsqlCommand(query, connection);
@@ -81,22 +80,22 @@ public class UserDbService : IUserDbService, IAsyncDisposable
             while (await reader.ReadAsync())
             {
                 var profile = new DbProfile(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
-                logger.LogDebug("[{location}]: User profile found for id {id}", nameof(UserDbService), playerId);
+                logger.LogDebug("[{location}]: User profile found for id {id}", nameof(DbService), playerId);
                 return profile;
             }
         }
         catch (ArgumentNullException ex)
         {
-            logger.LogWarning("[{location}]: User profile for id {id} does not exist. Ex: {ex}", nameof(UserDbService), playerId, ex);
+            logger.LogWarning("[{location}]: User profile for id {id} does not exist. Ex: {ex}", nameof(DbService), playerId, ex);
         }
         catch (Exception ex)
         {
-            logger.LogError("[{location}]: Could not retrieve user profile for id {id}. Ex: {ex}", nameof(UserDbService), playerId, ex);
+            logger.LogError("[{location}]: Could not retrieve user profile for id {id}. Ex: {ex}", nameof(DbService), playerId, ex);
         }
         return null;
     }
 
-    public async Task RemoveUserByIdAsync(int userId)
+    public Task RemoveUserByIdAsync(int userId)
     {
         throw new NotImplementedException();
         // try
@@ -117,7 +116,7 @@ public class UserDbService : IUserDbService, IAsyncDisposable
         // }
     }
 
-    public async Task UpdateUserAsync(DbProfile user)
+    public Task UpdateUserAsync(DbProfile user)
     {
         throw new NotImplementedException();
         // var userId = user.Id;
@@ -132,6 +131,50 @@ public class UserDbService : IUserDbService, IAsyncDisposable
         //     logger.LogError("[{location}]: Could not update user with id {id}. Ex: {ex}", nameof(UserDbService), userId, ex);
         //     throw;
         // }
+    }
+
+    //TODO: add logging
+    public async Task<IEnumerable<DbReview>> GetReviewsAsync()
+    {
+        try
+        {
+            var reviews = new List<DbReview>();
+            var query = "SELECT * FROM checkers.reviews";
+
+            await using var cmd = new NpgsqlCommand(query, connection);
+            await using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                var review = new DbReview(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetDateTime(3));
+                reviews.Add(review);
+            }
+
+            return reviews;
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not get reviews. Ex {ex}", nameof(DbService), ex);
+            throw;
+        }
+    }
+
+    public async Task AddReviewAsync(DbReview review)
+    {
+        try
+        {
+            var query = "INSERT INTO checkers.review (review_id, player_id, content, posted_on) VALUES (@review_id, @player_id, @content, @posted_on)";
+            await using var cmd = new NpgsqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("review_id", review.Id);
+            cmd.Parameters.AddWithValue("player_id", review.PlayerId);
+            cmd.Parameters.AddWithValue("content", review.Content);
+            cmd.Parameters.AddWithValue("posted_on", review.PostedOn);
+            await cmd.ExecuteNonQueryAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError("[{location}]: Could not add review. Ex: {ex}", nameof(DbService), ex);
+            throw;
+        }
     }
 
     public async ValueTask DisposeAsync()

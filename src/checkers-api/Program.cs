@@ -13,7 +13,7 @@ var clientId = builder.Configuration["GOOGLE-CLIENT-ID"];
 builder.Services.AddSingleton<IGameService, GameService>();
 builder.Services.AddSingleton<IMatchmakingService, MatchmakingService>();
 builder.Services.AddSingleton<IImageService, ImageService>();
-builder.Services.AddTransient<IUserDbService, UserDbService>();
+builder.Services.AddTransient<IDbService, DbService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
