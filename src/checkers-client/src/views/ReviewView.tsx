@@ -10,19 +10,17 @@ const ReviewView: FC = (): JSX.Element => {
     const [reviews, setReviews] = useState<Review[]>([]);
     const [review, setReview] = useState("");
 
-    console.log(reviews);
-
     useEffect(() => {
         reviewService.getReviews().then(r => setReviews(r));
     }, []);
 
-    const reviewChangedHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const reviewChangedHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setReview(e.target.value);
     }
 
     const submitComment = async (e: FormEvent) => {
         e.preventDefault();
-        if (review.trim().length > 0) {
+        if (review.trim().length > 0 && review.trim().length <= 1000) {
             if (token) {
                 await reviewService.addReviewAsUser(review, token);
             } else {
@@ -38,8 +36,10 @@ const ReviewView: FC = (): JSX.Element => {
         <h2>This is the review page</h2>
         <p>Leave a review</p>
         <form onSubmit={submitComment}>
-            <label htmlFor="review">Write your review</label>
-            <input name="review" type="text" value={review} onChange={reviewChangedHandler} />
+            <label htmlFor="review">Write your review</label><br/>
+            <textarea name="review" value={review} onChange={reviewChangedHandler} />
+            <p>{review.trim().length}/1000 characters used</p>
+            {review.trim().length >= 1000 && <p>Review too large</p>}
             <button type="submit">Add Review</button>
         </form>
         <Reviews reviews={reviews} />

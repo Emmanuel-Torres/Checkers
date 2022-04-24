@@ -37,6 +37,14 @@ public class ReviewController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddReview([FromBody] string content)
     {
+        if (string.IsNullOrWhiteSpace(content))
+        {
+            return BadRequest();
+        }
+        if (content.Trim().Length >= 1000)
+        {
+            return BadRequest();
+        }
         try
         {
             logger.LogDebug("[{location}]: Adding new review", nameof(ReviewController));
