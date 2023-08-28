@@ -4,11 +4,9 @@ namespace checkers_api.Services;
 
 public interface IDbService
 {
-    Task<Profile?> GetUserByEmailAsync(string userEmail);
-    Task<Profile?> GetUserByIdAsync(string userId);
-    Task AddUserAsync(Profile user);
-    Task RemoveUserByIdAsync(int userId);
-    Task UpdateUserAsync(Profile user);
-    Task<IEnumerable<Review>> GetReviewsAsync();
-    Task AddReviewAsync(string content, string? playerId);
+    public Task<Profile?> GetUserByEmailAsync(string userEmail);
+    public Task<Profile?> GetUserByIdAsync(string userId);
+    public Task AddUserAsync(Profile user);
+    public Task RemoveUserByIdAsync(int userId);
+    public Task UpdateUserAsync(Profile user);
 }

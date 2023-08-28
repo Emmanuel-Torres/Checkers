@@ -8,15 +8,12 @@ public class CheckersHub : Hub<ICheckersHub>
 {
     private readonly ILogger<CheckersHub> logger;
     private readonly IGameService gameService;
-    private readonly IAuthService authService;
     private readonly IMatchmakingService matchmakingService;
-    public CheckersHub(ILogger<CheckersHub> logger, IGameService gameService, IAuthService authService, IMatchmakingService matchmakingService)
+    public CheckersHub(ILogger<CheckersHub> logger, IGameService gameService, IMatchmakingService matchmakingService)
     {
         this.logger = logger;
         this.gameService = gameService;
-        this.authService = authService;
         this.matchmakingService = matchmakingService;
-        this.matchmakingService.ConfigureQueue(StartGameAsync);
     }
 
     public override async Task OnConnectedAsync()
@@ -44,17 +41,17 @@ public class CheckersHub : Hub<ICheckersHub>
         try
         {
             logger.LogDebug("[{location}]: Player {token} requested matchmaking", nameof(CheckersHub), Context.ConnectionId);
-            var profile = await authService.GetUserAsync(token ?? "");
-            if (profile is not null)
-            {
-                logger.LogDebug("[{location}]: User profile was found for player {token}. Matchmaking as {name}", nameof(CheckersHub), Context.ConnectionId, profile.GivenName);
-                await matchmakingService.MatchMakeAsync(new Player(Context.ConnectionId, profile.GivenName));
-            }
-            else
-            {
-                logger.LogDebug("[{location}]: User profile was not found for player {token}. Matchmaking as guest.", nameof(CheckersHub), Context.ConnectionId);
-                await matchmakingService.MatchMakeAsync(new Player(Context.ConnectionId, "Guest"));
-            }
+            // var profile = await authService.GetUserAsync(token ?? "");
+            // if (profile is not null)
+            // {
+            //     logger.LogDebug("[{location}]: User profile was found for player {token}. Matchmaking as {name}", nameof(CheckersHub), Context.ConnectionId, profile.GivenName);
+            //     await matchmakingService.MatchMakeAsync(new Player(Context.ConnectionId, profile.GivenName));
+            // }
+            // else
+            // {
+            logger.LogDebug("[{location}]: User profile was not found for player {token}. Matchmaking as guest.", nameof(CheckersHub), Context.ConnectionId);
+            await matchmakingService.MatchMakeAsync(new Player(Context.ConnectionId, "Guest"));
+            // }
 
             await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "You are matchmaking");
             logger.LogDebug("[{location}]: Player {token} is matchmaking successfully", nameof(CheckersHub), Context.ConnectionId);

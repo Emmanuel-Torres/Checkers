@@ -27,11 +27,11 @@ services:
     depends_on:
       - dev_db
 
-  dev_db:
-    image: postgres
-    container_name: dev_db
-    restart: always
-    environment:
-      - POSTGRES_PASSWORD=password
-    volumes:
-      - ../../src/checkers-db/checkers-db.sql:/docker-entrypoint-initdb.d/checkers-db.sql
+  # dev_db:
+  #   image: postgres
+  #   container_name: dev_db
+  #   restart: always
+  #   environment:
+  #     - POSTGRES_PASSWORD=password
+  #   volumes:
+  #     - ../../src/checkers-db/checkers-db.sql:/docker-entrypoint-initdb.d/checkers-db.sql

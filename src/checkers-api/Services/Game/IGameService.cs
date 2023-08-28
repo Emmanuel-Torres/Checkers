@@ -5,11 +5,11 @@ namespace checkers_api.Services;
 
 public interface IGameService
 {
-    string StartGame(Player player1, Player player2);
-    MoveResult MakeMove(string playerId, MoveRequest moveRequest);
-    IGame? GetGameByGameId(string gameId);
-    IGame? GetGameByPlayerId(string playerId);
-    GameResults TerminateGame(string gameId);
-    GameResults QuitGame(string playerId);
-    IEnumerable<Location> GetValidMoves(string playerId, Location location);
+    public string StartGame(Player player1, Player player2);
+    public MoveResult MakeMove(string playerId, MoveRequest moveRequest);
+    public Game? GetGameByGameId(string gameId);
+    public Game? GetGameByPlayerId(string playerId);
+    public GameResults TerminateGame(string gameId);
+    public GameResults QuitGame(string playerId);
+    public IEnumerable<Location> GetValidMoves(string playerId, Location location);
 }

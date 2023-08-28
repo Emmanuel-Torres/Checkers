@@ -1,9 +1,8 @@
 using checkers_api.Models.GameModels;
-using Microsoft.Azure.Amqp.Framing;
 
 namespace checkers_api.GameLogic;
 
-public class Game : IGame
+public class Game
 {
     private const int BLACK_PIECES_HOME_ROW = 7;
     private const int WHITE_PIECES_HOME_ROW = 0;

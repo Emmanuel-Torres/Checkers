@@ -9,7 +9,7 @@ public class GameService : IGameService
 {
     private readonly ConcurrentDictionary<string, Player> activePlayers;
     private readonly ConcurrentDictionary<string, string> playerGame;
-    private readonly ConcurrentDictionary<string, IGame> activeGames;
+    private readonly ConcurrentDictionary<string, Game> activeGames;
     private readonly ILogger<GameService> logger;
     private readonly ILoggerFactory loggerFactory;
 
@@ -17,7 +17,7 @@ public class GameService : IGameService
     {
         activePlayers = new ConcurrentDictionary<string, Player>();
         playerGame = new ConcurrentDictionary<string, string>();
-        activeGames = new ConcurrentDictionary<string, IGame>();
+        activeGames = new ConcurrentDictionary<string, Game>();
         this.logger = logger;
         this.loggerFactory = loggerFactory;
     }
@@ -60,7 +60,7 @@ public class GameService : IGameService
         return game.Id;
     }
 
-    public IGame? GetGameByGameId(string gameId)
+    public Game? GetGameByGameId(string gameId)
     {
         ArgumentNullException.ThrowIfNull(gameId);
 
@@ -68,7 +68,7 @@ public class GameService : IGameService
         return game;
     }
 
-    public IGame? GetGameByPlayerId(string playerId)
+    public Game? GetGameByPlayerId(string playerId)
     {
         ArgumentNullException.ThrowIfNull(playerId);
 

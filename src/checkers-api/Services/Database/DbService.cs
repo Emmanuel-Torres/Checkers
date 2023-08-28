@@ -98,83 +98,11 @@ public class DbService : IDbService, IAsyncDisposable
     public Task RemoveUserByIdAsync(int userId)
     {
         throw new NotImplementedException();
-        // try
-        // {
-        //     throw new NotImplementedException();
-        //     logger.LogDebug("[{location}]: Removing user with id {id} from database", nameof(UserDbService), userId);
-        //     logger.LogInformation("[{location}]: User {id} was successfully removed from the database", nameof(UserDbService), userId);
-        // }
-        // catch (ArgumentNullException ex)
-        // {
-        //     logger.LogWarning("[{location}]: Could not remove user with id {id} because it does not exist. Ex: {ex}", nameof(UserDbService), userId, ex);
-        //     throw;
-        // }
-        // catch (Exception ex)
-        // {
-        //     logger.LogError("[{location}]: Could not remove user with id {id}. Ex: {ex}", nameof(UserDbService), userId, ex);
-        //     throw;
-        // }
     }
 
     public Task UpdateUserAsync(Profile user)
     {
         throw new NotImplementedException();
-        // var userId = user.Id;
-
-        // try
-        // {
-        //     logger.LogDebug("[{location}]: Updating user with id {id}.", nameof(UserDbService), userId);
-        //     logger.LogInformation("[{location}]: User {id} was successfully updated", nameof(UserDbService), userId);
-        // }
-        // catch (Exception ex)
-        // {
-        //     logger.LogError("[{location}]: Could not update user with id {id}. Ex: {ex}", nameof(UserDbService), userId, ex);
-        //     throw;
-        // }
-    }
-
-    //TODO: add logging
-    public async Task<IEnumerable<Review>> GetReviewsAsync()
-    {
-        try
-        {
-            var reviews = new List<Review>();
-            var query = "SELECT r.review_id, COALESCE(p.given_name, 'Anonymous'), r.content, r.posted_on FROM checkers.review r LEFT JOIN checkers.player p ON (r.player_id = p.player_id)";
-
-            await using var cmd = new NpgsqlCommand(query, connection);
-            await using var reader = await cmd.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                var review = new Review(reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetDateTime(3));
-                reviews.Add(review);
-            }
-
-            return reviews;
-        }
-        catch (Exception ex)
-        {
-            logger.LogError("[{location}]: Could not get reviews. Ex {ex}", nameof(DbService), ex);
-            throw;
-        }
-    }
-
-    public async Task AddReviewAsync(string content, string? playerId)
-    {
-        try
-        {
-            var query = "INSERT INTO checkers.review (review_id, player_id, content, posted_on) VALUES (@review_id, @player_id, @content, @posted_on)";
-            await using var cmd = new NpgsqlCommand(query, connection);
-            cmd.Parameters.Add(new NpgsqlParameter<string>("review_id", IdGenerator.GetId()));
-            cmd.Parameters.Add(new NpgsqlParameter<string?>("player_id", playerId));
-            cmd.Parameters.Add(new NpgsqlParameter<string>("content", content));
-            cmd.Parameters.Add(new NpgsqlParameter<DateTime>("posted_on", DateTime.Now));
-            await cmd.ExecuteNonQueryAsync();
-        }
-        catch (Exception ex)
-        {
-            logger.LogError("[{location}]: Could not add review. Ex: {ex}", nameof(DbService), ex);
-            throw;
-        }
     }
 
     public async ValueTask DisposeAsync()
