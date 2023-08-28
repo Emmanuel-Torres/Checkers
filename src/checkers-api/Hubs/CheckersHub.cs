@@ -42,7 +42,7 @@ public class CheckersHub : Hub<ICheckersHub>
         {
             logger.LogDebug("[{location}]: Player {connectionId} requested matchmaking", nameof(CheckersHub), Context.ConnectionId);
 
-            await matchmakingService.MatchMakeAsync(new Player(Context.ConnectionId, "Guest"));
+            await matchmakingService.StartMatchmakingAsync(new Player(Context.ConnectionId, "Guest"));
             await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "You are matchmaking");
 
             logger.LogDebug("[{location}]: Player {connectionId} is matchmaking successfully", nameof(CheckersHub), Context.ConnectionId);

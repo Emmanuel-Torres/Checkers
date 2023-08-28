@@ -14,12 +14,12 @@ public class MatchmakingService : IMatchmakingService
         _matchMakingQueue = new();
     }
 
-    public Task MatchMakeAsync(Player player)
+    public Task StartMatchmakingAsync(Player player)
     {
         throw new NotImplementedException();
     }
 
-    public bool CancelMatchMaking(string playerId)
+    public bool CancelMatchmaking(string playerId)
     {
         throw new NotImplementedException();
     }

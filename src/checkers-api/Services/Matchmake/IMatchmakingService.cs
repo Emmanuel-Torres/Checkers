@@ -4,6 +4,6 @@ namespace checkers_api.Services;
 
 public interface IMatchmakingService
 {
-    public Task MatchMakeAsync(Player player);
-    public bool CancelMatchMaking(string playerId);
+    public Task StartMatchmakingAsync(Player player);
+    public bool CancelMatchmaking(string playerId);
 }
