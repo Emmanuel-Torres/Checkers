@@ -3,7 +3,7 @@ using checkers_api.GameLogic;
 using checkers_api.Models.GameModels;
 
 
-namespace checkers_api.Services;
+namespace checkers_api.Services.GameManager;
 
 public class GameManager : IGameManager
 {

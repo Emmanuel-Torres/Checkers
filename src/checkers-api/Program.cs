@@ -1,6 +1,8 @@
 using System.Text.Json.Serialization;
 using checkers_api.Hubs;
 using checkers_api.Services;
+using checkers_api.Services.GameManager;
+using checkers_api.Services.Matchmaking;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,26 +22,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// builder.Services.AddAuthentication(options =>
-// {
-//     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-//     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-// })
-// .AddCookie()
-// .AddJwtBearer(options =>
-// {
-//     options.Audience = clientId;
-//     options.Authority = "https://accounts.google.com";
-//     options.TokenValidationParameters = new TokenValidationParameters()
-//     {
-//         ValidAudience = clientId,
-//         ValidateIssuerSigningKey = true,
-//         ValidateIssuer = true,
-//         ValidIssuers = new List<string>() { "https://accounts.google.com", "accounts.google.com" }
-//     };
-// });
 
 var app = builder.Build();
 

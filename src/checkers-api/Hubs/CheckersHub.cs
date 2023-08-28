@@ -1,24 +1,29 @@
+using checkers_api.Models.Events;
 using checkers_api.Models.GameModels;
 using checkers_api.Services;
+using checkers_api.Services.GameManager;
+using checkers_api.Services.Matchmaking;
 using Microsoft.AspNetCore.SignalR;
 
 namespace checkers_api.Hubs;
 
 public class CheckersHub : Hub<ICheckersHub>
 {
-    private readonly ILogger<CheckersHub> logger;
-    private readonly IGameManager gameService;
-    private readonly IMatchmakingService matchmakingService;
+    private readonly ILogger<CheckersHub> _logger;
+    private readonly IGameManager _gameService;
+    private readonly IMatchmakingService _matchmakingService;
     public CheckersHub(ILogger<CheckersHub> logger, IGameManager gameService, IMatchmakingService matchmakingService)
     {
-        this.logger = logger;
-        this.gameService = gameService;
-        this.matchmakingService = matchmakingService;
+        _logger = logger;
+        _gameService = gameService;
+        _matchmakingService = matchmakingService;
+
+        _matchmakingService.PlayersMatched += OnPlayersMatchedAsync;
     }
 
     public override async Task OnConnectedAsync()
     {
-        logger.LogDebug("[{location}]: Player {connectionId} connected to the server", nameof(CheckersHub), Context.ConnectionId);
+        _logger.LogDebug("[{location}]: Player {connectionId} connected to the server", nameof(CheckersHub), Context.ConnectionId);
         await base.OnConnectedAsync();
     }
 
@@ -26,11 +31,11 @@ public class CheckersHub : Hub<ICheckersHub>
     {
         if (exception is not null)
         {
-            logger.LogError("[{location}]: Player {connectionId} disconnected from the sever due to an exception. Ex: {ex}", nameof(CheckersHub), Context.ConnectionId, exception);
+            _logger.LogError("[{location}]: Player {connectionId} disconnected from the sever due to an exception. Ex: {ex}", nameof(CheckersHub), Context.ConnectionId, exception);
         }
         else
         {
-            logger.LogDebug("[{location}]: Player {connectionId} disconnected from the server", nameof(CheckersHub), Context.ConnectionId);
+            _logger.LogDebug("[{location}]: Player {connectionId} disconnected from the server", nameof(CheckersHub), Context.ConnectionId);
         }
 
         await base.OnDisconnectedAsync(exception);
@@ -40,16 +45,16 @@ public class CheckersHub : Hub<ICheckersHub>
     {
         try
         {
-            logger.LogDebug("[{location}]: Player {connectionId} requested matchmaking", nameof(CheckersHub), Context.ConnectionId);
+            _logger.LogDebug("[{location}]: Player {connectionId} requested matchmaking", nameof(CheckersHub), Context.ConnectionId);
 
-            await matchmakingService.StartMatchmakingAsync(new Player(Context.ConnectionId, "Guest"));
+            await _matchmakingService.StartMatchmakingAsync(new Player(Context.ConnectionId, "Guest"));
             await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "You are matchmaking");
 
-            logger.LogDebug("[{location}]: Player {connectionId} is matchmaking successfully", nameof(CheckersHub), Context.ConnectionId);
+            _logger.LogDebug("[{location}]: Player {connectionId} is matchmaking successfully", nameof(CheckersHub), Context.ConnectionId);
         }
         catch (Exception ex)
         {
-            logger.LogError("[{location}]: Could not matchmake player {connectionId}. Ex: {ex}", nameof(CheckersHub), Context.ConnectionId, ex);
+            _logger.LogError("[{location}]: Matchmaking failed for player {connectionId}. Ex: {ex}", nameof(CheckersHub), Context.ConnectionId, ex);
             await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "Matchmaking failed");
         }
     }
@@ -58,19 +63,19 @@ public class CheckersHub : Hub<ICheckersHub>
     {
         try
         {
-            logger.LogDebug("[{location}]: Player {connectionId} made a move request from ({sRow}, {sCol}) to ({dRow}, {dCol})",
+            _logger.LogDebug("[{location}]: Player {connectionId} made a move request from ({sRow}, {sCol}) to ({dRow}, {dCol})",
                 nameof(CheckersHub), Context.ConnectionId, moveRequest.Source.Row, moveRequest.Source.Column, moveRequest.Destination.Row, moveRequest.Destination.Column);
 
-            var res = gameService.MakeMove(Context.ConnectionId, moveRequest);
+            var res = _gameService.MakeMove(Context.ConnectionId, moveRequest);
             if (res.IsGameOver)
             {
-                logger.LogInformation("[{location}]: Move request from player {connectionId} successfully won the game", nameof(CheckersHub), Context.ConnectionId);
+                _logger.LogInformation("[{location}]: Move request from player {connectionId} successfully won the game", nameof(CheckersHub), Context.ConnectionId);
                 await EndGameAsync(res.GameId);
                 return;
             }
             if (res.WasMoveSuccessful)
             {
-                logger.LogDebug("[{location}]: Move request from player {connectionId} was successful", nameof(CheckersHub), Context.ConnectionId);
+                _logger.LogDebug("[{location}]: Move request from player {connectionId} was successful", nameof(CheckersHub), Context.ConnectionId);
                 await Clients.Client(Context.ConnectionId).MoveSuccessfulAsync(res.Board);
                 return;
             }
@@ -79,7 +84,7 @@ public class CheckersHub : Hub<ICheckersHub>
         }
         catch (Exception ex)
         {
-            logger.LogError("[{location}]: Could not make move. Ex: {ex}", nameof(CheckersHub), ex);
+            _logger.LogError("[{location}]: Could not make move. Ex: {ex}", nameof(CheckersHub), ex);
             await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "Something went wrong when making your move");
         }
     }
@@ -88,19 +93,19 @@ public class CheckersHub : Hub<ICheckersHub>
     {
         try
         {
-            var game = gameService.GetGameByPlayerId(Context.ConnectionId);
+            var game = _gameService.GetGameByPlayerId(Context.ConnectionId);
             if (game is null)
             {
                 throw new Exception("Player is not in a game");
             }
             var currentTurn = game.Players.First(p => p.PlayerId != Context.ConnectionId);
 
-            logger.LogDebug("[{location}]: Player {p1} is done moving. Passing turn to {p2}", nameof(CheckersHub), Context.ConnectionId, currentTurn.PlayerId);
+            _logger.LogDebug("[{location}]: Player {p1} is done moving. Passing turn to {p2}", nameof(CheckersHub), Context.ConnectionId, currentTurn.PlayerId);
             await Clients.Client(currentTurn.PlayerId).YourTurnToMoveAsync(game.Board);
         }
         catch (Exception ex)
         {
-            logger.LogError("[{location}]: Could complete move for player {connectionId}. Ex: {ex}", nameof(CheckersHub), Context.ConnectionId, ex);
+            _logger.LogError("[{location}]: Could complete move for player {connectionId}. Ex: {ex}", nameof(CheckersHub), Context.ConnectionId, ex);
         }
     }
 
@@ -108,15 +113,15 @@ public class CheckersHub : Hub<ICheckersHub>
     {
         try
         {
-            logger.LogDebug("[{location}]: Getting valid locations for ({row}, {column})", nameof(CheckersHub), source.Row, source.Column);
-            var res = gameService.GetValidMoves(Context.ConnectionId, source);
-            logger.LogDebug("[{location}]: Found {count} valid locations for ({row}, {column})", nameof(CheckersHub), res.Count(), source.Row, source.Column);
+            _logger.LogDebug("[{location}]: Getting valid locations for ({row}, {column})", nameof(CheckersHub), source.Row, source.Column);
+            var res = _gameService.GetValidMoves(Context.ConnectionId, source);
+            _logger.LogDebug("[{location}]: Found {count} valid locations for ({row}, {column})", nameof(CheckersHub), res.Count(), source.Row, source.Column);
 
             await Clients.Client(Context.ConnectionId).SendValidMoveLocationsAsync(res);
         }
         catch (Exception ex)
         {
-            logger.LogError("[{location}]: Could not get valid moves for source ({column}, {row}). Ex: {ex}", nameof(CheckersHub), source.Column, source.Row, ex);
+            _logger.LogError("[{location}]: Could not get valid moves for source ({column}, {row}). Ex: {ex}", nameof(CheckersHub), source.Column, source.Row, ex);
         }
     }
 
@@ -124,10 +129,10 @@ public class CheckersHub : Hub<ICheckersHub>
     {
         try
         {
-            logger.LogInformation("[{location}]: Starting game for players {p1} and {p2}", nameof(CheckersHub), p1.PlayerId, p2.PlayerId);
+            _logger.LogInformation("[{location}]: Starting game for players {p1} and {p2}", nameof(CheckersHub), p1.PlayerId, p2.PlayerId);
 
-            var gameId = gameService.StartGame(p1, p2);
-            var game = gameService.GetGameByGameId(gameId);
+            var gameId = _gameService.StartGame(p1, p2);
+            var game = _gameService.GetGameByGameId(gameId);
 
             foreach (var p in game!.Players)
             {
@@ -140,7 +145,7 @@ public class CheckersHub : Hub<ICheckersHub>
         }
         catch (Exception ex)
         {
-            logger.LogError("[{location}]: Could not start game for players {p1} and {p2}. Ex: {ex}", nameof(CheckersHub), p1.PlayerId, p2.PlayerId, ex);
+            _logger.LogError("[{location}]: Could not start game for players {p1} and {p2}. Ex: {ex}", nameof(CheckersHub), p1.PlayerId, p2.PlayerId, ex);
         }
     }
 
@@ -148,18 +153,23 @@ public class CheckersHub : Hub<ICheckersHub>
     {
         try
         {
-            logger.LogDebug("[{location}]: Ending game {id}", nameof(CheckersHub), gameId);
-            var results = gameService.TerminateGame(gameId);
+            _logger.LogDebug("[{location}]: Ending game {id}", nameof(CheckersHub), gameId);
+            var results = _gameService.TerminateGame(gameId);
             foreach (var p in results.Players)
             {
                 await Clients.Client(p.PlayerId).GameOverAsync(results.Winner.Name, results.Board);
             }
 
-            logger.LogInformation("[{location}]: Game {id} was successfully terminated. Winner {connectionId}", nameof(CheckersHub), gameId, results.Winner.PlayerId);
+            _logger.LogInformation("[{location}]: Game {id} was successfully terminated. Winner {connectionId}", nameof(CheckersHub), gameId, results.Winner.PlayerId);
         }
         catch (Exception ex)
         {
-            logger.LogError("[{location}]: Could not end game properly. Ex: {ex}", nameof(CheckersHub), ex);
+            _logger.LogError("[{location}]: Could not end game properly. Ex: {ex}", nameof(CheckersHub), ex);
         }
+    }
+
+    private async Task OnPlayersMatchedAsync(object? sender, PlayersMatchedEventArgs e)
+    {
+        await StartGameAsync(e.Player1, e.Player2);
     }
 }
