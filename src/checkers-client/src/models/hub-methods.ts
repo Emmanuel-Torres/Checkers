@@ -3,7 +3,7 @@ export default class HubMethods {
     static gameOver = "GameOverAsync";
     static sendMessage = "SendMessageAsync";
     static sendJoinConfirmation = "SendJoinConfirmationAsync";
-    static matchMake = "MatchMakeAsync";
+    static matchMake = "FindGameAsync";
     static makeMove = "MakeMoveAsync";
     static getValidMoves = "GetValidMovesAsync";
     static sendValidMoveLocations = "SendValidMoveLocationsAsync";

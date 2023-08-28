@@ -68,8 +68,9 @@ const GameView: FC = (): JSX.Element => {
 
     const matchMake = async () => {
         try {
+            console.log("finding game");
             setIsMatchMaking(true);
-            await connection?.send(HubMethods.matchMake, undefined);
+            await connection?.send(HubMethods.matchMake);
         }
         catch (e) {
             console.error(e);
