@@ -20,18 +20,3 @@ services:
     build:
       context: ../../src/checkers-api
       dockerfile: ../../ops/development/dev-api.Dockerfile
-    env_file:
-      - ../../src/checkers-api/.env
-    environment:
-      - CONNECTION_STRING=Host=dev_db;Database=postgres;Username=postgres;Password=password
-    depends_on:
-      - dev_db
-
-  # dev_db:
-  #   image: postgres
-  #   container_name: dev_db
-  #   restart: always
-  #   environment:
-  #     - POSTGRES_PASSWORD=password
-  #   volumes:
-  #     - ../../src/checkers-db/checkers-db.sql:/docker-entrypoint-initdb.d/checkers-db.sql

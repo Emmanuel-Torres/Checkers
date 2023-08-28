@@ -1,21 +1,29 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-focal AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
 
 ENV ASPNETCORE_URLS=http://+:80
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0-focal AS build
+# Creates a non-root user with an explicit UID and adds permission to access the /app folder
+# For more info, please refer to https://aka.ms/vscode-docker-dotnet-configure-containers
+RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+USER appuser
+
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+ARG configuration=Release
 WORKDIR /src
 COPY ["checkers-api.csproj", "./"]
 RUN dotnet restore "checkers-api.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "checkers-api.csproj" -c Release -o /app/build
+RUN dotnet build "checkers-api.csproj" -c $configuration -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "checkers-api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG configuration=Release
+RUN dotnet publish "checkers-api.csproj" -c $configuration -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "checkers-api.dll"]
+

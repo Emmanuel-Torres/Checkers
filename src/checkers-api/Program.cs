@@ -6,7 +6,6 @@ using checkers_api.Services.Matchmaking;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-var clientId = builder.Configuration["GOOGLE-CLIENT-ID"];
 // Add services to the container.
 
 builder.Services.AddSingleton<IGameManager, GameManager>();
