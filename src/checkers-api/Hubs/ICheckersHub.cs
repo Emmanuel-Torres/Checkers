@@ -5,17 +5,17 @@ namespace checkers_api.Hubs;
 public interface ICheckersHub
 {
     //Server Methods
-    Task MatchMakeAsync(string? token);
-    Task MakeMoveAsync(MoveRequest moveRequest);
-    Task GetValidMovesAsync(Location source);
-    Task QuitGameAsync();
-    Task MoveCompletedAsync();
+    public Task FindGameAsync();
+    public Task MakeMoveAsync(MoveRequest moveRequest);
+    public Task GetValidMovesAsync(Location source);
+    public Task QuitGameAsync();
+    public Task MoveCompletedAsync();
 
     //Client methods
-    Task YourTurnToMoveAsync(IEnumerable<Square> board);
-    Task MoveSuccessfulAsync(IEnumerable<Square> board);
-    Task GameOverAsync(string winner, IEnumerable<Square> board);
-    Task SendMessageAsync(string sender, string message);
-    Task SendJoinConfirmationAsync(string name, Color color, IEnumerable<Square> board);
-    Task SendValidMoveLocationsAsync(IEnumerable<Location> validLocations);
+    public Task YourTurnToMoveAsync(IEnumerable<Square> board);
+    public Task MoveSuccessfulAsync(IEnumerable<Square> board);
+    public Task GameOverAsync(string winner, IEnumerable<Square> board);
+    public Task SendMessageAsync(string sender, string message);
+    public Task SendJoinConfirmationAsync(string name, Color color, IEnumerable<Square> board);
+    public Task SendValidMoveLocationsAsync(IEnumerable<Location> validLocations);
 }

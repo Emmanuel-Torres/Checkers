@@ -3,7 +3,7 @@ using checkers_api.GameLogic;
 
 namespace checkers_api.Services;
 
-public interface IGameService
+public interface IGameManager
 {
     public string StartGame(Player player1, Player player2);
     public MoveResult MakeMove(string playerId, MoveRequest moveRequest);

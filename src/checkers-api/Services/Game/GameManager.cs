@@ -5,15 +5,15 @@ using checkers_api.Models.GameModels;
 
 namespace checkers_api.Services;
 
-public class GameService : IGameService
+public class GameManager : IGameManager
 {
     private readonly ConcurrentDictionary<string, Player> activePlayers;
     private readonly ConcurrentDictionary<string, string> playerGame;
     private readonly ConcurrentDictionary<string, Game> activeGames;
-    private readonly ILogger<GameService> logger;
+    private readonly ILogger<GameManager> logger;
     private readonly ILoggerFactory loggerFactory;
 
-    public GameService(ILogger<GameService> logger, ILoggerFactory loggerFactory)
+    public GameManager(ILogger<GameManager> logger, ILoggerFactory loggerFactory)
     {
         activePlayers = new ConcurrentDictionary<string, Player>();
         playerGame = new ConcurrentDictionary<string, string>();
@@ -107,7 +107,7 @@ public class GameService : IGameService
         }
         catch (Exception ex)
         {
-            logger.LogWarning("[{location}]: Could not complete move request from player {playerId}. Ex: {ex}", nameof(GameService), playerId, ex);
+            logger.LogWarning("[{location}]: Could not complete move request from player {playerId}. Ex: {ex}", nameof(GameManager), playerId, ex);
             moveSuccessful = false;
         }
 
@@ -128,7 +128,7 @@ public class GameService : IGameService
         }
         catch (Exception ex)
         {
-            logger.LogWarning("[{location}]: Could not get valid moves for location ({row}. {column}). Ex: {ex}", nameof(GameService), location.Row, location.Column, ex);
+            logger.LogWarning("[{location}]: Could not get valid moves for location ({row}. {column}). Ex: {ex}", nameof(GameManager), location.Row, location.Column, ex);
             return new List<Location>();
         }
     }
@@ -174,7 +174,7 @@ public class GameService : IGameService
             }
             catch (Exception ex)
             {
-                logger.LogError("[{location}]: Could not terminate game {gameId}. Ex: {ex}", nameof(GameService), gameId, ex);
+                logger.LogError("[{location}]: Could not terminate game {gameId}. Ex: {ex}", nameof(GameManager), gameId, ex);
                 throw;
             }
         }

@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 var clientId = builder.Configuration["GOOGLE-CLIENT-ID"];
 // Add services to the container.
 
-builder.Services.AddSingleton<IGameService, GameService>();
+builder.Services.AddSingleton<IGameManager, GameManager>();
 builder.Services.AddSingleton<IMatchmakingService, MatchmakingService>();
 // builder.Services.AddTransient<IDbService, DbService>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
