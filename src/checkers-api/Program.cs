@@ -11,10 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<IGameManager, GameManager>();
 builder.Services.AddSingleton<IMatchmakingService, MatchmakingService>();
 // builder.Services.AddTransient<IDbService, DbService>();
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+// builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddSignalR().AddJsonProtocol(options =>
-    options.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter())
+   options.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter())
 );
 
 builder.Services.AddControllers();
@@ -37,7 +37,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapHub<CheckersHub>("/hubs/checkers");
 app.MapControllers();
+app.MapHub<CheckersHub>("/hubs/checkers");
 
 app.Run();
