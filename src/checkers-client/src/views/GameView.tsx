@@ -1,4 +1,4 @@
-import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
+import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { FC, useEffect, useState } from "react";
 import BoardComponent from "../components/game/board/BoardComponent";
 import BoardLocation from "../game-models/location";
@@ -22,17 +22,22 @@ const GameView: FC = (): JSX.Element => {
         const newConnection = new HubConnectionBuilder()
             .withUrl("/hubs/checkers")
             .withAutomaticReconnect()
+            .configureLogging(LogLevel.Debug)
             .build();
         setConnection(newConnection);
     }, [])
 
     useEffect(() => {
         if (connection) {
-            connection.start().then(_ => {
-                console.log("Connection Succeeded");
-            }).catch(err => {
-                console.error("Connection failed: ", err);
-            });
+            console.log("connecting...");
+
+            connection
+                .start()
+                .then(() => {
+                    console.log("Connection Succeeded");
+                }).catch(err => {
+                    console.error("Connection failed: ", err);
+                });
 
             connection.on(HubMethods.moveSuccessful, (board: Square[]) => {
                 setYourTurn(false);
