@@ -1,4 +1,3 @@
-using checkers_api.Models.Events;
 using checkers_api.Models.GameModels;
 using checkers_api.Services;
 using checkers_api.Services.GameManager;
@@ -18,7 +17,7 @@ public class CheckersHub : Hub<ICheckersHub>
         _gameService = gameService;
         _matchmakingService = matchmakingService;
 
-        _matchmakingService.PlayersMatched += OnPlayersMatchedAsync;
+        _matchmakingService.OnPlayersMatched = StartGameAsync;
     }
 
     public override async Task OnConnectedAsync()
@@ -166,10 +165,5 @@ public class CheckersHub : Hub<ICheckersHub>
         {
             _logger.LogError("[{location}]: Could not end game properly. Ex: {ex}", nameof(CheckersHub), ex);
         }
-    }
-
-    private async Task OnPlayersMatchedAsync(object? sender, PlayersMatchedEventArgs e)
-    {
-        await StartGameAsync(e.Player1, e.Player2);
     }
 }
