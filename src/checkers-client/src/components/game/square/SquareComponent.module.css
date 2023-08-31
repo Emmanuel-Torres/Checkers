@@ -1,38 +1,19 @@
 .square {
   color: white;
   aspect-ratio: 1/1;
-  padding: 5px;
-  display: flex;
-  justify-content: center;
-}
-
-.piece {
-  aspect-ratio: 1/1;
-  border: solid .15rem #ff0000;
-  border-radius: 100%;
-  align-items: center;
+  padding: 10%;
   display: flex;
   justify-content: center;
 }
 
 .bg-White {
-  background-color: #dadada;
+  background: rgb(189,189,189);
+  background: linear-gradient(45deg, rgba(189,189,189,1) 0%, rgba(255,255,255,1) 100%);
 }
 
 .bg-Black {
-  background-color: #705036;
-}
-
-.piece-White {
-    background-color: #ffffff;
-}
-.piece-Black {
-    background-color: rgb(0, 0, 0);
-}
-.crown {
-  width: 70%;
-  aspect-ratio: 1/1;
-  filter: invert(10%) sepia(89%) saturate(5619%) hue-rotate(360deg) brightness(129%) contrast(117%);
+  background: rgb(41,41,41);
+  background: linear-gradient(45deg, rgba(41,41,41,1) 0%, rgba(89,89,89,1) 100%);
 }
 
 .valid-move {
@@ -42,13 +23,4 @@
   width: 50%;
   background: rgb(92, 92, 92);
   border: solid .15rem black;
-}
-
-@media screen and (min-width: 600px) {
-    .square {
-        padding: 1.25rem;
-    }
-    .piece {
-        border-width: .25rem;
-    }
 }

@@ -13,15 +13,6 @@ const Navbar: FC = (): JSX.Element => {
                     <div className='nav-item'>
                         <Link className="nav-link" to="/game">Play</Link>
                     </div>
-                    <div className='nav-item'>
-                        <Link className="nav-link" to="/login">Login</Link>
-                    </div>
-                    <div className="nav-item">
-                        <Link className="nav-link" to="/profile">Profile</Link>
-                    </div>
-                    <div className="nav-item">
-                        <Link className="nav-link" to="/reviews">Reviews</Link>
-                    </div>
                 </div>
             </div>
         </nav>
