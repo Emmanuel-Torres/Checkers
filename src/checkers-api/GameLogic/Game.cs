@@ -37,27 +37,20 @@ public class Game
             throw new Exception("It is not this player's turn");
         }
 
-        try
+        var source = board.GetSquareByLocation(moveRequest.Source);
+        var destination = board.GetSquareByLocation(moveRequest.Destination);
+
+        if (!IsMoveValid(source, destination, playerId))
         {
-            var source = board.GetSquareByLocation(moveRequest.Source);
-            var destination = board.GetSquareByLocation(moveRequest.Destination);
-
-            if (!IsMoveValid(source, destination, playerId))
-            {
-                throw new Exception("Move was not valid");
-            }
-
-            MovePiece(source, destination);
-            currentTurn = Players.First(p => p.PlayerId != playerId).PlayerId;
-
-            if (IsGameOver())
-            {
-                state = GameState.GameOver;
-            }
+            throw new Exception("Move was not valid");
         }
-        catch
+
+        MovePiece(source, destination);
+        currentTurn = Players.First(p => p.PlayerId != playerId).PlayerId;
+
+        if (IsGameOver())
         {
-            throw;
+            state = GameState.GameOver;
         }
     }
 
@@ -76,45 +69,38 @@ public class Game
         ArgumentNullException.ThrowIfNull(playerId);
         ArgumentNullException.ThrowIfNull(location);
 
-        try
+        var square = board.GetSquareByLocation(location);
+
+        if (currentTurn != playerId)
         {
-            var square = board.GetSquareByLocation(location);
-
-            if (currentTurn != playerId)
-            {
-                throw new Exception("Is not this player's turn");
-            }
-            if (square.Piece is null)
-            {
-                throw new Exception("Square is does not have a piece");
-            }
-            if (square.Piece.OwnerId != playerId)
-            {
-                throw new Exception("Player does not own this piece");
-            }
-
-            var neighborSquares = GetNeighbors(square.Piece, location);
-            logger.LogDebug("[{location}]: Found {count} neighbor squares", nameof(Game), neighborSquares.Count());
-
-            var availableLocations = neighborSquares.Where(s => s.Piece is null).Select(x => x.Location);
-            logger.LogDebug("[{location}]: Found {count} available locations", nameof(Game), availableLocations.Count());
-
-            var occupiedSquares = neighborSquares.Where(s => s.Piece is not null && s.Piece.OwnerId != playerId);
-
-            if (!occupiedSquares.Any())
-            {
-                return availableLocations;
-            }
-            
-            var attackLocations = GetAttackLocations(square, occupiedSquares);
-            logger.LogDebug("[{location}]: Found {count} attack locations", nameof(Game), attackLocations.Count());
-
-            return availableLocations.Union(attackLocations);
+            throw new Exception("Is not this player's turn");
         }
-        catch
+        if (square.Piece is null)
         {
-            throw;
+            throw new Exception("Square is does not have a piece");
         }
+        if (square.Piece.OwnerId != playerId)
+        {
+            throw new Exception("Player does not own this piece");
+        }
+
+        var neighborSquares = GetNeighbors(square.Piece, location);
+        logger.LogDebug("[{location}]: Found {count} neighbor squares", nameof(Game), neighborSquares.Count());
+
+        var availableLocations = neighborSquares.Where(s => s.Piece is null).Select(x => x.Location);
+        logger.LogDebug("[{location}]: Found {count} available locations", nameof(Game), availableLocations.Count());
+
+        var occupiedSquares = neighborSquares.Where(s => s.Piece is not null && s.Piece.OwnerId != playerId);
+
+        if (!occupiedSquares.Any())
+        {
+            return availableLocations;
+        }
+
+        var attackLocations = GetAttackLocations(square, occupiedSquares);
+        logger.LogDebug("[{location}]: Found {count} attack locations", nameof(Game), attackLocations.Count());
+
+        return availableLocations.Union(attackLocations);
     }
 
     public bool IsGameOver()
@@ -139,26 +125,19 @@ public class Game
 
     private void MovePiece(Square source, Square destination)
     {
-        try
-        {
-            var piece = source.Piece!;
-            board.RemovePiece(source.Location);
-            board.PlacePiece(destination.Location, piece);
+        var piece = source.Piece!;
+        board.RemovePiece(source.Location);
+        board.PlacePiece(destination.Location, piece);
 
-            if (IsMoveAnAttack(source, destination))
-            {
-                var midLocation = GetMiddleLocation(source.Location, destination.Location);
-                board.RemovePiece(midLocation);
-            }
-            if (CanKingPiece(destination.Location, piece))
-            {
-                logger.LogDebug("[{location}]: Piece at location ({row}, {column}) can be kinged", nameof(Game), destination.Location.Row, destination.Location.Column);
-                board.KingPiece(destination.Location);
-            }
-        }
-        catch
+        if (IsMoveAnAttack(source, destination))
         {
-            throw;
+            var midLocation = GetMiddleLocation(source.Location, destination.Location);
+            board.RemovePiece(midLocation);
+        }
+        if (CanKingPiece(destination.Location, piece))
+        {
+            logger.LogDebug("[{location}]: Piece at location ({row}, {column}) can be kinged", nameof(Game), destination.Location.Row, destination.Location.Column);
+            board.KingPiece(destination.Location);
         }
     }
 
@@ -238,28 +217,22 @@ public class Game
 
     private IEnumerable<Location> GetAttackLocations(Square source, IEnumerable<Square> occupiedNeighbors)
     {
-        try
-        {
-            var locations = new List<Location>();
-            foreach (var n in occupiedNeighbors)
-            {
-                var square = GetNextSquareInTheDiagonal(source, n);
-                if (square is null)
-                {
-                    continue;
-                }
-                if (square.Piece is null)
-                {
-                    locations.Add(square.Location);
-                }
-            }
 
-            return locations;
-        }
-        catch
+        var locations = new List<Location>();
+        foreach (var n in occupiedNeighbors)
         {
-            throw;
+            var square = GetNextSquareInTheDiagonal(source, n);
+            if (square is null)
+            {
+                continue;
+            }
+            if (square.Piece is null)
+            {
+                locations.Add(square.Location);
+            }
         }
+
+        return locations;
     }
 
     private Square? GetNextSquareInTheDiagonal(Square source, Square middle)
