@@ -39,10 +39,12 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
     }
 
     return (
-        <div className={styles.board}>
-            {props.board.map((s, i) => {
-                return <SquareComponent key={i} square={s} onSquareClicked={squareSelected} isValidMoveLocation={validIndices.includes(i)}/>
-            })}
+        <div className={styles.container}>
+            <div className={styles.board}>
+                {props.board.map((s, i) => {
+                    return <SquareComponent key={i} square={s} onSquareClicked={squareSelected} isValidMoveLocation={validIndices.includes(i)}/>
+                })}
+            </div>
         </div>
     )
 }

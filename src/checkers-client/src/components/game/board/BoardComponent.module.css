@@ -1,6 +1,19 @@
-.board {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
+.container {
+  display: flex;
+  justify-content: center;
 }
 
+.board {
+  aspect-ratio: 1/1;
+  height: 80vmin;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+}
+
+@media screen and (max-width: 800px) {
+  .board {
+      width: 100%;
+  }
+}
 
