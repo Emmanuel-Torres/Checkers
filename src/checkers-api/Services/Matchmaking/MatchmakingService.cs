@@ -8,19 +8,17 @@ public class MatchmakingService : IMatchmakingService
 {
     private readonly ILogger<MatchmakingService> _logger;
     private readonly ConcurrentQueue<Player> _waitingQueue;
-    private event Func<object, EventArgs, Task> _queueUpdated;
-    private bool _matching;
 
-    public Func<Player, Player, Task>? OnPlayersMatched { get; set; }
-    
+    private event Func<object, EventArgs, Task> _queueUpdated;
+
     public MatchmakingService(ILogger<MatchmakingService> logger)
     {
         _logger = logger;
         _waitingQueue = new();
-        _matching = false;
-
         _queueUpdated += OnQueueUpdated;
     }
+
+    public Func<Player, Player, Task>? OnPlayersMatched { get; set; }
 
     public async Task StartMatchmakingAsync(Player player)
     {
@@ -38,15 +36,8 @@ public class MatchmakingService : IMatchmakingService
     {
         _logger.LogDebug("[{location}]: Queue has been updated", nameof(MatchmakingService));
 
-        //if (_matching)
-        //{
-        //    _logger.LogDebug("[{location}]: Already matchmaking", nameof(MatchmakingService));
-        //    return;
-        //}
-
         while (_waitingQueue.Count > 1)
         {
-            _matching = true;
             if (!_waitingQueue.TryDequeue(out var p1))
             {
                 break;
@@ -62,7 +53,5 @@ public class MatchmakingService : IMatchmakingService
             else
                 throw new InvalidOperationException($"{nameof(OnPlayersMatched)} has not been set");
         }
-
-        _matching = false;
     }
 }

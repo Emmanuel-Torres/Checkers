@@ -6,11 +6,12 @@ import PieceComponent from "../piece/PieceComponent";
 type Props = {
     square: Square;
     isValidMoveLocation: boolean;
+    isReversed: boolean;
     onSquareClicked: (square: Square) => void;
 }
 
 const SquareComponent: FC<Props> = (props): JSX.Element => {
-    const squareStyle = styles.square + " " + styles[`bg-${props.square.color}`];
+    const squareStyle = styles.square + " " + styles[`bg-${props.square.color}`] + " " + (props.isReversed ? styles['square-reversed'] : "");
 
     return (
         <>

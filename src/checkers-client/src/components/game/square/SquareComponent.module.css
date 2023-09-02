@@ -6,6 +6,10 @@
   justify-content: center;
 }
 
+.square-reversed {
+  transform: rotate(180deg);
+}
+
 .bg-White {
   background: rgb(189,189,189);
   background: linear-gradient(45deg, rgba(189,189,189,1) 0%, rgba(255,255,255,1) 100%);

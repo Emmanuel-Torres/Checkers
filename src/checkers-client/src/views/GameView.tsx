@@ -109,7 +109,7 @@ const GameView: FC = (): JSX.Element => {
             {inGame && <>
                 <h2>You are playing {yourColor} pieces</h2>
                 <h2>{yourTurn ? "Its your turn" : "Waiting for opponent"}</h2>
-                <BoardComponent board={board} validLocations={validLocations} onGetValidMoves={getValidMoves} onMakeMove={makeMove} />
+                <BoardComponent board={board} isReversed={yourColor === "White"} validLocations={validLocations} onGetValidMoves={getValidMoves} onMakeMove={makeMove} />
             </>}
             {isGameOver && <h2>Player {winner} won!</h2>}
         </>

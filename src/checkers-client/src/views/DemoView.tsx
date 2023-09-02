@@ -10,7 +10,7 @@ const DemoView: FC = (): JSX.Element => {
         <>
             <h2>You are playing pieces</h2>
             <h2>Its your turn</h2>
-            <BoardComponent board={board} validLocations={validLocations} onGetValidMoves={(location: BoardLocation) => { }} onMakeMove={(request: MoveRequest) => { }} />
+            <BoardComponent board={board} isReversed={false} validLocations={validLocations} onGetValidMoves={(location: BoardLocation) => { }} onMakeMove={(request: MoveRequest) => { }} />
         </>
     )
 }

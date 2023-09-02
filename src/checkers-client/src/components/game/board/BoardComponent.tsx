@@ -8,6 +8,7 @@ import MoveRequest from "../../../game-models/moveRequest";
 type Props = {
     board: Square[];
     validLocations: BoardLocation[];
+    isReversed: boolean;
     onGetValidMoves: (location: BoardLocation) => void;
     onMakeMove: (request: MoveRequest) => void;
 }
@@ -38,11 +39,13 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
         props.onMakeMove(new MoveRequest(source.location, square.location));
     }
 
+    const boardStyles = styles.board + " " + (props.isReversed ? styles['board-reversed'] : "");
+
     return (
         <div className={styles.container}>
-            <div className={styles.board}>
+            <div className={boardStyles}>
                 {props.board.map((s, i) => {
-                    return <SquareComponent key={i} square={s} onSquareClicked={squareSelected} isValidMoveLocation={validIndices.includes(i)}/>
+                    return <SquareComponent key={i} square={s} isReversed={props.isReversed} onSquareClicked={squareSelected} isValidMoveLocation={validIndices.includes(i)}/>
                 })}
             </div>
         </div>

@@ -25,7 +25,6 @@ public class Game
     }
 
     public string Id => id;
-    public string CurrentTurn => currentTurn;
     public IEnumerable<Player> Players => new List<Player>() { player1, player2 };
     public GameState State => state;
     public IEnumerable<Square> Board => board.Squares;
