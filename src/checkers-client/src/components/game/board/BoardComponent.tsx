@@ -39,7 +39,7 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
         props.onMakeMove(new MoveRequest(source.location, square.location));
     }
 
-    const boardStyles = styles.board + " " + (props.isReversed ? styles['board-reversed'] : "");
+    const boardStyles = styles.board + " " + (props.isReversed && styles['board-reversed']);
 
     return (
         <div className={styles.container}>
