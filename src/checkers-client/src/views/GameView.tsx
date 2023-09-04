@@ -5,6 +5,7 @@ import BoardLocation from "../models/game/location";
 import MoveRequest from "../models/game/moveRequest";
 import Square from "../models/game/square";
 import HubMethods from "../models/hub-methods";
+import GameInfoComponent from "../components/game/game-info/GameInfoComponent";
 
 const GameView: FC = (): JSX.Element => {
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -107,8 +108,7 @@ const GameView: FC = (): JSX.Element => {
             {!isLoading && !isMatchMaking && !inGame && <button type="button" onClick={matchMake}>Match Make</button>}
             {isMatchMaking && <h2>You are MatchMaking, please wait</h2>}
             {inGame && <>
-                <h2>You are playing {yourColor} pieces</h2>
-                <h2>{yourTurn ? "Its your turn" : "Waiting for opponent"}</h2>
+                <GameInfoComponent yourColor={yourColor} opponentColor={yourColor === "White" ? "Black" : "White"} />
                 <BoardComponent board={board} isReversed={yourColor === "White"} validLocations={validLocations} onGetValidMoves={getValidMoves} onMakeMove={makeMove} />
             </>}
             {isGameOver && <h2>Player {winner} won!</h2>}

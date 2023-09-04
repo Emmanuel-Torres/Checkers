@@ -8,9 +8,10 @@
   text-align: center;
   justify-content: center;
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 2fr 1fr;
   margin: 0.5em auto;
-  border: 2px black solid;
+  border-top: 2px black solid;
+  border-bottom: 2px black solid;
 }
 
 .left-Black,
@@ -20,19 +21,9 @@
   margin: 0;
   width: 4em;
   text-align: center;
-  padding: 0 0.5em;
-  line-height: 2em;
+  line-height: 50px;
   position: relative;
-}
-
-.right-Black,
-.right-White {
-  margin-left: 0.5em;
-}
-
-.left-Black,
-.left-White {
-  margin-right: 0.5em;
+  width: 100%;
 }
 
 .left-Black,
@@ -47,8 +38,6 @@
   background-color: white;
 }
 
-.left-Black::after,
-.left-White::after,
 .right-Black::before,
 .right-White::before {
   content: "";
@@ -58,30 +47,22 @@
   top: 0px;
 }
 
-.left-Black::after,
-.left-White::after {
-  left: 100%;
-  border-right: 1em solid transparent;
-}
-
 .right-Black::before,
 .right-White::before {
   right: 100%;
-  border-left: 1em solid transparent;
-}
-
-.left-Black::after {
-  border-top: 2em solid black;
-}
-
-.left-White::after {
-  border-top: 2em solid white;
+  border-left: 25px solid transparent;
 }
 
 .right-Black::before {
-  border-bottom: 2em solid black;
+  border-bottom: 50px solid black;
 }
 
 .right-White::before {
-  border-bottom: 2em solid white;
+  border-bottom: 50px solid white;
+}
+
+@media screen and (min-width: 800px) {
+    .container {
+        border: 2px solid black
+    }
 }
