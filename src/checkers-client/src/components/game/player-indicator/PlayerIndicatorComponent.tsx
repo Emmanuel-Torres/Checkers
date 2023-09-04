@@ -1,12 +1,12 @@
 import { FC } from 'react'
-import styles from './GameInfoComponent.module.css';
+import styles from './PlayerIndicatorComponent.module.css';
 
 type Props = {
     yourColor: string;
     opponentColor: string;
 }
 
-const GameInfoComponent: FC<Props> = (props): JSX.Element => {
+const PlayerIndicatorComponent: FC<Props> = (props): JSX.Element => {
     const yourStyle = styles[`left-${props.yourColor}`];
     const theirStyle = styles[`right-${props.opponentColor}`];
 
@@ -18,4 +18,4 @@ const GameInfoComponent: FC<Props> = (props): JSX.Element => {
     );
 }
 
-export default GameInfoComponent;
+export default PlayerIndicatorComponent;

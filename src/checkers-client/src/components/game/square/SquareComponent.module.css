@@ -1,3 +1,21 @@
+.bg-White {
+  background: rgb(189, 189, 189);
+  background: linear-gradient(
+    45deg,
+    rgba(189, 189, 189, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+}
+
+.bg-Black {
+  background: rgb(41, 41, 41);
+  background: linear-gradient(
+    45deg,
+    rgba(41, 41, 41, 1) 0%,
+    rgba(89, 89, 89, 1) 100%
+  );
+}
+
 .square {
   color: white;
   aspect-ratio: 1/1;
@@ -10,16 +28,8 @@
 }
 
 .square-selected {
+  position: relative;
   z-index: 1;
+  transition: box-shadow 0.5s ease-in-out;
   box-shadow: 0px 0px 10px 5px rgb(255, 0, 0);
-}
-
-.bg-White {
-  background: rgb(189,189,189);
-  background: linear-gradient(45deg, rgba(189,189,189,1) 0%, rgba(255,255,255,1) 100%);
-}
-
-.bg-Black {
-  background: rgb(41,41,41);
-  background: linear-gradient(45deg, rgba(41,41,41,1) 0%, rgba(89,89,89,1) 100%);
 }
