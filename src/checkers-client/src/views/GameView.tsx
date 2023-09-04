@@ -1,9 +1,9 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { FC, useEffect, useState } from "react";
 import BoardComponent from "../components/game/board/BoardComponent";
-import BoardLocation from "../game-models/location";
-import MoveRequest from "../game-models/moveRequest";
-import Square from "../game-models/square";
+import BoardLocation from "../models/game/location";
+import MoveRequest from "../models/game/moveRequest";
+import Square from "../models/game/square";
 import HubMethods from "../models/hub-methods";
 
 const GameView: FC = (): JSX.Element => {

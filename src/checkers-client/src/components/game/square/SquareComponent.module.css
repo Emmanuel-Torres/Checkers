@@ -1,13 +1,17 @@
 .square {
   color: white;
   aspect-ratio: 1/1;
-  padding: 10%;
   display: flex;
   justify-content: center;
 }
 
 .square-reversed {
   transform: rotate(180deg);
+}
+
+.square-selected {
+  z-index: 1;
+  box-shadow: 0px 0px 10px 5px rgb(255, 0, 0);
 }
 
 .bg-White {

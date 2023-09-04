@@ -1,0 +1,87 @@
+.container p {
+  margin: 0;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  display: grid;
+  grid-template-columns: auto auto;
+  margin: 0.5em auto;
+  border: 2px black solid;
+}
+
+.left-Black,
+.left-White,
+.right-Black,
+.right-White {
+  margin: 0;
+  width: 4em;
+  text-align: center;
+  padding: 0 0.5em;
+  line-height: 2em;
+  position: relative;
+}
+
+.right-Black,
+.right-White {
+  margin-left: 0.5em;
+}
+
+.left-Black,
+.left-White {
+  margin-right: 0.5em;
+}
+
+.left-Black,
+.right-Black {
+  color: white;
+  background-color: black;
+}
+
+.left-White,
+.right-White {
+  color: black;
+  background-color: white;
+}
+
+.left-Black::after,
+.left-White::after,
+.right-Black::before,
+.right-White::before {
+  content: "";
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  top: 0px;
+}
+
+.left-Black::after,
+.left-White::after {
+  left: 100%;
+  border-right: 1em solid transparent;
+}
+
+.right-Black::before,
+.right-White::before {
+  right: 100%;
+  border-left: 1em solid transparent;
+}
+
+.left-Black::after {
+  border-top: 2em solid black;
+}
+
+.left-White::after {
+  border-top: 2em solid white;
+}
+
+.right-Black::before {
+  border-bottom: 2em solid black;
+}
+
+.right-White::before {
+  border-bottom: 2em solid white;
+}
