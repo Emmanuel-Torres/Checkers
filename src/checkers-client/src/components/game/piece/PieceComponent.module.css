@@ -1,9 +1,10 @@
 .piece-Outline {
     aspect-ratio: 1/1;
     border-radius: 100%;
-    background: rgb(214,0,0);
-    background: linear-gradient(45deg, rgba(214,0,0,1) 0%, rgba(255,34,34,1) 100%);
+    background-color: red;
     margin: .25rem;
+    padding: 5%;
+    display: flex;
 }
 
 .piece {
@@ -12,16 +13,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: .25rem;
 }
 
 .piece-White {
-    background: rgb(186,186,186);
-    background: linear-gradient(45deg, rgba(186,186,186,1) 0%, rgba(255,255,255,1) 100%);
+    background: linear-gradient(45deg, rgb(156, 156, 156) 0%, rgba(255,255,255,1) 100%);
 }
 .piece-Black {
-    background: rgb(0,0,0);
-    background: linear-gradient(45deg, rgba(0,0,0,1) 0%, rgba(64,64,64,1) 100%);
+    background: linear-gradient(45deg, rgba(0,0,0,1) 0%, rgb(87, 87, 87) 100%);
 }
 
 .crown {
@@ -29,10 +27,4 @@
     aspect-ratio: 1/1;
     user-select: none;
     filter: invert(10%) sepia(89%) saturate(5619%) hue-rotate(360deg) brightness(129%) contrast(117%);
-}
-
-@media screen and (min-width: 800px) {
-    .piece {
-        margin: .25rem;
-    }
 }
