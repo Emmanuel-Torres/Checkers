@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/ui/Navbar";
-import DemoView from "./views/DemoView";
+import DemoView from "./views/Demo/DemoView";
 import GameView from "./views/GameView";
 import HomeView from "./views/HomeView";
 

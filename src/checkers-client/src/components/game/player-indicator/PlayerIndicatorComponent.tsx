@@ -1,21 +1,23 @@
-import { FC } from 'react'
-import styles from './PlayerIndicatorComponent.module.css';
+import { FC } from "react";
+import styles from "./PlayerIndicatorComponent.module.css";
+import PieceComponent from "../piece/PieceComponent";
+import SpinnerComponent from "../../effects/spinner/SpinnerComponent";
 
 type Props = {
-    yourColor: string;
-    opponentColor: string;
-}
+  yourTurn: boolean;
+};
 
 const PlayerIndicatorComponent: FC<Props> = (props): JSX.Element => {
-    const yourStyle = styles[`left-${props.yourColor}`];
-    const theirStyle = styles[`right-${props.opponentColor}`];
-
-    return (
+  return (
     <div className={styles.container}>
-        <h2 className={yourStyle}>You</h2>
-        <h2 className={theirStyle}>Them</h2>
+      {props.yourTurn 
+        ? <h2>Your Turn</h2> 
+        : <>
+            <SpinnerComponent />
+            <h2 className={styles["opponent-Text"]}>Waiting for opponent...</h2>
+          </>}
     </div>
-    );
-}
+  );
+};
 
 export default PlayerIndicatorComponent;

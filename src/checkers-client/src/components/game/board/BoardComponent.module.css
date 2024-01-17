@@ -14,10 +14,3 @@
 .board-reversed {
   transform: rotate(180deg);
 }
-
-@media screen and (max-width: 800px) {
-  .board {
-      width: 100%;
-  }
-}
-

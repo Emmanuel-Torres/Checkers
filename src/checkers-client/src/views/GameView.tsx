@@ -108,7 +108,7 @@ const GameView: FC = (): JSX.Element => {
             {!isLoading && !isMatchMaking && !inGame && <button type="button" onClick={matchMake}>Match Make</button>}
             {isMatchMaking && <h2>You are MatchMaking, please wait</h2>}
             {inGame && <>
-                <PlayerIndicatorComponent yourColor={yourColor} opponentColor={yourColor === "White" ? "Black" : "White"} />
+                <PlayerIndicatorComponent yourTurn={yourTurn} />
                 <BoardComponent board={board} isReversed={yourColor === "White"} validLocations={validLocations} onGetValidMoves={getValidMoves} onMakeMove={makeMove} />
             </>}
             {isGameOver && <h2>Player {winner} won!</h2>}
