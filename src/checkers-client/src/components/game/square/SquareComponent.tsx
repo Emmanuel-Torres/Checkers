@@ -20,7 +20,7 @@ const SquareComponent: FC<Props> = (props): JSX.Element => {
             <div className={squareStyle} onClick={() => props.onSquareClicked(props.square)}>
                 {props.isValidMoveLocation &&
                     <ValidMoveIndicatorComponent />}
-                {props.square.isOccupied && <PieceComponent piece={props.square.piece!}/>}
+                {props.square.isOccupied && <PieceComponent color={props.square.piece!.color} state={props.square.piece!.state}/>}
             </div>
         </>
     )

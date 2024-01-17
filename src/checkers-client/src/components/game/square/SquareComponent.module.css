@@ -21,6 +21,7 @@
   aspect-ratio: 1/1;
   display: flex;
   justify-content: center;
+  padding: .25rem;
 }
 
 .square-reversed {
