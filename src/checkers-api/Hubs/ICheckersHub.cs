@@ -12,10 +12,10 @@ public interface ICheckersHub
     public Task MoveCompletedAsync();
 
     //Client methods
-    public Task YourTurnToMoveAsync(IEnumerable<Square> board);
-    public Task MoveSuccessfulAsync(IEnumerable<Square> board);
-    public Task GameOverAsync(string winner, IEnumerable<Square> board);
+    public Task YourTurnToMoveAsync(IEnumerable<Piece?> board);
+    public Task MoveSuccessfulAsync(IEnumerable<Piece?> board);
+    public Task GameOverAsync(string winner, IEnumerable<Piece?> board);
     public Task SendMessageAsync(string sender, string message);
-    public Task SendJoinConfirmationAsync(string name, Color color, IEnumerable<Square> board);
+    public Task SendJoinConfirmationAsync(string name, IEnumerable<Piece?> board);
     public Task SendValidMoveLocationsAsync(IEnumerable<Location> validLocations);
 }

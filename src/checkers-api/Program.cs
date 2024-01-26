@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
-builder.Services.AddSingleton<IGameManager, GameManager>();
+// builder.Services.AddSingleton<IGameManager, GameManager>();
 builder.Services.AddSingleton<IMatchmakingService, MatchmakingService>();
 // builder.Services.AddTransient<IDbService, DbService>();
 // builder.Services.AddDatabaseDeveloperPageExceptionFilter();

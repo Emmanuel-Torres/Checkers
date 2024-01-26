@@ -6,9 +6,9 @@ public class GameResults
     public Player Winner { get; }
     public Player Loser { get; }
     public IEnumerable<Player> Players { get; }
-    public IEnumerable<Square> Board { get; }
+    public IEnumerable<Piece?> Board { get; }
 
-    public GameResults(string gameId, Player winner, Player loser, IEnumerable<Square> board)
+    public GameResults(string gameId, Player winner, Player loser, IEnumerable<Piece?> board)
     {
         GameId = gameId;
         Winner = winner;

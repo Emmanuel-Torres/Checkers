@@ -12,7 +12,7 @@
 }
 
 .opponent-Text {
-  background: linear-gradient(90deg, rgba(0,0,0,1) 0%, rgb(165, 165, 165) 50%, rgba(0,0,0,1) 100%);
+  background: linear-gradient(90deg, rgb(97, 97, 97) 0%, rgb(255, 255, 255) 50%, rgba(0,0,0,1) 100%);
   background-size: 400%;
   background-clip: text;
   -webkit-text-fill-color: transparent;

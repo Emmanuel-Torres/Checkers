@@ -135,9 +135,8 @@ public class CheckersHub : Hub<ICheckersHub>
 
             foreach (var p in game!.Players)
             {
-                var color = p.PlayerId == p1.PlayerId ? Color.Black : Color.White;
                 await Clients.Client(p.PlayerId).SendMessageAsync("server", "You were successfully matchmade");
-                await Clients.Client(p.PlayerId).SendJoinConfirmationAsync(p.Name, color, game.Board);
+                await Clients.Client(p.PlayerId).SendJoinConfirmationAsync(p.Name, game.Board);
             }
 
             await Clients.Client(p1.PlayerId).YourTurnToMoveAsync(game.Board);
