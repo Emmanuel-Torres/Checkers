@@ -1,9 +1,9 @@
 Feature: Game
-    To ensure that my game logic is correct\
+    To ensure that my game logic is correct
 
-Scenario: Generating the board
+Scenario: Generating default board board
     When I start a game with players O and X
-    Then the following board should get created
+    Then the board should look like this
     """
      O |   | O |   | O |   | O |   |
        | O |   | O |   | O |   | O |
@@ -14,3 +14,108 @@ Scenario: Generating the board
      X |   | X |   | X |   | X |   |
        | X |   | X |   | X |   | X
     """
+
+Scenario: Generating a game with a starter board
+  Given the following board with players O and X
+  """
+    O |   | O |   | O |   | O |   |
+      | O |   | O |   | O |   | O |
+    O |   | O |   | O |   |   |   |
+      |   |   |   |   | O |   |   |
+      |   |   |   |   |   |   |   |
+      | X |   | X |   | X |   | X |
+    X |   | X |   | X |   | X |   |
+      | X |   | X |   | X |   | X
+  """
+  Then the board should look like this
+  """
+    O |   | O |   | O |   | O |   |
+      | O |   | O |   | O |   | O |
+    O |   | O |   | O |   |   |   |
+      |   |   |   |   | O |   |   |
+      |   |   |   |   |   |   |   |
+      | X |   | X |   | X |   | X |
+    X |   | X |   | X |   | X |   |
+      | X |   | X |   | X |   | X
+  """
+
+Scenario: Player X makes a valid move
+  Given the following board with players O and X
+  """
+    O |   | O |   | O |   | O |   |
+      | O |   | O |   | O |   | O |
+    O |   | O |   | O |   | O |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      | X |   | X |   | X |   | X |
+    X |   | X |   | X |   | X |   |
+      | X |   | X |   | X |   | X
+  """
+  When player X makes a move from 5,1 to 4,2
+  Then the board should look like this
+  """
+    O |   | O |   | O |   | O |   |
+      | O |   | O |   | O |   | O |
+    O |   | O |   | O |   | O |   |
+      |   |   |   |   |   |   |   |
+      |   | X |   |   |   |   |   |
+      |   |   | X |   | X |   | X |
+    X |   | X |   | X |   | X |   |
+      | X |   | X |   | X |   | X
+  """
+
+Scenario: Player O makes a valid move
+  Given the following board with players O and X
+  """
+    O |   | O |   | O |   | O |   |
+      | O |   | O |   | O |   | O |
+    O |   | O |   | O |   | O |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      | X |   | X |   | X |   | X |
+    X |   | X |   | X |   | X |   |
+      | X |   | X |   | X |   | X
+  """
+  When player O makes a move from 2,6 to 3,5
+  Then the board should look like this
+  """
+    O |   | O |   | O |   | O |   |
+      | O |   | O |   | O |   | O |
+    O |   | O |   | O |   |   |   |
+      |   |   |   |   | O |   |   |
+      |   |   |   |   |   |   |   |
+      | X |   | X |   | X |   | X |
+    X |   | X |   | X |   | X |   |
+      | X |   | X |   | X |   | X
+  """
+
+Scenario Outline: Validating regular moves (excluding king moves and capturing)
+  Given the following board with players O and X
+  """
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+    O |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      | X |   |   |   |   |   |   |
+    X |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |  
+  """
+  When player <player> makes a move from <sr>,<sc> to <dr>,<dc>
+  Then the move should fail with error '<error>'
+
+  Examples:
+    | player | sr  | sc  | dr | dc  | error                                                                  |
+    | X      | -1  | 8   | 5  | 0   | Invalid move: Source location (-1,8) is out of bounds                  |
+    | X      | 5   | 1   | 1  | -1  | Invalid move: Destination location (1,-1) is out of bounds             |
+    | X      | 8   | 8   | 5  | 0   | Invalid move: Source location (8,8) is out of bounds                   |
+    | X      | 5   | 1   | 8  | 8   | Invalid move: Destination location (8,8) is out of bounds              |
+    | X      | 0   | 0   | 1  | 1   | Invalid move: Source location (0,0) does not contain a piece           |
+    | X      | 2   | 0   | 3  | 1   | Invalid move: Player X does not own the piece at source location (2,0) |
+    | X      | 6   | 0   | 5  | 1   | Invalid move: Destination location (5,1) is not empty                  |
+    | X      | 5   | 1   | 6  | 2   | Invalid move: Regular pieces cannot move backwards                     |
+    | O      | 2   | 0   | 1  | 1   | Invalid move: Regular pieces cannot move backwards                     | 
+    | X      | 5   | 1   | 5  | 2   | Invalid move: Pieces can only move diagonally                          |
+    | X      | 5   | 1   | 4  | 1   | Invalid move: Pieces can only move diagonally                          |
+    | X      | 5   | 1   | 4  | 4   | Invalid move: Pieces can only move diagonally                          |
+    | X      | 5   | 1   | 3  | 3   | Invalid move: Pieces can only move one square when not capturing       |

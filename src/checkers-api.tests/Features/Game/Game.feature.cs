@@ -35,7 +35,7 @@ namespace checkers_api.tests.Features.Game
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/Game", "Game", "    To ensure that my game logic is correct\\", ProgrammingLanguage.CSharp, featureTags);
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Features/Game", "Game", "    To ensure that my game logic is correct", ProgrammingLanguage.CSharp, featureTags);
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -74,12 +74,12 @@ namespace checkers_api.tests.Features.Game
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Generating the board")]
-        public void GeneratingTheBoard()
+        [NUnit.Framework.DescriptionAttribute("Generating default board board")]
+        public void GeneratingDefaultBoardBoard()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Generating the board", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Generating default board board", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 4
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -94,7 +94,7 @@ this.ScenarioInitialize(scenarioInfo);
     testRunner.When("I start a game with players O and X", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 6
-    testRunner.Then("the following board should get created", @" O |   | O |   | O |   | O |   |
+    testRunner.Then("the board should look like this", @" O |   | O |   | O |   | O |   |
    | O |   | O |   | O |   | O |
  O |   | O |   | O |   | O |   |
    |   |   |   |   |   |   |   |
@@ -102,6 +102,191 @@ this.ScenarioInitialize(scenarioInfo);
    | X |   | X |   | X |   | X |
  X |   | X |   | X |   | X |   |
    | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Generating a game with a starter board")]
+        public void GeneratingAGameWithAStarterBoard()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Generating a game with a starter board", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 18
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 19
+  testRunner.Given("the following board with players O and X", @"  O |   | O |   | O |   | O |   |
+    | O |   | O |   | O |   | O |
+  O |   | O |   | O |   |   |   |
+    |   |   |   |   | O |   |   |
+    |   |   |   |   |   |   |   |
+    | X |   | X |   | X |   | X |
+  X |   | X |   | X |   | X |   |
+    | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 30
+  testRunner.Then("the board should look like this", @"  O |   | O |   | O |   | O |   |
+    | O |   | O |   | O |   | O |
+  O |   | O |   | O |   |   |   |
+    |   |   |   |   | O |   |   |
+    |   |   |   |   |   |   |   |
+    | X |   | X |   | X |   | X |
+  X |   | X |   | X |   | X |   |
+    | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Player X makes a valid move")]
+        public void PlayerXMakesAValidMove()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X makes a valid move", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 42
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 43
+  testRunner.Given("the following board with players O and X", @"  O |   | O |   | O |   | O |   |
+    | O |   | O |   | O |   | O |
+  O |   | O |   | O |   | O |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    | X |   | X |   | X |   | X |
+  X |   | X |   | X |   | X |   |
+    | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 54
+  testRunner.When("player X makes a move from 5,1 to 4,2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 55
+  testRunner.Then("the board should look like this", @"  O |   | O |   | O |   | O |   |
+    | O |   | O |   | O |   | O |
+  O |   | O |   | O |   | O |   |
+    |   |   |   |   |   |   |   |
+    |   | X |   |   |   |   |   |
+    |   |   | X |   | X |   | X |
+  X |   | X |   | X |   | X |   |
+    | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Player O makes a valid move")]
+        public void PlayerOMakesAValidMove()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player O makes a valid move", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 67
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 68
+  testRunner.Given("the following board with players O and X", @"  O |   | O |   | O |   | O |   |
+    | O |   | O |   | O |   | O |
+  O |   | O |   | O |   | O |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    | X |   | X |   | X |   | X |
+  X |   | X |   | X |   | X |   |
+    | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 79
+  testRunner.When("player O makes a move from 2,6 to 3,5", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 80
+  testRunner.Then("the board should look like this", @"  O |   | O |   | O |   | O |   |
+    | O |   | O |   | O |   | O |
+  O |   | O |   | O |   |   |   |
+    |   |   |   |   | O |   |   |
+    |   |   |   |   |   |   |   |
+    | X |   | X |   | X |   | X |
+  X |   | X |   | X |   | X |   |
+    | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Validating regular moves (excluding king moves and capturing)")]
+        [NUnit.Framework.TestCaseAttribute("X", "-1", "8", "5", "0", "Invalid move: Source location (-1,8) is out of bounds", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "5", "1", "1", "-1", "Invalid move: Destination location (1,-1) is out of bounds", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "8", "8", "5", "0", "Invalid move: Source location (8,8) is out of bounds", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "5", "1", "8", "8", "Invalid move: Destination location (8,8) is out of bounds", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "0", "0", "1", "1", "Invalid move: Source location (0,0) does not contain a piece", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "2", "0", "3", "1", "Invalid move: Player X does not own the piece at source location (2,0)", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "6", "0", "5", "1", "Invalid move: Destination location (5,1) is not empty", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "5", "1", "6", "2", "Invalid move: Regular pieces cannot move backwards", null)]
+        [NUnit.Framework.TestCaseAttribute("O", "2", "0", "1", "1", "Invalid move: Regular pieces cannot move backwards", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "5", "1", "5", "2", "Invalid move: Pieces can only move diagonally", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "5", "1", "4", "1", "Invalid move: Pieces can only move diagonally", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "5", "1", "4", "4", "Invalid move: Pieces can only move diagonally", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "5", "1", "3", "3", "Invalid move: Pieces can only move one square when not capturing", null)]
+        public void ValidatingRegularMovesExcludingKingMovesAndCapturing(string player, string sr, string sc, string dr, string dc, string error, string[] exampleTags)
+        {
+            string[] tagsOfScenario = exampleTags;
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("player", player);
+            argumentsOfScenario.Add("sr", sr);
+            argumentsOfScenario.Add("sc", sc);
+            argumentsOfScenario.Add("dr", dr);
+            argumentsOfScenario.Add("dc", dc);
+            argumentsOfScenario.Add("error", error);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Validating regular moves (excluding king moves and capturing)", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 92
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 93
+  testRunner.Given("the following board with players O and X", @"    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+  O |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    | X |   |   |   |   |   |   |
+  X |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 104
+  testRunner.When(string.Format("player {0} makes a move from {1},{2} to {3},{4}", player, sr, sc, dr, dc), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 105
+  testRunner.Then(string.Format("the move should fail with error \'{0}\'", error), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
