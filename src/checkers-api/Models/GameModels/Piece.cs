@@ -17,4 +17,14 @@ public class Piece
     {
         State = PieceState.King;
     }
+
+    public override string ToString()
+    {
+        if (State == PieceState.King)
+        {
+            return OwnerId + "$";
+        }
+
+        return OwnerId;
+    }
 }

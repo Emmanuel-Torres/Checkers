@@ -6,6 +6,8 @@ namespace checkers_api.GameLogic;
 
 public class Game
 {
+    private const int PLAYER_1_HOME_ROW = 0;
+    private const int PLAYER_2_HOME_ROW = 7;
     private readonly string _id;
     private readonly Player _player1;
     private readonly Player _player2;
@@ -41,6 +43,11 @@ public class Game
         var destinationIndex = request.Destination.ToIndex();
 
         var piece = _board[sourceIndex];
+        if (IsKingRow(playerId, request.Destination.Row))
+        {
+            piece!.KingPiece();
+        }
+
         _board[sourceIndex] = null;
         _board[destinationIndex] = piece;
     }
@@ -94,7 +101,10 @@ public class Game
             throw new InvalidOperationException("Invalid move: Pieces can only move one square when not capturing");
         }
     }
-
+    private bool IsKingRow(string playerId, int row)
+    {
+        return (playerId == _player1.PlayerId && row == PLAYER_2_HOME_ROW) || (playerId == _player2.PlayerId && row == PLAYER_1_HOME_ROW);
+    }
     private int GetRowDelta(int sourceRow, int destinationRow, string playerId)
     {
         var directionModifier = playerId == _player1.PlayerId ? -1 : 1;

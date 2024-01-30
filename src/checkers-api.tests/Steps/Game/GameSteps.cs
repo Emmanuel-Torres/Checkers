@@ -20,7 +20,7 @@ namespace MyProject.Specs.Steps
         [Given(@"the following board with players (.*) and (.*)")]
         public void GivenTheFollowingBoard(string player1, string player2, string startingBoard)
         {
-            var parsedBoard = ParseBoardToPieceIEnumerable(startingBoard).ToArray();
+            var parsedBoard = ParseStringBoardToPieceIEnumerable(startingBoard).ToArray();
             var game = new Game(new Player(player1, player1), new Player(player2, player2), parsedBoard);
             _scenarioContext.Add("currentGame", game);
         }
@@ -50,10 +50,10 @@ namespace MyProject.Specs.Steps
         [Then(@"the board should look like this")]
         public void ThenTheFollowingBoardShouldGetCreated(string expectedBoard)
         {
-            var parsedExpectedBoard = ParseBoardToStringArray(expectedBoard);
+            var parsedExpectedBoard = ParseStringBoardToStringArray(expectedBoard);
             var board = _scenarioContext.Get<Game>("currentGame").Board.ToList();
 
-            board.Select(p => p?.OwnerId).Should().Equal(parsedExpectedBoard);
+            board.Select(p => p?.ToString()).Should().Equal(parsedExpectedBoard);
         }
 
         [Then(@"the move should fail with error '(.*)'")]
@@ -63,14 +63,39 @@ namespace MyProject.Specs.Steps
             moveException.Message.Should().Contain(expectedError);
         }
 
-        private IEnumerable<string?> ParseBoardToStringArray(string board)
+        [Then(@"the piece at (\d),(\d) should be a king piece")]
+        public void ThePieceAtShouldBeAKingPiece(int sourceRow, int sourceColumn)
+        {
+            var index = sourceRow * 8 + sourceColumn;
+            var piece = _scenarioContext.Get<Game>("currentGame").Board.ToArray()[index];
+
+            piece?.State.Should().Be(PieceState.King);
+        }
+
+        private IEnumerable<string?> ParseStringBoardToStringArray(string board)
         {
             return board.Split('|').ToList().Select(c => string.IsNullOrWhiteSpace(c) ? null : c.Trim());
         }
 
-        private IEnumerable<Piece?> ParseBoardToPieceIEnumerable(string board)
+        private IEnumerable<Piece?> ParseStringBoardToPieceIEnumerable(string board)
         {
-            return ParseBoardToStringArray(board).Select(p => p is null ? null : new Piece(p));
+            return ParseStringBoardToStringArray(board).Select(ParsePieceFromString);
+        }
+
+        private Piece? ParsePieceFromString(string? id)
+        {
+            if (id is null)
+                return null;
+
+            if (id.Contains('$'))
+            {
+                id.Remove(1);
+                var piece = new Piece(id);
+                piece.KingPiece();
+                return piece;
+            }
+
+            return new Piece(id);
         }
     }
 }

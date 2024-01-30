@@ -119,3 +119,55 @@ Scenario Outline: Validating regular moves (excluding king moves and capturing)
     | X      | 5   | 1   | 4  | 1   | Invalid move: Pieces can only move diagonally                          |
     | X      | 5   | 1   | 4  | 4   | Invalid move: Pieces can only move diagonally                          |
     | X      | 5   | 1   | 3  | 3   | Invalid move: Pieces can only move one square when not capturing       |
+
+Scenario: Crowning regular piece from player X
+  Given the following board with players O and X
+  """
+      |   |   |   |   |   |   |   |
+      | X |   |   |   |   |   |   |
+    O |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |  
+  """
+  When player X makes a move from 1,1 to 0,0
+  Then the board should look like this
+  """
+    X$ |   |   |   |   |   |   |   |
+       |   |   |   |   |   |   |   |
+     O |   |   |   |   |   |   |   |
+       |   |   |   |   |   |   |   |
+       |   |   |   |   |   |   |   |
+       |   |   |   |   |   |   |   |
+       |   |   |   |   |   |   |   |
+       |   |   |   |   |   |   |  
+  """
+  And the piece at 0,0 should be a king piece
+
+Scenario: Crowning regular piece from player O
+  Given the following board with players O and X
+  """
+      |   |   |   |   |   |   |   |
+      | X |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   | O |   |
+      |   |   |   |   |   |   |  
+  """
+  When player O makes a move from 6,6 to 7,7
+  Then the board should look like this
+  """
+      |   |   |   |   |   |   |   |
+      | X |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   | O$
+  """
+  And the piece at 7,7 should be a king piece
