@@ -106,19 +106,19 @@ Scenario Outline: Validating regular moves (excluding king moves and capturing)
 
   Examples:
     | player | sr  | sc  | dr | dc  | error                                                                  |
-    | X      | -1  | 8   | 5  | 0   | Invalid move: Source location (-1,8) is out of bounds                  |
-    | X      | 5   | 1   | 1  | -1  | Invalid move: Destination location (1,-1) is out of bounds             |
-    | X      | 8   | 8   | 5  | 0   | Invalid move: Source location (8,8) is out of bounds                   |
-    | X      | 5   | 1   | 8  | 8   | Invalid move: Destination location (8,8) is out of bounds              |
-    | X      | 0   | 0   | 1  | 1   | Invalid move: Source location (0,0) does not contain a piece           |
-    | X      | 2   | 0   | 3  | 1   | Invalid move: Player X does not own the piece at source location (2,0) |
-    | X      | 6   | 0   | 5  | 1   | Invalid move: Destination location (5,1) is not empty                  |
-    | X      | 5   | 1   | 6  | 2   | Invalid move: Regular pieces cannot move backwards                     |
-    | O      | 2   | 0   | 1  | 1   | Invalid move: Regular pieces cannot move backwards                     | 
-    | X      | 5   | 1   | 5  | 2   | Invalid move: Pieces can only move diagonally                          |
-    | X      | 5   | 1   | 4  | 1   | Invalid move: Pieces can only move diagonally                          |
-    | X      | 5   | 1   | 4  | 4   | Invalid move: Pieces can only move diagonally                          |
-    | X      | 5   | 1   | 3  | 3   | Invalid move: Pieces can only move one square when not capturing       |
+    | X      | -1  | 8   | 5  | 0   | Source location (-1,8) is out of bounds                  |
+    | X      | 5   | 1   | 1  | -1  | Destination location (1,-1) is out of bounds             |
+    | X      | 8   | 8   | 5  | 0   | Source location (8,8) is out of bounds                   |
+    | X      | 5   | 1   | 8  | 8   | Destination location (8,8) is out of bounds              |
+    | X      | 0   | 0   | 1  | 1   | Source location (0,0) does not contain a piece           |
+    | X      | 2   | 0   | 3  | 1   | Player X does not own the piece at source location (2,0) |
+    | X      | 6   | 0   | 5  | 1   | Destination location (5,1) is not empty                  |
+    | X      | 5   | 1   | 6  | 2   | Regular pieces cannot move backwards                     |
+    | O      | 2   | 0   | 1  | 1   | Regular pieces cannot move backwards                     | 
+    | X      | 5   | 1   | 5  | 2   | Pieces can only move diagonally                          |
+    | X      | 5   | 1   | 4  | 1   | Pieces can only move diagonally                          |
+    | X      | 5   | 1   | 4  | 4   | Pieces can only move diagonally                          |
+    | X      | 5   | 1   | 3  | 3   | Pieces can only move one square when not capturing       |
 
 Scenario: Crowning regular piece from player X
   Given the following board with players O and X

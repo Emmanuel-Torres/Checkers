@@ -64,25 +64,25 @@ public class Game
 
         if (sourceRow < 0 || sourceRow > 7 || sourceColumn < 0 || sourceColumn > 7)
         {
-            throw new InvalidOperationException($"Invalid move: Source location ({sourceRow},{sourceColumn}) is out of bounds");
+            throw new InvalidOperationException($"Source location ({sourceRow},{sourceColumn}) is out of bounds");
         }
         if (destinationRow < 0 || destinationRow > 7 || destinationColumn < 0 || destinationColumn > 7)
         {
-            throw new InvalidOperationException($"Invalid move: Destination location ({destinationRow},{destinationColumn}) is out of bounds");
+            throw new InvalidOperationException($"Destination location ({destinationRow},{destinationColumn}) is out of bounds");
         }
 
         var piece = _board[sourceIndex];
         if (piece is null)
         {
-            throw new InvalidOperationException($"Invalid move: Source location ({sourceRow},{sourceColumn}) does not contain a piece");
+            throw new InvalidOperationException($"Source location ({sourceRow},{sourceColumn}) does not contain a piece");
         }
         if (piece.OwnerId != playerId)
         {
-            throw new InvalidOperationException($"Invalid move: Player {playerId} does not own the piece at source location ({sourceRow},{sourceColumn})");
+            throw new InvalidOperationException($"Player {playerId} does not own the piece at source location ({sourceRow},{sourceColumn})");
         }
         if (_board[destinationIndex] is not null)
         {
-            throw new InvalidOperationException($"Invalid move: Destination location ({destinationRow},{destinationColumn}) is not empty");
+            throw new InvalidOperationException($"Destination location ({destinationRow},{destinationColumn}) is not empty");
         }
 
         var temp = GetRowDelta(sourceRow, destinationRow, playerId);
@@ -91,15 +91,15 @@ public class Game
 
         if (rowDelta < 0)
         {
-            throw new InvalidOperationException("Invalid move: Regular pieces cannot move backwards");
+            throw new InvalidOperationException("Regular pieces cannot move backwards");
         }
         if (rowDelta != columnDelta)
         {
-            throw new InvalidOperationException($"Invalid move: Pieces can only move diagonally");
+            throw new InvalidOperationException($"Pieces can only move diagonally");
         }
         if (rowDelta > 1)
         {
-            throw new InvalidOperationException("Invalid move: Pieces can only move one square when not capturing");
+            throw new InvalidOperationException("Pieces can only move one square when not capturing");
         }
     }
     private bool IsKingRow(string playerId, int row)
