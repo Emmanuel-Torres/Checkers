@@ -385,6 +385,135 @@ this.ScenarioInitialize(scenarioInfo);
             }
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Generating a board with king piece already in it")]
+        public void GeneratingABoardWithKingPieceAlreadyInIt()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Generating a board with king piece already in it", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 175
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 176
+  testRunner.Given("the following board with players O and X", @" O$ |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 187
+  testRunner.Then("the board should look like this", @" O$ |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("King piece from player X can move backwards")]
+        public void KingPieceFromPlayerXCanMoveBackwards()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("King piece from player X can move backwards", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 199
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 200
+  testRunner.Given("the following board with players O and X", @"  |    |   |   |   |   |   |   |
+  | X$ |   |   |   |   |   |   |
+  |    |   |   |   |   |   |   |
+  |    |   |   |   |   |   |   |
+  |    |   |   |   |   |   |   |
+  |    |   |   |   |   |   |   |
+  |    |   |   |   |   | O |   |
+  |    |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 211
+  testRunner.When("player X makes a move from 1,1 to 2,2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 212
+  testRunner.Then("the board should look like this", @"  |   |    |   |   |   |   |   |
+  |   |    |   |   |   |   |   |
+  |   | X$ |   |   |   |   |   |
+  |   |    |   |   |   |   |   |
+  |   |    |   |   |   |   |   |
+  |   |    |   |   |   |   |   |
+  |   |    |   |   |   | O |   |
+  |   |    |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("King piece from player O can move backwards")]
+        public void KingPieceFromPlayerOCanMoveBackwards()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("King piece from player O can move backwards", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 224
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 225
+  testRunner.Given("the following board with players O and X", @"  |   |   |   |   |   |    |   |
+  | X |   |   |   |   |    |   |
+  |   |   |   |   |   |    |   |
+  |   |   |   |   |   |    |   |
+  |   |   |   |   |   |    |   |
+  |   |   |   |   |   |    |   |
+  |   |   |   |   |   | O$ |   |
+  |   |   |   |   |   |    |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 236
+  testRunner.When("player O makes a move from 6,6 to 5,5", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 237
+  testRunner.Then("the board should look like this", @"  |   |   |   |   |    |   |   |
+  | X |   |   |   |    |   |   |
+  |   |   |   |   |    |   |   |
+  |   |   |   |   |    |   |   |
+  |   |   |   |   |    |   |   |
+  |   |   |   |   | O$ |   |   |
+  |   |   |   |   |    |   |   |
+  |   |   |   |   |    |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

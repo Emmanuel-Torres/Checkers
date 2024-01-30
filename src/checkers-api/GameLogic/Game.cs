@@ -85,7 +85,8 @@ public class Game
             throw new InvalidOperationException($"Invalid move: Destination location ({destinationRow},{destinationColumn}) is not empty");
         }
 
-        var rowDelta = GetRowDelta(sourceRow, destinationRow, playerId);
+        var temp = GetRowDelta(sourceRow, destinationRow, playerId);
+        var rowDelta =  piece.State == PieceState.Regular ? temp : Math.Abs(temp);
         var columnDelta = Math.Abs(sourceColumn - destinationColumn);
 
         if (rowDelta < 0)

@@ -53,6 +53,7 @@ namespace MyProject.Specs.Steps
             var parsedExpectedBoard = ParseStringBoardToStringArray(expectedBoard);
             var board = _scenarioContext.Get<Game>("currentGame").Board.ToList();
 
+            _scenarioContext.ContainsKey("moveException").Should().BeFalse();
             board.Select(p => p?.ToString()).Should().Equal(parsedExpectedBoard);
         }
 
@@ -89,8 +90,7 @@ namespace MyProject.Specs.Steps
 
             if (id.Contains('$'))
             {
-                id.Remove(1);
-                var piece = new Piece(id);
+                var piece = new Piece(id.Trim('$'));
                 piece.KingPiece();
                 return piece;
             }

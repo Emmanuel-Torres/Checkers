@@ -171,3 +171,77 @@ Scenario: Crowning regular piece from player O
       |   |   |   |   |   |   | O$
   """
   And the piece at 7,7 should be a king piece
+
+Scenario: Generating a board with king piece already in it
+  Given the following board with players O and X
+  """
+   O$ |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |  
+  """
+  Then the board should look like this
+  """
+   O$ |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |   |
+      |   |   |   |   |   |   |  
+  """
+
+Scenario: King piece from player X can move backwards
+  Given the following board with players O and X
+  """
+    |    |   |   |   |   |   |   |
+    | X$ |   |   |   |   |   |   |
+    |    |   |   |   |   |   |   |
+    |    |   |   |   |   |   |   |
+    |    |   |   |   |   |   |   |
+    |    |   |   |   |   |   |   |
+    |    |   |   |   |   | O |   |
+    |    |   |   |   |   |   |  
+  """
+  When player X makes a move from 1,1 to 2,2
+  Then the board should look like this
+  """
+    |   |    |   |   |   |   |   |
+    |   |    |   |   |   |   |   |
+    |   | X$ |   |   |   |   |   |
+    |   |    |   |   |   |   |   |
+    |   |    |   |   |   |   |   |
+    |   |    |   |   |   |   |   |
+    |   |    |   |   |   | O |   |
+    |   |    |   |   |   |   |  
+  """
+
+Scenario: King piece from player O can move backwards
+  Given the following board with players O and X
+  """
+    |   |   |   |   |   |    |   |
+    | X |   |   |   |   |    |   |
+    |   |   |   |   |   |    |   |
+    |   |   |   |   |   |    |   |
+    |   |   |   |   |   |    |   |
+    |   |   |   |   |   |    |   |
+    |   |   |   |   |   | O$ |   |
+    |   |   |   |   |   |    |  
+  """
+  When player O makes a move from 6,6 to 5,5
+  Then the board should look like this
+  """
+    |   |   |   |   |    |   |   |
+    | X |   |   |   |    |   |   |
+    |   |   |   |   |    |   |   |
+    |   |   |   |   |    |   |   |
+    |   |   |   |   |    |   |   |
+    |   |   |   |   | O$ |   |   |
+    |   |   |   |   |    |   |   |
+    |   |   |   |   |    |   |  
+  """
