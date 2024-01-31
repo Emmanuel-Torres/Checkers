@@ -97,8 +97,8 @@ Scenario Outline: Validating regular moves (excluding king moves and capturing)
     O |   |   |   |   |   |   |   |
       |   |   |   |   |   |   |   |
       |   |   |   |   |   |   |   |
-      | X |   |   |   |   |   |   |
-    X |   |   |   |   |   |   |   |
+      | X |   |   |   | O |   |   |
+    X |   |   |   | X |   |   |   |
       |   |   |   |   |   |   |  
   """
   When player <player> makes a move from <sr>,<sc> to <dr>,<dc>
@@ -119,6 +119,7 @@ Scenario Outline: Validating regular moves (excluding king moves and capturing)
     | X      | 5   | 1   | 4  | 1   | Pieces can only move diagonally                          |
     | X      | 5   | 1   | 4  | 4   | Pieces can only move diagonally                          |
     | X      | 5   | 1   | 3  | 3   | Pieces can only move one square when not capturing       |
+    | X      | 6   | 4   | 3  | 7   | Pieces can only move one square when not capturing       |
 
 Scenario: Crowning regular piece from player X
   Given the following board with players O and X
@@ -244,4 +245,104 @@ Scenario: King piece from player O can move backwards
     |   |   |   |   | O$ |   |   |
     |   |   |   |   |    |   |   |
     |   |   |   |   |    |   |  
+  """
+
+Scenario: Player X captures a piece from player O
+  Given the following board with players O and X
+  """
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   | O |   |   |   |   |   |
+    |   |   | X |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+  When player X makes a move from 3,3 to 1,1
+  Then the board should look like this
+  """
+    |   |   |   |   |   |   |   |
+    | X |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+
+Scenario: Player O captures a piece from player X
+  Given the following board with players O and X
+  """
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   | O |   |   |   |   |   |
+    |   |   | X |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+  When player O makes a move from 2,2 to 4,4
+  Then the board should look like this
+  """
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   | O |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+
+Scenario: Player X captures a piece from player O using a king piece
+  Given the following board with players O and X
+  """
+    |    |   |   |   |   |   |   |
+    | X$ |   |   |   |   |   |   |
+    |    | O |   |   |   |   |   |
+    |    |   |   |   |   |   |   |
+    |    |   |   |   |   |   |   |
+    |    |   |   |   |   |   |   |
+    |    |   |   |   |   |   |   |
+    |    |   |   |   |   |   |  
+  """
+  When player X makes a move from 1,1 to 3,3
+  Then the board should look like this
+  """
+    |   |   |    |   |   |   |   |
+    |   |   |    |   |   |   |   |
+    |   |   |    |   |   |   |   |
+    |   |   | X$ |   |   |   |   |
+    |   |   |    |   |   |   |   |
+    |   |   |    |   |   |   |   |
+    |   |   |    |   |   |   |   |
+    |   |   |    |   |   |   |  
+  """
+
+Scenario: Player O captures a piece from player X using a king piece
+  Given the following board with players O and X
+  """
+    |   |    |   |   |   |   |   |
+    | X |    |   |   |   |   |   |
+    |   | O$ |   |   |   |   |   |
+    |   |    |   |   |   |   |   |
+    |   |    |   |   |   |   |   |
+    |   |    |   |   |   |   |   |
+    |   |    |   |   |   |   |   |
+    |   |    |   |   |   |   |  
+  """
+  When player O makes a move from 2,2 to 0,0
+  Then the board should look like this
+  """
+  O$ |   |   |   |   |   |   |   |
+     |   |   |   |   |   |   |   |
+     |   |   |   |   |   |   |   |
+     |   |   |   |   |   |   |   |
+     |   |   |   |   |   |   |   |
+     |   |   |   |   |   |   |   |
+     |   |   |   |   |   |   |   |
+     |   |   |   |   |   |   |  
   """

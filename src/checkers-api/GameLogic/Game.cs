@@ -37,22 +37,29 @@ public class Game
 
     public void MakeMove(string playerId, MoveRequest request)
     {
-        ValidateMove(playerId, request);
+        ValidateMove(playerId, request, out var isAttackMove);
 
         var sourceIndex = request.Source.ToIndex();
         var destinationIndex = request.Destination.ToIndex();
 
-        var piece = _board[sourceIndex];
-        if (IsKingRow(playerId, request.Destination.Row))
+        var piece = _board[sourceIndex] ?? throw new InvalidOperationException("Piece at source does not exist");
+
+        if (IsKingRow(playerId, request.Destination.Row) && piece.State is not PieceState.King)
         {
-            piece!.KingPiece();
+            piece.KingPiece();
+        }
+
+        if (isAttackMove)
+        {
+            var middleSource = (sourceIndex + destinationIndex) / 2;
+            _board[middleSource] = null;
         }
 
         _board[sourceIndex] = null;
         _board[destinationIndex] = piece;
     }
 
-    private void ValidateMove(string playerId, MoveRequest request)
+    private void ValidateMove(string playerId, MoveRequest request, out bool isAttackMove)
     {
         var sourceRow = request.Source.Row;
         var sourceColumn = request.Source.Column;
@@ -97,15 +104,26 @@ public class Game
         {
             throw new InvalidOperationException($"Pieces can only move diagonally");
         }
-        if (rowDelta > 1)
+        
+        var isPlayerCapturing = IsPlayerCapturing(sourceIndex, destinationIndex);
+        if (rowDelta > 2 || (rowDelta > 1 && !isPlayerCapturing))
         {
             throw new InvalidOperationException("Pieces can only move one square when not capturing");
         }
+
+        isAttackMove = isPlayerCapturing;
     }
     private bool IsKingRow(string playerId, int row)
     {
         return (playerId == _player1.PlayerId && row == PLAYER_2_HOME_ROW) || (playerId == _player2.PlayerId && row == PLAYER_1_HOME_ROW);
     }
+
+    private bool IsPlayerCapturing(int sourceIndex, int destinationIndex)
+    {
+        var middleIndex = (sourceIndex + destinationIndex) / 2;
+        return _board[middleIndex] is not null;
+    }
+
     private int GetRowDelta(int sourceRow, int destinationRow, string playerId)
     {
         var directionModifier = playerId == _player1.PlayerId ? -1 : 1;
