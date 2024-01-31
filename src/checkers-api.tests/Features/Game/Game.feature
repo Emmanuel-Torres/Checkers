@@ -347,7 +347,7 @@ Scenario: Player O captures a piece from player X using a king piece
      |   |   |   |   |   |   |  
   """
 
-Scenario: Player X tries a double jump when capturing
+Scenario: Player X tries a straigt double jump when capturing
   Given the following board with players O and X
   """
     |   |   |   |   |   |   |   |
@@ -372,6 +372,56 @@ Scenario: Player X tries a double jump when capturing
     |   |   |   |   |   |   |  
   """
 
+Scenario: Player O tries a straight triple jump when capturing
+  Given the following board with players O and X
+  """
+  O |   |   |   |   |   |   |   |
+    | X |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   | X |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   | X |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+  When player O makes a move from '0,0 > 2,2 > 4,4 > 6,6'
+  Then the board should look like this
+    """
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   | O |   |
+    |   |   |   |   |   |   |  
+  """
+
+Scenario: Player O tries a twisty triple jump when capturing
+  Given the following board with players O and X
+  """
+  O |   |   |   |   |   |   |   |
+    | X |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    | X |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    | X |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+  When player O makes a move from '0,0 > 2,2 > 4,0 > 6,2'
+  Then the board should look like this
+    """
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   | O |   |   |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+
 Scenario: Player O tries an invalid double jump
   Given the following board with players O and X
   """
@@ -386,3 +436,43 @@ Scenario: Player O tries an invalid double jump
   """
   When player O makes a move from '0,0 > 2,2 > 5,5'
   Then the move should fail with error 'Pieces can only move one square when not capturing'
+
+Scenario: Player O tries to double jump backwards with regular piece
+  Given the following board with players O and X
+  """
+  O |   |   |   |   |   |   |   |
+    | X |   | X |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+  When player O makes a move from '0,0 > 2,2 > 0,4'
+  Then the move should fail with error 'Regular pieces cannot move backwards'
+
+Scenario: Player O tries to tripe jump backwards while crowning regular piece
+  Given the following board with players O and X
+  """
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   | X |   |
+    | O |   |   |   |   |   |   |
+    |   | X |   | X |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+  When player O makes a move from '5,1 > 7,3 > 5,5 > 3,7'
+  Then the board should look like this
+    """
+    |   |   |   |   |   |   |    |
+    |   |   |   |   |   |   |    |
+    |   |   |   |   |   |   |    |
+    |   |   |   |   |   |   | O$ |
+    |   |   |   |   |   |   |    |
+    |   |   |   |   |   |   |    |
+    |   |   |   |   |   |   |    |
+    |   |   |   |   |   |   |   
+  """
