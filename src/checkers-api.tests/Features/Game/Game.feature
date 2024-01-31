@@ -76,7 +76,7 @@ Scenario: Player O makes a valid move
     X |   | X |   | X |   | X |   |
       | X |   | X |   | X |   | X
   """
-  When player O makes a move from 2,6 to 3,5
+  When player O makes a move from '2,6 > 3,5'
   Then the board should look like this
   """
     O |   | O |   | O |   | O |   |
@@ -346,3 +346,43 @@ Scenario: Player O captures a piece from player X using a king piece
      |   |   |   |   |   |   |   |
      |   |   |   |   |   |   |  
   """
+
+Scenario: Player X tries a double jump when capturing
+  Given the following board with players O and X
+  """
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   | O |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   | O |   |   |   |
+    |   |   |   |   | X |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+  When player X makes a move from '5,5 > 3,3 > 1,1'
+  Then the board should look like this
+  """
+    |   |   |   |   |   |   |   |
+    | X |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+
+Scenario: Player O tries an invalid double jump
+  Given the following board with players O and X
+  """
+  O |   |   |   |   |   |   |   |
+    | X |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   | X |   |   |   |   |
+    |   |   |   | X |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+  When player O makes a move from '0,0 > 2,2 > 5,5'
+  Then the move should fail with error 'Pieces can only move one square when not capturing'

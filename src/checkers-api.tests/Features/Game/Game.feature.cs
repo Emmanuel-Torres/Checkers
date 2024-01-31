@@ -220,7 +220,7 @@ this.ScenarioInitialize(scenarioInfo);
     | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 79
-  testRunner.When("player O makes a move from 2,6 to 3,5", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("player O makes a move from \'2,6 > 3,5\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 80
   testRunner.Then("the board should look like this", @"  O |   | O |   | O |   | O |   |
@@ -687,6 +687,88 @@ this.ScenarioInitialize(scenarioInfo);
    |   |   |   |   |   |   |   |
    |   |   |   |   |   |   |   |
    |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Player X tries a double jump when capturing")]
+        public void PlayerXTriesADoubleJumpWhenCapturing()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X tries a double jump when capturing", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 350
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 351
+  testRunner.Given("the following board with players O and X", @"  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   | O |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   | O |   |   |   |
+  |   |   |   |   | X |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 362
+  testRunner.When("player X makes a move from \'5,5 > 3,3 > 1,1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 363
+  testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   |
+  | X |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Player O tries an invalid double jump")]
+        public void PlayerOTriesAnInvalidDoubleJump()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player O tries an invalid double jump", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 375
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 376
+  testRunner.Given("the following board with players O and X", @"O |   |   |   |   |   |   |   |
+  | X |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   | X |   |   |   |   |
+  |   |   |   | X |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 387
+  testRunner.When("player O makes a move from \'0,0 > 2,2 > 5,5\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 388
+  testRunner.Then("the move should fail with error \'Pieces can only move one square when not capturi" +
+                        "ng\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

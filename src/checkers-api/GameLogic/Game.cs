@@ -35,28 +35,56 @@ public class Game
     public IEnumerable<Player> Players => _players;
     public IEnumerable<Piece?> Board => _board;
 
-    public void MakeMove(string playerId, MoveRequest request)
+    public void MakeMove(string playerId, IEnumerable<MoveRequest> requests)
     {
-        ValidateMove(playerId, request, out var isAttackMove);
+        var toRemove = new List<int>();
+        Location? source = null;
+        Location? destination = null;
+        Piece? initialPiece = null;
 
-        var sourceIndex = request.Source.ToIndex();
-        var destinationIndex = request.Destination.ToIndex();
-
-        var piece = _board[sourceIndex] ?? throw new InvalidOperationException("Piece at source does not exist");
-
-        if (IsKingRow(playerId, request.Destination.Row) && piece.State is not PieceState.King)
+        foreach(var request in requests)
         {
-            piece.KingPiece();
+            try 
+            {
+                ValidateMove(playerId, request, out var isAttackMove);
+                source ??= request.Source;
+                destination = request.Destination;
+
+                var sourceIndex = request.Source.ToIndex();
+                var destinationIndex = request.Destination.ToIndex();
+            
+                var piece = initialPiece??= _board[sourceIndex]!;
+
+                if (isAttackMove)
+                {
+                    var middleSource = (sourceIndex + destinationIndex) / 2;
+                    toRemove.Add(middleSource);
+                }
+
+                if (IsKingRow(playerId, destination!.Row) && piece.State is not PieceState.King)
+                {
+                    piece.KingPiece();
+                }
+
+                _board[sourceIndex] = null;
+                _board[destinationIndex] = piece;
+            }
+            catch
+            {
+                if (source is not null && destination is not null)
+                {
+                    _board[source.ToIndex()] = initialPiece;
+                    _board[destination.ToIndex()] = null;
+                }
+                throw;
+            }
         }
 
-        if (isAttackMove)
-        {
-            var middleSource = (sourceIndex + destinationIndex) / 2;
-            _board[middleSource] = null;
-        }
 
-        _board[sourceIndex] = null;
-        _board[destinationIndex] = piece;
+        foreach(var i in toRemove)
+        {
+            _board[i] = null;
+        }
     }
 
     private void ValidateMove(string playerId, MoveRequest request, out bool isAttackMove)

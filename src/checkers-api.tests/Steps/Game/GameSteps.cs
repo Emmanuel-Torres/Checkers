@@ -22,22 +22,22 @@ namespace MyProject.Specs.Steps
         {
             var parsedBoard = ParseStringBoardToPieceIEnumerable(startingBoard).ToArray();
             var game = new Game(new Player(player1, player1), new Player(player2, player2), parsedBoard);
+            _scenarioContext.Add("startingBoard", startingBoard);
             _scenarioContext.Add("currentGame", game);
         }
 
         [When(@"player (.*) makes a move from (-?\d+),(-?\d+) to (-?\d+),(-?\d+)")]
         public void WhenPlayerMakesAMoveFrom(string player, int startRow, int startColumn, int endRow, int endColumn)
         {
-            try 
-            {
-                var game = _scenarioContext.Get<Game>("currentGame");
-                game.MakeMove(player, new MoveRequest((startRow, startColumn), (endRow, endColumn)));
-                _scenarioContext["currentGame"] = game;
-            }
-            catch (Exception ex)
-            {
-                _scenarioContext.Add("moveException", ex);
-            }
+            var requests = new[] { new MoveRequest((startRow, startColumn), (endRow, endColumn)) };
+            MakeMoves(player, requests);
+        }
+
+        [When(@"player (.*) makes a move from '(.*)'")]
+        public void WhenPlayerMakesAMoveFrom(string player, string request)
+        {
+            var parsedRequest = ParseMoveRequestsFromString(request);
+            MakeMoves(player, parsedRequest);
         }
 
         [When(@"I start a game with players (.*) and (.*)")]
@@ -61,7 +61,13 @@ namespace MyProject.Specs.Steps
         public void ThenTheMoveShouldFailWithError(string expectedError)
         {
             var moveException = _scenarioContext.Get<Exception>("moveException");
+            
+            var startingBoard = _scenarioContext.Get<string>("startingBoard");
+            var parsedExpectedBoard = ParseStringBoardToStringArray(startingBoard);
+            var currentBoard = _scenarioContext.Get<Game>("currentGame").Board.ToList();
+            
             moveException.Message.Should().Contain(expectedError);
+            currentBoard.Select(p => p?.ToString()).Should().Equal(parsedExpectedBoard);
         }
 
         [Then(@"the piece at (\d),(\d) should be a king piece")]
@@ -73,6 +79,20 @@ namespace MyProject.Specs.Steps
             piece?.State.Should().Be(PieceState.King);
         }
 
+        private void MakeMoves(string player, IEnumerable<MoveRequest> requests)
+        {
+            try 
+            {
+                var game = _scenarioContext.Get<Game>("currentGame");
+                game.MakeMove(player, requests);
+                _scenarioContext["currentGame"] = game;
+            }
+            catch (Exception ex)
+            {
+                _scenarioContext.Add("moveException", ex);
+            }
+        }
+
         private IEnumerable<string?> ParseStringBoardToStringArray(string board)
         {
             return board.Split('|').ToList().Select(c => string.IsNullOrWhiteSpace(c) ? null : c.Trim());
@@ -81,6 +101,31 @@ namespace MyProject.Specs.Steps
         private IEnumerable<Piece?> ParseStringBoardToPieceIEnumerable(string board)
         {
             return ParseStringBoardToStringArray(board).Select(ParsePieceFromString);
+        }
+
+        private IEnumerable<MoveRequest> ParseMoveRequestsFromString(string request)
+        {
+            var locations = request.Split('>');
+
+            if (locations.Length < 2)
+            {
+                throw new InvalidOperationException("Invalid string for move request");
+            }
+
+            var requests = new List<MoveRequest>();
+
+            for(int i = 0; i < locations.Length - 1; i++)
+            {
+                var source = locations[i].Split(',').Select(Int32.Parse).ToArray();
+                var destination = locations[i + 1].Split(',').Select(Int32.Parse).ToArray();
+
+                var s_Location = new Location(source[0], source[1]);
+                var d_Location = new Location(destination[0], destination[1]);
+
+                requests.Add(new MoveRequest(s_Location, d_Location));
+            }
+
+            return requests;
         }
 
         private Piece? ParsePieceFromString(string? id)

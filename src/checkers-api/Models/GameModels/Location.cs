@@ -10,22 +10,4 @@ public class Location
         Row = row;
         Column = column;
     }
-
-    public override bool Equals(object? obj)
-    {
-        if ((obj == null) || !this.GetType().Equals(obj.GetType()))
-        {
-            return false;
-        }
-        else
-        {
-            Location l = (Location)obj;
-            return (Column == l.Column) && (Row == l.Row);
-        }
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(Row, Column);
-    }
 }
