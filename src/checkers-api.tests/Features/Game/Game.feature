@@ -531,30 +531,3 @@ Scenario: Player X captures all player O pieces
 #     |   |   |   |   |   |   |  
 #   """
 #   And player O won the game
-
-# Scenario Outline: Player request valid moves for given locations
-#   Given the following board with players O and X and player X is moving
-#   """
-#     |   | O |   | O |   | O |   |
-#     |   |   |   |   | O |   | O |
-#     |   |   |   |   |   | X |   |
-#     |   |   |   |   |   |   |   |
-#     |   |   |   |   |   |   |   |
-#     | O |   |   |   |   |   |   |
-#   X |   | X |   |   |   |   |   |
-#     | X |   | X |   | X |   |  
-#   """
-#   When player <player> requests the valid moves for location '<source>'
-#   Then the following locations should be returned '<locations>'
-
-#   Examples:
-#   | player | source | locations |
-#   | X      | -1,-1  |           |
-#   | X      | 0,0    |           |
-#   | X      | 0,2    |           |
-#   | X      | 7,5    | 6,4 - 6,6 |
-  # | O      | 0,2    | 1,1 - 1,3 |
-  # | X      | 7,3    | 6,4       |
-  # | X      | 7,1    |           |
-  # | X      | 6,0    | 4,2       |
-  # | X      | 6,2    | 4,0 - 5,3 |

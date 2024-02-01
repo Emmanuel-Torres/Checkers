@@ -40,24 +40,6 @@ namespace MyProject.Specs.Steps
             _scenarioContext.Add("currentGame", game);
         }
 
-        [When(@"player (.*) requests the valid moves for location '(.*)'")]
-        public void PlayerRequestsTheValidMovesForLocation(string player, string source)
-        {
-            var currentGame = _scenarioContext.Get<Game>("currentGame");
-            var availableMoves = currentGame.GetAvailableMoves(player, ParseLocationFromString(source));
-
-            _scenarioContext.Add("availableMoves", availableMoves);
-        }
-
-        [Then(@"the following locations should be returned '(.*)'")]
-        public void TheFollowingLocationsShouldBeReturned(string expectedLocations)
-        {
-            var splitExpectedLocations = string.IsNullOrEmpty(expectedLocations) ? new List<string>() : expectedLocations.Split('-').Select(l => l.Trim());
-            var availableMoves = _scenarioContext.Get<IEnumerable<Location>>("availableMoves").Select(l => l.ToString());
-
-            availableMoves.Should().Equal(splitExpectedLocations);
-        }
-
         [Then(@"the board should look like this")]
         public void ThenTheFollowingBoardShouldGetCreated(string expectedBoard)
         {
