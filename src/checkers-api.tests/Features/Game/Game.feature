@@ -16,7 +16,7 @@ Scenario: Generating default board board
     """
 
 Scenario: Generating a game with a starter board
-  Given the following board with players O and X
+  Given the following board with players O and X and player X is moving
   """
     O |   | O |   | O |   | O |   |
       | O |   | O |   | O |   | O |
@@ -40,7 +40,7 @@ Scenario: Generating a game with a starter board
   """
 
 Scenario: Player X makes a valid move
-  Given the following board with players O and X
+  Given the following board with players O and X and player X is moving
   """
     O |   | O |   | O |   | O |   |
       | O |   | O |   | O |   | O |
@@ -63,9 +63,10 @@ Scenario: Player X makes a valid move
     X |   | X |   | X |   | X |   |
       | X |   | X |   | X |   | X
   """
+  And player O should now be moving
 
 Scenario: Player O makes a valid move
-  Given the following board with players O and X
+  Given the following board with players O and X and player O is moving
   """
     O |   | O |   | O |   | O |   |
       | O |   | O |   | O |   | O |
@@ -88,9 +89,10 @@ Scenario: Player O makes a valid move
     X |   | X |   | X |   | X |   |
       | X |   | X |   | X |   | X
   """
+  And player X should now be moving
 
 Scenario Outline: Validating regular moves (excluding king moves and capturing)
-  Given the following board with players O and X
+  Given the following board with players O and X and player <turn> is moving
   """
       |   |   |   |   |   |   |   |
       |   |   |   |   |   |   |   |
@@ -105,24 +107,25 @@ Scenario Outline: Validating regular moves (excluding king moves and capturing)
   Then the move should fail with error '<error>'
 
   Examples:
-    | player | sr  | sc  | dr | dc  | error                                                                  |
-    | X      | -1  | 8   | 5  | 0   | Source location (-1,8) is out of bounds                  |
-    | X      | 5   | 1   | 1  | -1  | Destination location (1,-1) is out of bounds             |
-    | X      | 8   | 8   | 5  | 0   | Source location (8,8) is out of bounds                   |
-    | X      | 5   | 1   | 8  | 8   | Destination location (8,8) is out of bounds              |
-    | X      | 0   | 0   | 1  | 1   | Source location (0,0) does not contain a piece           |
-    | X      | 2   | 0   | 3  | 1   | Player X does not own the piece at source location (2,0) |
-    | X      | 6   | 0   | 5  | 1   | Destination location (5,1) is not empty                  |
-    | X      | 5   | 1   | 6  | 2   | Regular pieces cannot move backwards                     |
-    | O      | 2   | 0   | 1  | 1   | Regular pieces cannot move backwards                     | 
-    | X      | 5   | 1   | 5  | 2   | Pieces can only move diagonally                          |
-    | X      | 5   | 1   | 4  | 1   | Pieces can only move diagonally                          |
-    | X      | 5   | 1   | 4  | 4   | Pieces can only move diagonally                          |
-    | X      | 5   | 1   | 3  | 3   | Pieces can only move one square when not capturing       |
-    | X      | 6   | 4   | 3  | 7   | Pieces can only move one square when not capturing       |
+  | turn | player | sr  | sc  | dr | dc  | error                                                    |
+  | X    | X      | -1  | 8   | 5  | 0   | Source location (-1,8) is out of bounds                  |
+  | X    | X      | 5   | 1   | 1  | -1  | Destination location (1,-1) is out of bounds             |
+  | X    | X      | 8   | 8   | 5  | 0   | Source location (8,8) is out of bounds                   |
+  | X    | X      | 5   | 1   | 8  | 8   | Destination location (8,8) is out of bounds              |
+  | X    | X      | 0   | 0   | 1  | 1   | Source location (0,0) does not contain a piece           |
+  | X    | X      | 2   | 0   | 3  | 1   | Player X does not own the piece at source location (2,0) |
+  | X    | X      | 6   | 0   | 5  | 1   | Destination location (5,1) is not empty                  |
+  | X    | X      | 5   | 1   | 6  | 2   | Regular pieces cannot move backwards                     |
+  | O    | O      | 2   | 0   | 1  | 1   | Regular pieces cannot move backwards                     | 
+  | X    | X      | 5   | 1   | 5  | 2   | Pieces can only move diagonally                          |
+  | X    | X      | 5   | 1   | 4  | 1   | Pieces can only move diagonally                          |
+  | X    | X      | 5   | 1   | 4  | 4   | Pieces can only move diagonally                          |
+  | X    | X      | 5   | 1   | 3  | 3   | Pieces can only move one square when not capturing       |
+  | X    | X      | 6   | 4   | 3  | 7   | Pieces can only move one square when not capturing       |
+  | O    | X      | 6   | 4   | 3  | 7   | Player X tried to move outside its turn                  |
 
 Scenario: Crowning regular piece from player X
-  Given the following board with players O and X
+  Given the following board with players O and X and player X is moving
   """
       |   |   |   |   |   |   |   |
       | X |   |   |   |   |   |   |
@@ -148,7 +151,7 @@ Scenario: Crowning regular piece from player X
   And the piece at 0,0 should be a king piece
 
 Scenario: Crowning regular piece from player O
-  Given the following board with players O and X
+  Given the following board with players O and X and player O is moving
   """
       |   |   |   |   |   |   |   |
       | X |   |   |   |   |   |   |
@@ -174,7 +177,7 @@ Scenario: Crowning regular piece from player O
   And the piece at 7,7 should be a king piece
 
 Scenario: Generating a board with king piece already in it
-  Given the following board with players O and X
+  Given the following board with players O and X and player O is moving
   """
    O$ |   |   |   |   |   |   |   |
       |   |   |   |   |   |   |   |
@@ -198,7 +201,7 @@ Scenario: Generating a board with king piece already in it
   """
 
 Scenario: King piece from player X can move backwards
-  Given the following board with players O and X
+  Given the following board with players O and X and player X is moving
   """
     |    |   |   |   |   |   |   |
     | X$ |   |   |   |   |   |   |
@@ -223,7 +226,7 @@ Scenario: King piece from player X can move backwards
   """
 
 Scenario: King piece from player O can move backwards
-  Given the following board with players O and X
+  Given the following board with players O and X and player O is moving
   """
     |   |   |   |   |   |    |   |
     | X |   |   |   |   |    |   |
@@ -248,7 +251,7 @@ Scenario: King piece from player O can move backwards
   """
 
 Scenario: Player X captures a piece from player O
-  Given the following board with players O and X
+  Given the following board with players O and X and player X is moving
   """
     |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |   |
@@ -273,7 +276,7 @@ Scenario: Player X captures a piece from player O
   """
 
 Scenario: Player O captures a piece from player X
-  Given the following board with players O and X
+  Given the following board with players O and X and player O is moving
   """
     |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |   |
@@ -298,7 +301,7 @@ Scenario: Player O captures a piece from player X
   """
 
 Scenario: Player X captures a piece from player O using a king piece
-  Given the following board with players O and X
+  Given the following board with players O and X and player X is moving
   """
     |    |   |   |   |   |   |   |
     | X$ |   |   |   |   |   |   |
@@ -323,7 +326,7 @@ Scenario: Player X captures a piece from player O using a king piece
   """
 
 Scenario: Player O captures a piece from player X using a king piece
-  Given the following board with players O and X
+  Given the following board with players O and X and player O is moving
   """
     |   |    |   |   |   |   |   |
     | X |    |   |   |   |   |   |
@@ -348,7 +351,7 @@ Scenario: Player O captures a piece from player X using a king piece
   """
 
 Scenario: Player X tries a straigt double jump when capturing
-  Given the following board with players O and X
+  Given the following board with players O and X and player X is moving
   """
     |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |   |
@@ -373,7 +376,7 @@ Scenario: Player X tries a straigt double jump when capturing
   """
 
 Scenario: Player O tries a straight triple jump when capturing
-  Given the following board with players O and X
+  Given the following board with players O and X and player O is moving
   """
   O |   |   |   |   |   |   |   |
     | X |   |   |   |   |   |   |
@@ -398,7 +401,7 @@ Scenario: Player O tries a straight triple jump when capturing
   """
 
 Scenario: Player O tries a twisty triple jump when capturing
-  Given the following board with players O and X
+  Given the following board with players O and X and player O is moving
   """
   O |   |   |   |   |   |   |   |
     | X |   |   |   |   |   |   |
@@ -423,7 +426,7 @@ Scenario: Player O tries a twisty triple jump when capturing
   """
 
 Scenario: Player O tries an invalid double jump
-  Given the following board with players O and X
+  Given the following board with players O and X and player O is moving
   """
   O |   |   |   |   |   |   |   |
     | X |   |   |   |   |   |   |
@@ -438,7 +441,7 @@ Scenario: Player O tries an invalid double jump
   Then the move should fail with error 'Pieces can only move one square when not capturing'
 
 Scenario: Player O tries to double jump backwards with regular piece
-  Given the following board with players O and X
+  Given the following board with players O and X and player O is moving
   """
   O |   |   |   |   |   |   |   |
     | X |   | X |   |   |   |   |
@@ -453,7 +456,7 @@ Scenario: Player O tries to double jump backwards with regular piece
   Then the move should fail with error 'Regular pieces cannot move backwards'
 
 Scenario: Player O tries to tripe jump backwards while crowning regular piece
-  Given the following board with players O and X
+  Given the following board with players O and X and player O is moving
   """
     |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |   |

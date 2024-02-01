@@ -17,11 +17,11 @@ namespace MyProject.Specs.Steps
             _scenarioContext = scenarioContext;
         }
 
-        [Given(@"the following board with players (.*) and (.*)")]
-        public void GivenTheFollowingBoard(string player1, string player2, string startingBoard)
+        [Given(@"the following board with players (.*) and (.*) and player (.*) is moving")]
+        public void GivenTheFollowingBoard(string player1, string player2, string currentTurn, string startingBoard)
         {
             var parsedBoard = ParseStringBoardToPieceIEnumerable(startingBoard).ToArray();
-            var game = new Game(new Player(player1, player1), new Player(player2, player2), parsedBoard);
+            var game = new Game(new Player(player1, player1), new Player(player2, player2), parsedBoard, new Player(currentTurn, currentTurn));
             _scenarioContext.Add("startingBoard", startingBoard);
             _scenarioContext.Add("currentGame", game);
         }
@@ -70,13 +70,11 @@ namespace MyProject.Specs.Steps
             currentBoard.Select(p => p?.ToString()).Should().Equal(parsedExpectedBoard);
         }
 
-        [Then(@"the piece at (\d),(\d) should be a king piece")]
-        public void ThePieceAtShouldBeAKingPiece(int sourceRow, int sourceColumn)
+        [Then(@"player (.*) should now be moving")]
+        public void PlayerShouldNowBeMoving(string expectedPlayer)
         {
-            var index = sourceRow * 8 + sourceColumn;
-            var piece = _scenarioContext.Get<Game>("currentGame").Board.ToArray()[index];
-
-            piece?.State.Should().Be(PieceState.King);
+            var currentTurn = _scenarioContext.Get<Game>("currentGame").CurrentTurn;
+            currentTurn.PlayerId.Should().Contain(expectedPlayer);
         }
 
         private void MakeMoves(string player, IEnumerable<MoveRequest> requests)

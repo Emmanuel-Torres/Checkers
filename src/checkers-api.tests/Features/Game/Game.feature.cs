@@ -125,7 +125,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 19
-  testRunner.Given("the following board with players O and X", @"  O |   | O |   | O |   | O |   |
+  testRunner.Given("the following board with players O and X and player X is moving", @"  O |   | O |   | O |   | O |   |
     | O |   | O |   | O |   | O |
   O |   | O |   | O |   |   |   |
     |   |   |   |   | O |   |   |
@@ -166,7 +166,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 43
-  testRunner.Given("the following board with players O and X", @"  O |   | O |   | O |   | O |   |
+  testRunner.Given("the following board with players O and X and player X is moving", @"  O |   | O |   | O |   | O |   |
     | O |   | O |   | O |   | O |
   O |   | O |   | O |   | O |   |
     |   |   |   |   |   |   |   |
@@ -188,6 +188,9 @@ this.ScenarioInitialize(scenarioInfo);
   X |   | X |   | X |   | X |   |
     | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
+#line 66
+  testRunner.And("player O should now be moving", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
             }
             this.ScenarioCleanup();
         }
@@ -199,7 +202,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player O makes a valid move", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 67
+#line 68
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -209,8 +212,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 68
-  testRunner.Given("the following board with players O and X", @"  O |   | O |   | O |   | O |   |
+#line 69
+  testRunner.Given("the following board with players O and X and player O is moving", @"  O |   | O |   | O |   | O |   |
     | O |   | O |   | O |   | O |
   O |   | O |   | O |   | O |   |
     |   |   |   |   |   |   |   |
@@ -219,10 +222,10 @@ this.ScenarioInitialize(scenarioInfo);
   X |   | X |   | X |   | X |   |
     | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 79
+#line 80
   testRunner.When("player O makes a move from \'2,6 > 3,5\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 80
+#line 81
   testRunner.Then("the board should look like this", @"  O |   | O |   | O |   | O |   |
     | O |   | O |   | O |   | O |
   O |   | O |   | O |   |   |   |
@@ -232,30 +235,35 @@ this.ScenarioInitialize(scenarioInfo);
   X |   | X |   | X |   | X |   |
     | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
+#line 92
+  testRunner.And("player X should now be moving", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
             }
             this.ScenarioCleanup();
         }
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Validating regular moves (excluding king moves and capturing)")]
-        [NUnit.Framework.TestCaseAttribute("X", "-1", "8", "5", "0", "Source location (-1,8) is out of bounds", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "5", "1", "1", "-1", "Destination location (1,-1) is out of bounds", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "8", "8", "5", "0", "Source location (8,8) is out of bounds", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "5", "1", "8", "8", "Destination location (8,8) is out of bounds", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "0", "0", "1", "1", "Source location (0,0) does not contain a piece", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "2", "0", "3", "1", "Player X does not own the piece at source location (2,0)", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "6", "0", "5", "1", "Destination location (5,1) is not empty", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "5", "1", "6", "2", "Regular pieces cannot move backwards", null)]
-        [NUnit.Framework.TestCaseAttribute("O", "2", "0", "1", "1", "Regular pieces cannot move backwards", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "5", "1", "5", "2", "Pieces can only move diagonally", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "5", "1", "4", "1", "Pieces can only move diagonally", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "5", "1", "4", "4", "Pieces can only move diagonally", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "5", "1", "3", "3", "Pieces can only move one square when not capturing", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "6", "4", "3", "7", "Pieces can only move one square when not capturing", null)]
-        public void ValidatingRegularMovesExcludingKingMovesAndCapturing(string player, string sr, string sc, string dr, string dc, string error, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("X", "X", "-1", "8", "5", "0", "Source location (-1,8) is out of bounds", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "5", "1", "1", "-1", "Destination location (1,-1) is out of bounds", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "8", "8", "5", "0", "Source location (8,8) is out of bounds", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "5", "1", "8", "8", "Destination location (8,8) is out of bounds", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "0", "0", "1", "1", "Source location (0,0) does not contain a piece", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "2", "0", "3", "1", "Player X does not own the piece at source location (2,0)", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "6", "0", "5", "1", "Destination location (5,1) is not empty", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "5", "1", "6", "2", "Regular pieces cannot move backwards", null)]
+        [NUnit.Framework.TestCaseAttribute("O", "O", "2", "0", "1", "1", "Regular pieces cannot move backwards", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "5", "1", "5", "2", "Pieces can only move diagonally", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "5", "1", "4", "1", "Pieces can only move diagonally", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "5", "1", "4", "4", "Pieces can only move diagonally", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "5", "1", "3", "3", "Pieces can only move one square when not capturing", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "6", "4", "3", "7", "Pieces can only move one square when not capturing", null)]
+        [NUnit.Framework.TestCaseAttribute("O", "X", "6", "4", "3", "7", "Player X tried to move outside its turn", null)]
+        public void ValidatingRegularMovesExcludingKingMovesAndCapturing(string turn, string player, string sr, string sc, string dr, string dc, string error, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            argumentsOfScenario.Add("turn", turn);
             argumentsOfScenario.Add("player", player);
             argumentsOfScenario.Add("sr", sr);
             argumentsOfScenario.Add("sc", sc);
@@ -263,7 +271,7 @@ this.ScenarioInitialize(scenarioInfo);
             argumentsOfScenario.Add("dc", dc);
             argumentsOfScenario.Add("error", error);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Validating regular moves (excluding king moves and capturing)", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 92
+#line 94
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -273,8 +281,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 93
-  testRunner.Given("the following board with players O and X", @"    |   |   |   |   |   |   |   |
+#line 95
+  testRunner.Given(string.Format("the following board with players O and X and player {0} is moving", turn), @"    |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |   |
   O |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |   |
@@ -283,10 +291,10 @@ this.ScenarioInitialize(scenarioInfo);
   X |   |   |   | X |   |   |   |
     |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 104
+#line 106
   testRunner.When(string.Format("player {0} makes a move from {1},{2} to {3},{4}", player, sr, sc, dr, dc), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 105
+#line 107
   testRunner.Then(string.Format("the move should fail with error \'{0}\'", error), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -300,7 +308,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Crowning regular piece from player X", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 124
+#line 127
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -310,8 +318,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 125
-  testRunner.Given("the following board with players O and X", @"    |   |   |   |   |   |   |   |
+#line 128
+  testRunner.Given("the following board with players O and X and player X is moving", @"    |   |   |   |   |   |   |   |
     | X |   |   |   |   |   |   |
   O |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |   |
@@ -320,10 +328,10 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 136
+#line 139
   testRunner.When("player X makes a move from 1,1 to 0,0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 137
+#line 140
   testRunner.Then("the board should look like this", @"  X$ |   |   |   |   |   |   |   |
      |   |   |   |   |   |   |   |
    O |   |   |   |   |   |   |   |
@@ -333,7 +341,7 @@ this.ScenarioInitialize(scenarioInfo);
      |   |   |   |   |   |   |   |
      |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 148
+#line 151
   testRunner.And("the piece at 0,0 should be a king piece", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
@@ -347,7 +355,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Crowning regular piece from player O", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 150
+#line 153
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -357,8 +365,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 151
-  testRunner.Given("the following board with players O and X", @"    |   |   |   |   |   |   |   |
+#line 154
+  testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |   |   |   |
     | X |   |   |   |   |   |   |
     |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |   |
@@ -367,10 +375,10 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   | O |   |
     |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 162
+#line 165
   testRunner.When("player O makes a move from 6,6 to 7,7", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 163
+#line 166
   testRunner.Then("the board should look like this", @"    |   |   |   |   |   |   |   |
     | X |   |   |   |   |   |   |
     |   |   |   |   |   |   |   |
@@ -380,7 +388,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   |   |   |
     |   |   |   |   |   |   | O$", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 174
+#line 177
   testRunner.And("the piece at 7,7 should be a king piece", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
@@ -394,7 +402,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Generating a board with king piece already in it", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 176
+#line 179
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -404,8 +412,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 177
-  testRunner.Given("the following board with players O and X", @" O$ |   |   |   |   |   |   |   |
+#line 180
+  testRunner.Given("the following board with players O and X and player O is moving", @" O$ |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |   |
@@ -414,7 +422,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 188
+#line 191
   testRunner.Then("the board should look like this", @" O$ |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |   |
@@ -435,7 +443,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("King piece from player X can move backwards", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 200
+#line 203
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -445,8 +453,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 201
-  testRunner.Given("the following board with players O and X", @"  |    |   |   |   |   |   |   |
+#line 204
+  testRunner.Given("the following board with players O and X and player X is moving", @"  |    |   |   |   |   |   |   |
   | X$ |   |   |   |   |   |   |
   |    |   |   |   |   |   |   |
   |    |   |   |   |   |   |   |
@@ -455,10 +463,10 @@ this.ScenarioInitialize(scenarioInfo);
   |    |   |   |   |   | O |   |
   |    |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 212
+#line 215
   testRunner.When("player X makes a move from 1,1 to 2,2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 213
+#line 216
   testRunner.Then("the board should look like this", @"  |   |    |   |   |   |   |   |
   |   |    |   |   |   |   |   |
   |   | X$ |   |   |   |   |   |
@@ -479,7 +487,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("King piece from player O can move backwards", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 225
+#line 228
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -489,8 +497,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 226
-  testRunner.Given("the following board with players O and X", @"  |   |   |   |   |   |    |   |
+#line 229
+  testRunner.Given("the following board with players O and X and player O is moving", @"  |   |   |   |   |   |    |   |
   | X |   |   |   |   |    |   |
   |   |   |   |   |   |    |   |
   |   |   |   |   |   |    |   |
@@ -499,10 +507,10 @@ this.ScenarioInitialize(scenarioInfo);
   |   |   |   |   |   | O$ |   |
   |   |   |   |   |   |    |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 237
+#line 240
   testRunner.When("player O makes a move from 6,6 to 5,5", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 238
+#line 241
   testRunner.Then("the board should look like this", @"  |   |   |   |   |    |   |   |
   | X |   |   |   |    |   |   |
   |   |   |   |   |    |   |   |
@@ -523,7 +531,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X captures a piece from player O", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 250
+#line 253
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -533,8 +541,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 251
-  testRunner.Given("the following board with players O and X", @"  |   |   |   |   |   |   |   |
+#line 254
+  testRunner.Given("the following board with players O and X and player X is moving", @"  |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |   |
   |   | O |   |   |   |   |   |
   |   |   | X |   |   |   |   |
@@ -543,10 +551,10 @@ this.ScenarioInitialize(scenarioInfo);
   |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 262
+#line 265
   testRunner.When("player X makes a move from 3,3 to 1,1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 263
+#line 266
   testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   |
   | X |   |   |   |   |   |   |
   |   |   |   |   |   |   |   |
@@ -567,7 +575,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player O captures a piece from player X", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 275
+#line 278
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -577,8 +585,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 276
-  testRunner.Given("the following board with players O and X", @"  |   |   |   |   |   |   |   |
+#line 279
+  testRunner.Given("the following board with players O and X and player O is moving", @"  |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |   |
   |   | O |   |   |   |   |   |
   |   |   | X |   |   |   |   |
@@ -587,10 +595,10 @@ this.ScenarioInitialize(scenarioInfo);
   |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 287
+#line 290
   testRunner.When("player O makes a move from 2,2 to 4,4", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 288
+#line 291
   testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |   |
@@ -611,7 +619,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X captures a piece from player O using a king piece", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 300
+#line 303
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -621,8 +629,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 301
-  testRunner.Given("the following board with players O and X", @"  |    |   |   |   |   |   |   |
+#line 304
+  testRunner.Given("the following board with players O and X and player X is moving", @"  |    |   |   |   |   |   |   |
   | X$ |   |   |   |   |   |   |
   |    | O |   |   |   |   |   |
   |    |   |   |   |   |   |   |
@@ -631,10 +639,10 @@ this.ScenarioInitialize(scenarioInfo);
   |    |   |   |   |   |   |   |
   |    |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 312
+#line 315
   testRunner.When("player X makes a move from 1,1 to 3,3", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 313
+#line 316
   testRunner.Then("the board should look like this", @"  |   |   |    |   |   |   |   |
   |   |   |    |   |   |   |   |
   |   |   |    |   |   |   |   |
@@ -655,7 +663,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player O captures a piece from player X using a king piece", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 325
+#line 328
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -665,8 +673,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 326
-  testRunner.Given("the following board with players O and X", @"  |   |    |   |   |   |   |   |
+#line 329
+  testRunner.Given("the following board with players O and X and player O is moving", @"  |   |    |   |   |   |   |   |
   | X |    |   |   |   |   |   |
   |   | O$ |   |   |   |   |   |
   |   |    |   |   |   |   |   |
@@ -675,10 +683,10 @@ this.ScenarioInitialize(scenarioInfo);
   |   |    |   |   |   |   |   |
   |   |    |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 337
+#line 340
   testRunner.When("player O makes a move from 2,2 to 0,0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 338
+#line 341
   testRunner.Then("the board should look like this", @"O$ |   |   |   |   |   |   |   |
    |   |   |   |   |   |   |   |
    |   |   |   |   |   |   |   |
@@ -699,7 +707,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X tries a straigt double jump when capturing", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 350
+#line 353
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -709,8 +717,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 351
-  testRunner.Given("the following board with players O and X", @"  |   |   |   |   |   |   |   |
+#line 354
+  testRunner.Given("the following board with players O and X and player X is moving", @"  |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |   |
   |   | O |   |   |   |   |   |
   |   |   |   |   |   |   |   |
@@ -719,10 +727,10 @@ this.ScenarioInitialize(scenarioInfo);
   |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 362
+#line 365
   testRunner.When("player X makes a move from \'5,5 > 3,3 > 1,1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 363
+#line 366
   testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   |
   | X |   |   |   |   |   |   |
   |   |   |   |   |   |   |   |
@@ -743,7 +751,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player O tries a straight triple jump when capturing", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 375
+#line 378
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -753,8 +761,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 376
-  testRunner.Given("the following board with players O and X", @"O |   |   |   |   |   |   |   |
+#line 379
+  testRunner.Given("the following board with players O and X and player O is moving", @"O |   |   |   |   |   |   |   |
   | X |   |   |   |   |   |   |
   |   |   |   |   |   |   |   |
   |   |   | X |   |   |   |   |
@@ -763,10 +771,10 @@ this.ScenarioInitialize(scenarioInfo);
   |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 387
+#line 390
   testRunner.When("player O makes a move from \'0,0 > 2,2 > 4,4 > 6,6\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 388
+#line 391
   testRunner.Then("the board should look like this", "|   |   |   |   |   |   |   |\r\n|   |   |   |   |   |   |   |\r\n|   |   |   |   |  " +
                         " |   |   |\r\n|   |   |   |   |   |   |   |\r\n|   |   |   |   |   |   |   |\r\n|   | " +
                         "  |   |   |   |   |   |\r\n|   |   |   |   |   | O |   |\r\n|   |   |   |   |   |   " +
@@ -783,7 +791,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player O tries a twisty triple jump when capturing", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 400
+#line 403
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -793,8 +801,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 401
-  testRunner.Given("the following board with players O and X", @"O |   |   |   |   |   |   |   |
+#line 404
+  testRunner.Given("the following board with players O and X and player O is moving", @"O |   |   |   |   |   |   |   |
   | X |   |   |   |   |   |   |
   |   |   |   |   |   |   |   |
   | X |   |   |   |   |   |   |
@@ -803,10 +811,10 @@ this.ScenarioInitialize(scenarioInfo);
   |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 412
+#line 415
   testRunner.When("player O makes a move from \'0,0 > 2,2 > 4,0 > 6,2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 413
+#line 416
   testRunner.Then("the board should look like this", "|   |   |   |   |   |   |   |\r\n|   |   |   |   |   |   |   |\r\n|   |   |   |   |  " +
                         " |   |   |\r\n|   |   |   |   |   |   |   |\r\n|   |   |   |   |   |   |   |\r\n|   | " +
                         "  |   |   |   |   |   |\r\n|   | O |   |   |   |   |   |\r\n|   |   |   |   |   |   " +
@@ -823,7 +831,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player O tries an invalid double jump", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 425
+#line 428
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -833,8 +841,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 426
-  testRunner.Given("the following board with players O and X", @"O |   |   |   |   |   |   |   |
+#line 429
+  testRunner.Given("the following board with players O and X and player O is moving", @"O |   |   |   |   |   |   |   |
   | X |   |   |   |   |   |   |
   |   |   |   |   |   |   |   |
   |   |   | X |   |   |   |   |
@@ -843,10 +851,10 @@ this.ScenarioInitialize(scenarioInfo);
   |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 437
+#line 440
   testRunner.When("player O makes a move from \'0,0 > 2,2 > 5,5\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 438
+#line 441
   testRunner.Then("the move should fail with error \'Pieces can only move one square when not capturi" +
                         "ng\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
@@ -861,7 +869,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player O tries to double jump backwards with regular piece", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 440
+#line 443
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -871,8 +879,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 441
-  testRunner.Given("the following board with players O and X", @"O |   |   |   |   |   |   |   |
+#line 444
+  testRunner.Given("the following board with players O and X and player O is moving", @"O |   |   |   |   |   |   |   |
   | X |   | X |   |   |   |   |
   |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |   |
@@ -881,10 +889,10 @@ this.ScenarioInitialize(scenarioInfo);
   |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 452
+#line 455
   testRunner.When("player O makes a move from \'0,0 > 2,2 > 0,4\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 453
+#line 456
   testRunner.Then("the move should fail with error \'Regular pieces cannot move backwards\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -892,13 +900,13 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Player O tries to double jump backwards while crowning regular piece")]
-        public void PlayerOTriesToDoubleJumpBackwardsWhileCrowningRegularPiece()
+        [NUnit.Framework.DescriptionAttribute("Player O tries to tripe jump backwards while crowning regular piece")]
+        public void PlayerOTriesToTripeJumpBackwardsWhileCrowningRegularPiece()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player O tries to double jump backwards while crowning regular piece", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 455
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player O tries to tripe jump backwards while crowning regular piece", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 458
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -908,8 +916,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 456
-  testRunner.Given("the following board with players O and X", @"  |   |   |   |   |   |   |   |
+#line 459
+  testRunner.Given("the following board with players O and X and player O is moving", @"  |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |   |
   |   |   |   |   |   |   |   |
@@ -918,10 +926,10 @@ this.ScenarioInitialize(scenarioInfo);
   |   | X |   | X |   |   |   |
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 467
+#line 470
   testRunner.When("player O makes a move from \'5,1 > 7,3 > 5,5 > 3,7\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 468
+#line 471
   testRunner.Then("the board should look like this", "|   |   |   |   |   |   |    |\r\n|   |   |   |   |   |   |    |\r\n|   |   |   |   |" +
                         "   |   |    |\r\n|   |   |   |   |   |   | O$ |\r\n|   |   |   |   |   |   |    |\r\n|" +
                         "   |   |   |   |   |   |    |\r\n|   |   |   |   |   |   |    |\r\n|   |   |   |   |" +

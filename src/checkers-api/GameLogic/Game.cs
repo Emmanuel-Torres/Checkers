@@ -13,12 +13,22 @@ public class Game
     private readonly Player _player2;
     private readonly List<Player> _players;
     private readonly Piece?[] _board;
-    public Game(Player player1, Player player2, Piece?[]? startingBoard = null)
+    private Player _currentTurn;
+    public Game(Player player1, Player player2, Piece?[]? startingBoard = null, Player? startingPlayer = null)
     {
         _id = Guid.NewGuid().ToString();
         _player1 = player1;
         _player2 = player2;
         _players = new() { player1, player2 };
+        
+        if (startingPlayer is null)
+        {
+            _currentTurn = player1;
+        }
+        else
+        {
+            _currentTurn = startingPlayer;
+        }
 
         if (startingBoard is null)
         {
@@ -34,6 +44,7 @@ public class Game
     public string Id => _id;
     public IEnumerable<Player> Players => _players;
     public IEnumerable<Piece?> Board => _board;
+    public Player CurrentTurn => _currentTurn;
 
     public void MakeMove(string playerId, IEnumerable<MoveRequest> requests)
     {
@@ -85,6 +96,8 @@ public class Game
         {
             _board[i] = null;
         }
+
+        _currentTurn = _currentTurn.PlayerId == _player1.PlayerId ? _player2 : _player1;
     }
 
     private void ValidateMove(string playerId, MoveRequest request, out bool isAttackMove)
@@ -97,6 +110,10 @@ public class Game
         var sourceIndex = request.Source.ToIndex();
         var destinationIndex = request.Destination.ToIndex();
 
+        if (_currentTurn.PlayerId != playerId)
+        {
+            throw new InvalidOperationException($"Player {playerId} tried to move outside its turn");
+        }
         if (sourceRow < 0 || sourceRow > 7 || sourceColumn < 0 || sourceColumn > 7)
         {
             throw new InvalidOperationException($"Source location ({sourceRow},{sourceColumn}) is out of bounds");
