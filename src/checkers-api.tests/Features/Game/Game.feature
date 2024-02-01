@@ -51,7 +51,7 @@ Scenario: Player X makes a valid move
     X |   | X |   | X |   | X |   |
       | X |   | X |   | X |   | X
   """
-  When player X makes a move from 5,1 to 4,2
+  When player X makes a move from '5,1 > 4,2'
   Then the board should look like this
   """
     O |   | O |   | O |   | O |   |
@@ -103,26 +103,26 @@ Scenario Outline: Validating regular moves (excluding king moves and capturing)
     X |   |   |   | X |   |   |   |
       |   |   |   |   |   |   |  
   """
-  When player <player> makes a move from <sr>,<sc> to <dr>,<dc>
+  When player <player> makes a move from '<request>'
   Then the move should fail with error '<error>'
 
   Examples:
-  | turn | player | sr  | sc  | dr | dc  | error                                                    |
-  | X    | X      | -1  | 8   | 5  | 0   | Source location (-1,8) is out of bounds                  |
-  | X    | X      | 5   | 1   | 1  | -1  | Destination location (1,-1) is out of bounds             |
-  | X    | X      | 8   | 8   | 5  | 0   | Source location (8,8) is out of bounds                   |
-  | X    | X      | 5   | 1   | 8  | 8   | Destination location (8,8) is out of bounds              |
-  | X    | X      | 0   | 0   | 1  | 1   | Source location (0,0) does not contain a piece           |
-  | X    | X      | 2   | 0   | 3  | 1   | Player X does not own the piece at source location (2,0) |
-  | X    | X      | 6   | 0   | 5  | 1   | Destination location (5,1) is not empty                  |
-  | X    | X      | 5   | 1   | 6  | 2   | Regular pieces cannot move backwards                     |
-  | O    | O      | 2   | 0   | 1  | 1   | Regular pieces cannot move backwards                     | 
-  | X    | X      | 5   | 1   | 5  | 2   | Pieces can only move diagonally                          |
-  | X    | X      | 5   | 1   | 4  | 1   | Pieces can only move diagonally                          |
-  | X    | X      | 5   | 1   | 4  | 4   | Pieces can only move diagonally                          |
-  | X    | X      | 5   | 1   | 3  | 3   | Pieces can only move one square when not capturing       |
-  | X    | X      | 6   | 4   | 3  | 7   | Pieces can only move one square when not capturing       |
-  | O    | X      | 6   | 4   | 3  | 7   | Player X tried to move outside its turn                  |
+  | turn | player | request    | error                                                    |
+  | X    | X      | -1,8 > 5,0 | Source location (-1,8) is out of bounds                  |
+  | X    | X      | 5,1 > 1,-1 | Destination location (1,-1) is out of bounds             |
+  | X    | X      | 8,8 > 5,0  | Source location (8,8) is out of bounds                   |
+  | X    | X      | 5,1 > 8,8  | Destination location (8,8) is out of bounds              |
+  | X    | X      | 0,0 > 1,1  | Source location (0,0) does not contain a piece           |
+  | X    | X      | 2,0 > 3,1  | Player X does not own the piece at source location (2,0) |
+  | X    | X      | 6,0 > 5,1  | Destination location (5,1) is not empty                  |
+  | X    | X      | 5,1 > 6,2  | Regular pieces cannot move backwards                     |
+  | O    | O      | 2,0 > 1,1  | Regular pieces cannot move backwards                     | 
+  | X    | X      | 5,1 > 5,2  | Pieces can only move diagonally                          |
+  | X    | X      | 5,1 > 4,1  | Pieces can only move diagonally                          |
+  | X    | X      | 5,1 > 4,4  | Pieces can only move diagonally                          |
+  | X    | X      | 5,1 > 3,3  | Pieces can only move one square when not capturing       |
+  | X    | X      | 6,4 > 3,7  | Pieces can only move one square when not capturing       |
+  | O    | X      | 6,4 > 3,7  | Player X tried to move outside its turn                  |
 
 Scenario: Crowning regular piece from player X
   Given the following board with players O and X and player X is moving
@@ -136,7 +136,7 @@ Scenario: Crowning regular piece from player X
       |   |   |   |   |   |   |   |
       |   |   |   |   |   |   |  
   """
-  When player X makes a move from 1,1 to 0,0
+  When player X makes a move from '1,1 > 0,0'
   Then the board should look like this
   """
     X$ |   |   |   |   |   |   |   |
@@ -162,7 +162,7 @@ Scenario: Crowning regular piece from player O
       |   |   |   |   |   | O |   |
       |   |   |   |   |   |   |  
   """
-  When player O makes a move from 6,6 to 7,7
+  When player O makes a move from '6,6 > 7,7'
   Then the board should look like this
   """
       |   |   |   |   |   |   |   |
@@ -212,7 +212,7 @@ Scenario: King piece from player X can move backwards
     |    |   |   |   |   | O |   |
     |    |   |   |   |   |   |  
   """
-  When player X makes a move from 1,1 to 2,2
+  When player X makes a move from '1,1 > 2,2'
   Then the board should look like this
   """
     |   |    |   |   |   |   |   |
@@ -237,7 +237,7 @@ Scenario: King piece from player O can move backwards
     |   |   |   |   |   | O$ |   |
     |   |   |   |   |   |    |  
   """
-  When player O makes a move from 6,6 to 5,5
+  When player O makes a move from '6,6 > 5,5'
   Then the board should look like this
   """
     |   |   |   |   |    |   |   |
@@ -262,7 +262,7 @@ Scenario: Player X captures a piece from player O
     |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |  
   """
-  When player X makes a move from 3,3 to 1,1
+  When player X makes a move from '3,3 > 1,1'
   Then the board should look like this
   """
     |   |   |   |   |   |   |   |
@@ -287,7 +287,7 @@ Scenario: Player O captures a piece from player X
     |   |   |   |   |   |   |   |
     |   |   |   |   |   |   |  
   """
-  When player O makes a move from 2,2 to 4,4
+  When player O makes a move from '2,2 > 4,4'
   Then the board should look like this
   """
     |   |   |   |   |   |   |   |
@@ -312,7 +312,7 @@ Scenario: Player X captures a piece from player O using a king piece
     |    |   |   |   |   |   |   |
     |    |   |   |   |   |   |  
   """
-  When player X makes a move from 1,1 to 3,3
+  When player X makes a move from '1,1 > 3,3'
   Then the board should look like this
   """
     |   |   |    |   |   |   |   |
@@ -337,7 +337,7 @@ Scenario: Player O captures a piece from player X using a king piece
     |   |    |   |   |   |   |   |
     |   |    |   |   |   |   |  
   """
-  When player O makes a move from 2,2 to 0,0
+  When player O makes a move from '2,2 > 0,0'
   Then the board should look like this
   """
   O$ |   |   |   |   |   |   |   |
@@ -479,3 +479,82 @@ Scenario: Player O tries to tripe jump backwards while crowning regular piece
     |   |   |   |   |   |   |    |
     |   |   |   |   |   |   |   
   """
+
+Scenario: Player X captures all player O pieces
+  Given the following board with players O and X and player X is moving
+  """
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   | O |   |   |   |   |   |
+    | X |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+  When player X makes a move from '5,1 > 3,3'
+  Then the board should look like this
+  """
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   | X |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+  And player X won the game
+
+# Scenario: Player X cannot make a valid move
+#   Given the following board with players O and X and player O is moving
+#   """
+#     |   |   |   |   |   |   |   |
+#     |   |   |   |   |   |   |   |
+#     |   |   |   |   |   |   |   |
+#     | O |   |   |   |   |   |   |
+#     |   |   |   |   |   |   |   |
+#     | O |   |   |   |   |   |   |
+#   X |   |   |   |   |   |   |   |
+#     |   |   |   |   |   |   |  
+#   """
+#   When player O makes a move from '3,1 > 4,2'
+#   Then the board should look like this
+#   """
+#     |   |   |   |   |   |   |   |
+#     |   |   |   |   |   |   |   |
+#     |   |   |   |   |   |   |   |
+#     |   |   |   |   |   |   |   |
+#     |   | O |   |   |   |   |   |
+#     | O |   |   |   |   |   |   |
+#   X |   |   |   |   |   |   |   |
+#     |   |   |   |   |   |   |  
+#   """
+#   And player O won the game
+
+# Scenario Outline: Player request valid moves for given locations
+#   Given the following board with players O and X and player X is moving
+#   """
+#     |   | O |   | O |   | O |   |
+#     |   |   |   |   | O |   | O |
+#     |   |   |   |   |   | X |   |
+#     |   |   |   |   |   |   |   |
+#     |   |   |   |   |   |   |   |
+#     | O |   |   |   |   |   |   |
+#   X |   | X |   |   |   |   |   |
+#     | X |   | X |   | X |   |  
+#   """
+#   When player <player> requests the valid moves for location '<source>'
+#   Then the following locations should be returned '<locations>'
+
+#   Examples:
+#   | player | source | locations |
+#   | X      | -1,-1  |           |
+#   | X      | 0,0    |           |
+#   | X      | 0,2    |           |
+#   | X      | 7,5    | 6,4 - 6,6 |
+  # | O      | 0,2    | 1,1 - 1,3 |
+  # | X      | 7,3    | 6,4       |
+  # | X      | 7,1    |           |
+  # | X      | 6,0    | 4,2       |
+  # | X      | 6,2    | 4,0 - 5,3 |

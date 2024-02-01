@@ -9,7 +9,7 @@ public interface IGameManager
     public MoveResult MakeMove(string playerId, MoveRequest moveRequest);
     public Game? GetGameByGameId(string gameId);
     public Game? GetGameByPlayerId(string playerId);
-    public GameResults TerminateGame(string gameId);
-    public GameResults QuitGame(string playerId);
+    // public GameResults TerminateGame(string gameId);
+    // public GameResults QuitGame(string playerId);
     public IEnumerable<Location> GetValidMoves(string playerId, Location location);
 }

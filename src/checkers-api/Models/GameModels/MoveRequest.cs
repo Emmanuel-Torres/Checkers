@@ -10,10 +10,4 @@ public class MoveRequest
         Source = source;
         Destination = destination;
     }
-
-        public MoveRequest((int row, int column) source, (int row, int column) destination)
-    {
-        Source = new Location(source.row, source.column);
-        Destination = new Location(destination.row, destination.column);
-    }
 }

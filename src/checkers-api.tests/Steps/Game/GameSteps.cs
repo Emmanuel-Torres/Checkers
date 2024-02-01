@@ -26,13 +26,6 @@ namespace MyProject.Specs.Steps
             _scenarioContext.Add("currentGame", game);
         }
 
-        [When(@"player (.*) makes a move from (-?\d+),(-?\d+) to (-?\d+),(-?\d+)")]
-        public void WhenPlayerMakesAMoveFrom(string player, int startRow, int startColumn, int endRow, int endColumn)
-        {
-            var requests = new[] { new MoveRequest((startRow, startColumn), (endRow, endColumn)) };
-            MakeMoves(player, requests);
-        }
-
         [When(@"player (.*) makes a move from '(.*)'")]
         public void WhenPlayerMakesAMoveFrom(string player, string request)
         {
@@ -45,6 +38,24 @@ namespace MyProject.Specs.Steps
         {
             var game = new Game(new Player(p1, p1), new Player(p2, p2));
             _scenarioContext.Add("currentGame", game);
+        }
+
+        [When(@"player (.*) requests the valid moves for location '(.*)'")]
+        public void PlayerRequestsTheValidMovesForLocation(string player, string source)
+        {
+            var currentGame = _scenarioContext.Get<Game>("currentGame");
+            var availableMoves = currentGame.GetAvailableMoves(player, ParseLocationFromString(source));
+
+            _scenarioContext.Add("availableMoves", availableMoves);
+        }
+
+        [Then(@"the following locations should be returned '(.*)'")]
+        public void TheFollowingLocationsShouldBeReturned(string expectedLocations)
+        {
+            var splitExpectedLocations = string.IsNullOrEmpty(expectedLocations) ? new List<string>() : expectedLocations.Split('-').Select(l => l.Trim());
+            var availableMoves = _scenarioContext.Get<IEnumerable<Location>>("availableMoves").Select(l => l.ToString());
+
+            availableMoves.Should().Equal(splitExpectedLocations);
         }
 
         [Then(@"the board should look like this")]
@@ -70,11 +81,21 @@ namespace MyProject.Specs.Steps
             currentBoard.Select(p => p?.ToString()).Should().Equal(parsedExpectedBoard);
         }
 
+        [Then(@"player (.*) won the game")]
+        public void PlayerWonTheGame(string expectedPlayer)
+        {
+            var isGameOver = _scenarioContext.Get<bool>("isGameOver");
+            var currentGame = _scenarioContext.Get<Game>("currentGame");
+
+            isGameOver.Should().BeTrue();
+            currentGame.Winner?.PlayerId.Should().Be(expectedPlayer);
+        }
+
         [Then(@"player (.*) should now be moving")]
         public void PlayerShouldNowBeMoving(string expectedPlayer)
         {
             var currentTurn = _scenarioContext.Get<Game>("currentGame").CurrentTurn;
-            currentTurn.PlayerId.Should().Contain(expectedPlayer);
+            currentTurn.PlayerId.Should().Be(expectedPlayer);
         }
 
         private void MakeMoves(string player, IEnumerable<MoveRequest> requests)
@@ -82,8 +103,9 @@ namespace MyProject.Specs.Steps
             try 
             {
                 var game = _scenarioContext.Get<Game>("currentGame");
-                game.MakeMove(player, requests);
+                var canGameContinue = game.MakeMove(player, requests);
                 _scenarioContext["currentGame"] = game;
+                _scenarioContext.Add("isGameOver", !canGameContinue);
             }
             catch (Exception ex)
             {
@@ -114,16 +136,19 @@ namespace MyProject.Specs.Steps
 
             for(int i = 0; i < locations.Length - 1; i++)
             {
-                var source = locations[i].Split(',').Select(Int32.Parse).ToArray();
-                var destination = locations[i + 1].Split(',').Select(Int32.Parse).ToArray();
+                var source = ParseLocationFromString(locations[i]);
+                var destination = ParseLocationFromString(locations[i + 1]);
 
-                var s_Location = new Location(source[0], source[1]);
-                var d_Location = new Location(destination[0], destination[1]);
-
-                requests.Add(new MoveRequest(s_Location, d_Location));
+                requests.Add(new MoveRequest(source, destination));
             }
 
             return requests;
+        }
+
+        private Location ParseLocationFromString(string location)
+        {
+            var split = location.Split(',').Select(Int32.Parse).ToArray();
+            return new Location(split[0], split[1]);
         }
 
         private Piece? ParsePieceFromString(string? id)

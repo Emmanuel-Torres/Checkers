@@ -14,6 +14,7 @@ public class Game
     private readonly List<Player> _players;
     private readonly Piece?[] _board;
     private Player _currentTurn;
+    private Player? _winner;
     public Game(Player player1, Player player2, Piece?[]? startingBoard = null, Player? startingPlayer = null)
     {
         _id = Guid.NewGuid().ToString();
@@ -45,8 +46,51 @@ public class Game
     public IEnumerable<Player> Players => _players;
     public IEnumerable<Piece?> Board => _board;
     public Player CurrentTurn => _currentTurn;
+    public Player? Winner => _winner;
 
-    public void MakeMove(string playerId, IEnumerable<MoveRequest> requests)
+    public bool MakeMove(string playerId, IEnumerable<MoveRequest> requests)
+    {
+        ProcessMoveRequests(playerId, requests);
+        CycleTurn();
+        var canGameContinue = CanGameContinue();
+        _winner = canGameContinue ? null : GetOppositePlayer();
+        return canGameContinue;
+    }
+
+    public IEnumerable<Location> GetAvailableMoves(string playerId, Location source, bool forceJump = false)
+    {
+        var availableMoves = new List<Location>();
+        if (source.Row < 0 || source.Row > 7 || source.Column < 0 || source.Column > 7)
+        {
+            return availableMoves;
+        }
+
+        var sourceIndex = source.ToIndex();
+        var piece = _board[sourceIndex];
+        if (piece is null || piece.OwnerId != playerId)
+        {
+            return availableMoves;
+        }
+
+        
+
+        return availableMoves;
+    }
+
+    private bool CanGameContinue()
+    {
+        var remainingPieces = _board.Where(p => p?.OwnerId == _currentTurn.PlayerId);
+
+        return remainingPieces.Any();
+        // if (!remainingPieces.Any())
+        // {
+        //     return false;
+        // }
+
+        // return hasRemainingPieces && hasRemainingMoves;
+    }
+
+    private void ProcessMoveRequests(string playerId, IEnumerable<MoveRequest> requests)
     {
         var toRemove = new List<int>();
         Location? source = null;
@@ -96,10 +140,15 @@ public class Game
         {
             _board[i] = null;
         }
-
-        _currentTurn = _currentTurn.PlayerId == _player1.PlayerId ? _player2 : _player1;
     }
-
+    private void CycleTurn()
+    {
+        _currentTurn = GetOppositePlayer();
+    }
+    private Player GetOppositePlayer()
+    {
+        return _currentTurn.PlayerId == _player1.PlayerId ? _player2 : _player1;
+    }
     private void ValidateMove(string playerId, MoveRequest request, out bool isAttackMove)
     {
         var sourceRow = request.Source.Row;
@@ -162,13 +211,11 @@ public class Game
     {
         return (playerId == _player1.PlayerId && row == PLAYER_2_HOME_ROW) || (playerId == _player2.PlayerId && row == PLAYER_1_HOME_ROW);
     }
-
     private bool IsPlayerCapturing(int sourceIndex, int destinationIndex)
     {
         var middleIndex = (sourceIndex + destinationIndex) / 2;
         return _board[middleIndex] is not null;
     }
-
     private int GetRowDelta(int sourceRow, int destinationRow, string playerId)
     {
         var directionModifier = playerId == _player1.PlayerId ? -1 : 1;

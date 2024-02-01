@@ -176,7 +176,7 @@ this.ScenarioInitialize(scenarioInfo);
     | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 54
-  testRunner.When("player X makes a move from 5,1 to 4,2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("player X makes a move from \'5,1 > 4,2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 55
   testRunner.Then("the board should look like this", @"  O |   | O |   | O |   | O |   |
@@ -244,31 +244,28 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Validating regular moves (excluding king moves and capturing)")]
-        [NUnit.Framework.TestCaseAttribute("X", "X", "-1", "8", "5", "0", "Source location (-1,8) is out of bounds", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "X", "5", "1", "1", "-1", "Destination location (1,-1) is out of bounds", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "X", "8", "8", "5", "0", "Source location (8,8) is out of bounds", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "X", "5", "1", "8", "8", "Destination location (8,8) is out of bounds", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "X", "0", "0", "1", "1", "Source location (0,0) does not contain a piece", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "X", "2", "0", "3", "1", "Player X does not own the piece at source location (2,0)", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "X", "6", "0", "5", "1", "Destination location (5,1) is not empty", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "X", "5", "1", "6", "2", "Regular pieces cannot move backwards", null)]
-        [NUnit.Framework.TestCaseAttribute("O", "O", "2", "0", "1", "1", "Regular pieces cannot move backwards", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "X", "5", "1", "5", "2", "Pieces can only move diagonally", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "X", "5", "1", "4", "1", "Pieces can only move diagonally", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "X", "5", "1", "4", "4", "Pieces can only move diagonally", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "X", "5", "1", "3", "3", "Pieces can only move one square when not capturing", null)]
-        [NUnit.Framework.TestCaseAttribute("X", "X", "6", "4", "3", "7", "Pieces can only move one square when not capturing", null)]
-        [NUnit.Framework.TestCaseAttribute("O", "X", "6", "4", "3", "7", "Player X tried to move outside its turn", null)]
-        public void ValidatingRegularMovesExcludingKingMovesAndCapturing(string turn, string player, string sr, string sc, string dr, string dc, string error, string[] exampleTags)
+        [NUnit.Framework.TestCaseAttribute("X", "X", "-1,8 > 5,0", "Source location (-1,8) is out of bounds", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "5,1 > 1,-1", "Destination location (1,-1) is out of bounds", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "8,8 > 5,0", "Source location (8,8) is out of bounds", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "5,1 > 8,8", "Destination location (8,8) is out of bounds", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "0,0 > 1,1", "Source location (0,0) does not contain a piece", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "2,0 > 3,1", "Player X does not own the piece at source location (2,0)", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "6,0 > 5,1", "Destination location (5,1) is not empty", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "5,1 > 6,2", "Regular pieces cannot move backwards", null)]
+        [NUnit.Framework.TestCaseAttribute("O", "O", "2,0 > 1,1", "Regular pieces cannot move backwards", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "5,1 > 5,2", "Pieces can only move diagonally", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "5,1 > 4,1", "Pieces can only move diagonally", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "5,1 > 4,4", "Pieces can only move diagonally", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "5,1 > 3,3", "Pieces can only move one square when not capturing", null)]
+        [NUnit.Framework.TestCaseAttribute("X", "X", "6,4 > 3,7", "Pieces can only move one square when not capturing", null)]
+        [NUnit.Framework.TestCaseAttribute("O", "X", "6,4 > 3,7", "Player X tried to move outside its turn", null)]
+        public void ValidatingRegularMovesExcludingKingMovesAndCapturing(string turn, string player, string request, string error, string[] exampleTags)
         {
             string[] tagsOfScenario = exampleTags;
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("turn", turn);
             argumentsOfScenario.Add("player", player);
-            argumentsOfScenario.Add("sr", sr);
-            argumentsOfScenario.Add("sc", sc);
-            argumentsOfScenario.Add("dr", dr);
-            argumentsOfScenario.Add("dc", dc);
+            argumentsOfScenario.Add("request", request);
             argumentsOfScenario.Add("error", error);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Validating regular moves (excluding king moves and capturing)", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 94
@@ -292,7 +289,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 106
-  testRunner.When(string.Format("player {0} makes a move from {1},{2} to {3},{4}", player, sr, sc, dr, dc), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When(string.Format("player {0} makes a move from \'{1}\'", player, request), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 107
   testRunner.Then(string.Format("the move should fail with error \'{0}\'", error), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -329,7 +326,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 139
-  testRunner.When("player X makes a move from 1,1 to 0,0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("player X makes a move from \'1,1 > 0,0\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 140
   testRunner.Then("the board should look like this", @"  X$ |   |   |   |   |   |   |   |
@@ -376,7 +373,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 165
-  testRunner.When("player O makes a move from 6,6 to 7,7", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("player O makes a move from \'6,6 > 7,7\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 166
   testRunner.Then("the board should look like this", @"    |   |   |   |   |   |   |   |
@@ -464,7 +461,7 @@ this.ScenarioInitialize(scenarioInfo);
   |    |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 215
-  testRunner.When("player X makes a move from 1,1 to 2,2", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("player X makes a move from \'1,1 > 2,2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 216
   testRunner.Then("the board should look like this", @"  |   |    |   |   |   |   |   |
@@ -508,7 +505,7 @@ this.ScenarioInitialize(scenarioInfo);
   |   |   |   |   |   |    |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 240
-  testRunner.When("player O makes a move from 6,6 to 5,5", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("player O makes a move from \'6,6 > 5,5\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 241
   testRunner.Then("the board should look like this", @"  |   |   |   |   |    |   |   |
@@ -552,7 +549,7 @@ this.ScenarioInitialize(scenarioInfo);
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 265
-  testRunner.When("player X makes a move from 3,3 to 1,1", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("player X makes a move from \'3,3 > 1,1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 266
   testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   |
@@ -596,7 +593,7 @@ this.ScenarioInitialize(scenarioInfo);
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 290
-  testRunner.When("player O makes a move from 2,2 to 4,4", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("player O makes a move from \'2,2 > 4,4\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 291
   testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   |
@@ -640,7 +637,7 @@ this.ScenarioInitialize(scenarioInfo);
   |    |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 315
-  testRunner.When("player X makes a move from 1,1 to 3,3", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("player X makes a move from \'1,1 > 3,3\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 316
   testRunner.Then("the board should look like this", @"  |   |   |    |   |   |   |   |
@@ -684,7 +681,7 @@ this.ScenarioInitialize(scenarioInfo);
   |   |    |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 340
-  testRunner.When("player O makes a move from 2,2 to 0,0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("player O makes a move from \'2,2 > 0,0\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 341
   testRunner.Then("the board should look like this", @"O$ |   |   |   |   |   |   |   |
@@ -934,6 +931,53 @@ this.ScenarioInitialize(scenarioInfo);
                         "   |   |    |\r\n|   |   |   |   |   |   | O$ |\r\n|   |   |   |   |   |   |    |\r\n|" +
                         "   |   |   |   |   |   |    |\r\n|   |   |   |   |   |   |    |\r\n|   |   |   |   |" +
                         "   |   |   ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Player X captures all player O pieces")]
+        public void PlayerXCapturesAllPlayerOPieces()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X captures all player O pieces", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 483
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 484
+  testRunner.Given("the following board with players O and X and player X is moving", @"  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   | O |   |   |   |   |   |
+  | X |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 495
+  testRunner.When("player X makes a move from \'5,1 > 3,3\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 496
+  testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   | X |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |   |
+  |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 507
+  testRunner.And("player X won the game", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();

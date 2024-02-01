@@ -152,13 +152,13 @@ public class CheckersHub : Hub<ICheckersHub>
         try
         {
             _logger.LogDebug("[{location}]: Ending game {id}", nameof(CheckersHub), gameId);
-            var results = _gameService.TerminateGame(gameId);
-            foreach (var p in results.Players)
-            {
-                await Clients.Client(p.PlayerId).GameOverAsync(results.Winner.Name, results.Board);
-            }
+            // var results = _gameService.TerminateGame(gameId);
+            // foreach (var p in results.Players)
+            // {
+            //     await Clients.Client(p.PlayerId).GameOverAsync(results.Winner.Name, results.Board);
+            // }
 
-            _logger.LogInformation("[{location}]: Game {id} was successfully terminated. Winner {connectionId}", nameof(CheckersHub), gameId, results.Winner.PlayerId);
+            // _logger.LogInformation("[{location}]: Game {id} was successfully terminated. Winner {connectionId}", nameof(CheckersHub), gameId);
         }
         catch (Exception ex)
         {
