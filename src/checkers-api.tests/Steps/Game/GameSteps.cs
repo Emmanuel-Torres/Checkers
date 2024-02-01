@@ -76,7 +76,10 @@ namespace MyProject.Specs.Steps
         [Then(@"player (.*) should now be moving")]
         public void PlayerShouldNowBeMoving(string expectedPlayer)
         {
-            var currentTurn = _scenarioContext.Get<Game>("currentGame").CurrentTurn;
+            var currentGame = _scenarioContext.Get<Game>("currentGame");
+            var currentTurn = currentGame.CurrentTurn;
+            var isGameOver = currentGame.Winner is not null;
+            isGameOver.Should().BeFalse();
             currentTurn.PlayerId.Should().Be(expectedPlayer);
         }
 

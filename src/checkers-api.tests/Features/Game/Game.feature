@@ -148,7 +148,6 @@ Scenario: Crowning regular piece from player X
        |   |   |   |   |   |   |   |
        |   |   |   |   |   |   |  
   """
-  And the piece at 0,0 should be a king piece
 
 Scenario: Crowning regular piece from player O
   Given the following board with players O and X and player O is moving
@@ -174,7 +173,6 @@ Scenario: Crowning regular piece from player O
       |   |   |   |   |   |   |   |
       |   |   |   |   |   |   | O$
   """
-  And the piece at 7,7 should be a king piece
 
 Scenario: Generating a board with king piece already in it
   Given the following board with players O and X and player O is moving
@@ -506,28 +504,54 @@ Scenario: Player X captures all player O pieces
   """
   And player X won the game
 
-# Scenario: Player X cannot make a valid move
-#   Given the following board with players O and X and player O is moving
-#   """
-#     |   |   |   |   |   |   |   |
-#     |   |   |   |   |   |   |   |
-#     |   |   |   |   |   |   |   |
-#     | O |   |   |   |   |   |   |
-#     |   |   |   |   |   |   |   |
-#     | O |   |   |   |   |   |   |
-#   X |   |   |   |   |   |   |   |
-#     |   |   |   |   |   |   |  
-#   """
-#   When player O makes a move from '3,1 > 4,2'
-#   Then the board should look like this
-#   """
-#     |   |   |   |   |   |   |   |
-#     |   |   |   |   |   |   |   |
-#     |   |   |   |   |   |   |   |
-#     |   |   |   |   |   |   |   |
-#     |   | O |   |   |   |   |   |
-#     | O |   |   |   |   |   |   |
-#   X |   |   |   |   |   |   |   |
-#     |   |   |   |   |   |   |  
-#   """
-#   And player O won the game
+Scenario: Player X cannot make a valid move
+  Given the following board with players O and X and player O is moving
+  """
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    | O |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    | O |   |   |   |   |   |   |
+  X |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+  When player O makes a move from '3,1 > 4,2'
+  Then the board should look like this
+  """
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   | O |   |   |   |   |   |
+    | O |   |   |   |   |   |   |
+  X |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |  
+  """
+  And player O won the game
+
+Scenario: Player O cannot make a valid move
+  Given the following board with players O and X and player X is moving
+  """
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    | O |   |   |   |   |   |   |
+  X |   |   |   |   |   |   |   |
+    | X |   | X |   |   |   |  
+  """
+  When player X makes a move from '7,1 > 6,2'
+  Then the board should look like this
+  """
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    |   |   |   |   |   |   |   |
+    | O |   |   |   |   |   |   |
+  X |   | X |   |   |   |   |   |
+    |   |   | X |   |   |   |  
+  """
+  And player X won the game
