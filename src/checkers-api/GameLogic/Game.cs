@@ -1,6 +1,6 @@
-using System.Diagnostics;
 using checkers_api.Helpers;
 using checkers_api.Models.GameModels;
+using checkers_api.Models.Requests;
 
 namespace checkers_api.GameLogic;
 

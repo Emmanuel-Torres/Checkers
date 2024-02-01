@@ -1,4 +1,5 @@
 using checkers_api.Models.GameModels;
+using checkers_api.Models.Requests;
 
 namespace checkers_api.Hubs;
 

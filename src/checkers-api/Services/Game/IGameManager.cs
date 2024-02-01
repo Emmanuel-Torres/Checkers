@@ -1,4 +1,5 @@
 using checkers_api.Models.GameModels;
+using checkers_api.Models.Requests;
 using checkers_api.GameLogic;
 
 namespace checkers_api.Services.GameManager;

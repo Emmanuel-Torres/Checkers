@@ -1,4 +1,6 @@
-namespace checkers_api.Models.GameModels;
+using checkers_api.Models.GameModels;
+
+namespace checkers_api.Models.Requests;
 
 public class MoveRequest
 {

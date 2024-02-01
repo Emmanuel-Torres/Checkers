@@ -1,5 +1,6 @@
 using checkers_api.GameLogic;
 using checkers_api.Models.GameModels;
+using checkers_api.Models.Requests;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
