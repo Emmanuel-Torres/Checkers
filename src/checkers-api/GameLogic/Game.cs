@@ -57,41 +57,6 @@ public class Game
         return canGameContinue;
     }
 
-    private bool CanGameContinue()
-    {
-        var remainingPieces = _board.Where(p => p?.OwnerId == _currentTurn.PlayerId);
-
-        if (!remainingPieces.Any())
-        {
-            return false;
-        }
-
-        foreach (var p in remainingPieces)
-        {
-            var source = Array.IndexOf(_board, p).ToLocation();
-            var possibleMoves = new List<Location>() { new Location(source.Row + 1, source.Column + 1), 
-                                                       new Location(source.Row + 1, source.Column - 1),
-                                                       new Location(source.Row - 1, source.Column + 1),
-                                                       new Location(source.Row - 1, source.Column - 1),
-                                                       new Location(source.Row + 2, source.Column + 2),
-                                                       new Location(source.Row + 2, source.Column - 2),
-                                                       new Location(source.Row - 2, source.Column + 2),
-                                                       new Location(source.Row - 2, source.Column - 2) };
-            
-            var moveRequests = possibleMoves.Select(l => new MoveRequest(source, l));
-            foreach(var mr in moveRequests)
-            {
-                var result = ValidateMove(_currentTurn.PlayerId, mr, out _);
-                if (result.isValid)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     private void ProcessMoveRequests(string playerId, IEnumerable<MoveRequest> requests)
     {
         var toRemove = new List<int>();
@@ -141,14 +106,7 @@ public class Game
             _board[i] = null;
         }
     }
-    private void CycleTurn()
-    {
-        _currentTurn = GetOppositePlayer();
-    }
-    private Player GetOppositePlayer()
-    {
-        return _currentTurn.PlayerId == _player1.PlayerId ? _player2 : _player1;
-    }
+
     private (bool isValid, string? errorMessage) ValidateMove(string playerId, MoveRequest request, out bool isAttackMove)
     {
         var sourceRow = request.Source.Row;
@@ -209,20 +167,69 @@ public class Game
         isAttackMove = isPlayerCapturing;
         return (true, null);
     }
+
+    private bool CanGameContinue()
+    {
+        var remainingPieces = _board.Where(p => p?.OwnerId == _currentTurn.PlayerId);
+
+        if (!remainingPieces.Any())
+        {
+            return false;
+        }
+
+        foreach (var p in remainingPieces)
+        {
+            var source = Array.IndexOf(_board, p).ToLocation();
+            var possibleMoves = new List<Location>() { new Location(source.Row + 1, source.Column + 1),
+                                                       new Location(source.Row + 1, source.Column - 1),
+                                                       new Location(source.Row - 1, source.Column + 1),
+                                                       new Location(source.Row - 1, source.Column - 1),
+                                                       new Location(source.Row + 2, source.Column + 2),
+                                                       new Location(source.Row + 2, source.Column - 2),
+                                                       new Location(source.Row - 2, source.Column + 2),
+                                                       new Location(source.Row - 2, source.Column - 2) };
+
+            var moveRequests = possibleMoves.Select(l => new MoveRequest(source, l));
+            foreach (var mr in moveRequests)
+            {
+                var result = ValidateMove(_currentTurn.PlayerId, mr, out _);
+                if (result.isValid)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     private bool IsKingRow(string playerId, int row)
     {
         return (playerId == _player1.PlayerId && row == PLAYER_2_HOME_ROW) || (playerId == _player2.PlayerId && row == PLAYER_1_HOME_ROW);
     }
+
     private bool IsPlayerCapturing(int sourceIndex, int destinationIndex)
     {
         var middleIndex = (sourceIndex + destinationIndex) / 2;
         return _board[middleIndex] is not null;
     }
+
     private int GetRowDelta(int sourceRow, int destinationRow, string playerId)
     {
         var directionModifier = playerId == _player1.PlayerId ? -1 : 1;
         return (sourceRow - destinationRow) * directionModifier;
     }
+
+    private void CycleTurn()
+    {
+        _currentTurn = GetOppositePlayer();
+    }
+
+    private Player GetOppositePlayer()
+    {
+        return _currentTurn.PlayerId == _player1.PlayerId ? _player2 : _player1;
+    }
+
     private void InitBoard(string player1Id, string player2Id)
     {
         for (int row = 0; row < 3; row++)
