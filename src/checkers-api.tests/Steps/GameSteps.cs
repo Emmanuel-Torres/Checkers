@@ -1,4 +1,4 @@
-using checkers_api.GameLogic;
+using checkers_api.Models.GameLogic;
 using checkers_api.Models.GameModels;
 using checkers_api.Models.Requests;
 using FluentAssertions;
@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using TechTalk.SpecFlow;
 
-namespace MyProject.Specs.Steps
+namespace checkers_api.tests.Steps
 {
     [Binding]
     public class GameSteps
@@ -22,7 +22,7 @@ namespace MyProject.Specs.Steps
         public void GivenTheFollowingBoard(string player1, string player2, string currentTurn, string startingBoard)
         {
             var parsedBoard = ParseStringBoardToPieceIEnumerable(startingBoard).ToArray();
-            var game = new Game(new Player(player1, player1), new Player(player2, player2), parsedBoard, new Player(currentTurn, currentTurn));
+            var game = new Game("game", new Player(player1, player1), new Player(player2, player2), parsedBoard, new Player(currentTurn, currentTurn));
             _scenarioContext.Add("startingBoard", startingBoard);
             _scenarioContext.Add("currentGame", game);
         }
@@ -37,7 +37,7 @@ namespace MyProject.Specs.Steps
         [When(@"I start a game with players (.*) and (.*)")]
         public void WhenIStartAGameWithPlayers(string p1, string p2)
         {
-            var game = new Game(new Player(p1, p1), new Player(p2, p2));
+            var game = new Game("game", new Player(p1, p1), new Player(p2, p2));
             _scenarioContext.Add("currentGame", game);
         }
 

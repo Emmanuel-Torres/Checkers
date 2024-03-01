@@ -2,7 +2,7 @@ using checkers_api.Helpers;
 using checkers_api.Models.GameModels;
 using checkers_api.Models.Requests;
 
-namespace checkers_api.GameLogic;
+namespace checkers_api.Models.GameLogic;
 
 public class Game
 {
@@ -15,9 +15,9 @@ public class Game
     private readonly Piece?[] _board;
     private Player _currentTurn;
     private Player? _winner;
-    public Game(Player player1, Player player2, Piece?[]? startingBoard = null, Player? startingPlayer = null)
+    public Game(string gameId, Player player1, Player player2, Piece?[]? startingBoard = null, Player? startingPlayer = null)
     {
-        _id = Guid.NewGuid().ToString();
+        _id = gameId;
         _player1 = player1;
         _player2 = player2;
         _players = new() { player1, player2 };
