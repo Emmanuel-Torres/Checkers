@@ -1,6 +1,7 @@
 using checkers_api.Models.GameLogic;
 using checkers_api.Models.GameModels;
 using checkers_api.Models.Requests;
+using checkers_api.tests.Helpers;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -21,7 +22,7 @@ namespace checkers_api.tests.Steps
         [Given(@"the following board with players (.*) and (.*) and player (.*) is moving")]
         public void GivenTheFollowingBoard(string player1, string player2, string currentTurn, string startingBoard)
         {
-            var parsedBoard = ParseStringBoardToPieceIEnumerable(startingBoard).ToArray();
+            var parsedBoard = Parser.ParseStringBoardToPieceIEnumerable(startingBoard).ToArray();
             var game = new Game("game", new Player(player1, player1), new Player(player2, player2), parsedBoard, new Player(currentTurn, currentTurn));
             _scenarioContext.Add("startingBoard", startingBoard);
             _scenarioContext.Add("currentGame", game);
@@ -30,7 +31,7 @@ namespace checkers_api.tests.Steps
         [When(@"player (.*) makes a move from '(.*)'")]
         public void WhenPlayerMakesAMoveFrom(string player, string request)
         {
-            var parsedRequest = ParseMoveRequestsFromString(request);
+            var parsedRequest = Parser.ParseMoveRequestsFromString(request);
             MakeMoves(player, parsedRequest);
         }
 
@@ -44,7 +45,7 @@ namespace checkers_api.tests.Steps
         [Then(@"the board should look like this")]
         public void ThenTheFollowingBoardShouldGetCreated(string expectedBoard)
         {
-            var parsedExpectedBoard = ParseStringBoardToStringArray(expectedBoard);
+            var parsedExpectedBoard = Parser.ParseStringBoardToStringArray(expectedBoard);
             var board = _scenarioContext.Get<Game>("currentGame").Board.ToList();
 
             _scenarioContext.ContainsKey("moveException").Should().BeFalse();
@@ -57,7 +58,7 @@ namespace checkers_api.tests.Steps
             var moveException = _scenarioContext.Get<Exception>("moveException");
             
             var startingBoard = _scenarioContext.Get<string>("startingBoard");
-            var parsedExpectedBoard = ParseStringBoardToStringArray(startingBoard);
+            var parsedExpectedBoard = Parser.ParseStringBoardToStringArray(startingBoard);
             var currentBoard = _scenarioContext.Get<Game>("currentGame").Board.ToList();
             
             moveException.Message.Should().Contain(expectedError);
@@ -97,59 +98,6 @@ namespace checkers_api.tests.Steps
             {
                 _scenarioContext.Add("moveException", ex);
             }
-        }
-
-        private IEnumerable<string?> ParseStringBoardToStringArray(string board)
-        {
-            return board.Split('|').ToList().Select(c => string.IsNullOrWhiteSpace(c) ? null : c.Trim());
-        }
-
-        private IEnumerable<Piece?> ParseStringBoardToPieceIEnumerable(string board)
-        {
-            return ParseStringBoardToStringArray(board).Select(ParsePieceFromString);
-        }
-
-        private IEnumerable<MoveRequest> ParseMoveRequestsFromString(string request)
-        {
-            var locations = request.Split('>');
-
-            if (locations.Length < 2)
-            {
-                throw new InvalidOperationException("Invalid string for move request");
-            }
-
-            var requests = new List<MoveRequest>();
-
-            for(int i = 0; i < locations.Length - 1; i++)
-            {
-                var source = ParseLocationFromString(locations[i]);
-                var destination = ParseLocationFromString(locations[i + 1]);
-
-                requests.Add(new MoveRequest(source, destination));
-            }
-
-            return requests;
-        }
-
-        private Location ParseLocationFromString(string location)
-        {
-            var split = location.Split(',').Select(Int32.Parse).ToArray();
-            return new Location(split[0], split[1]);
-        }
-
-        private Piece? ParsePieceFromString(string? id)
-        {
-            if (id is null)
-                return null;
-
-            if (id.Contains('$'))
-            {
-                var piece = new Piece(id.Trim('$'));
-                piece.KingPiece();
-                return piece;
-            }
-
-            return new Piece(id);
         }
     }
 }

@@ -6,8 +6,9 @@ public class Room
 {
     private readonly string _roomId;
     private readonly Player _roomOwner;
+    private readonly string _roomCode;
     private Player? _roomGuest;
-    private string _roomCode;
+    private Game? _game;
 
     public Room(string roomId, Player roomOwner, string roomCode)
     {
@@ -19,6 +20,7 @@ public class Room
     public string RoomId => _roomId;
     public Player RoomOwner => _roomOwner;
     public Player? RoomGuest => _roomGuest;
+    public Game? Game => _game;
 
     public void JoinRoom(Player guestPlayer, string roomCode)
     {
@@ -38,5 +40,25 @@ public class Room
         }
 
         _roomGuest = guestPlayer;
+    }
+
+    public void StartGame(string requestorId)
+    {
+        if (_roomGuest is null)
+        {
+            throw new InvalidOperationException("Cannot start a game with only one player");
+        }
+
+        if (requestorId != _roomOwner.PlayerId)
+        {
+            throw new InvalidOperationException("Room guest cannot start a game");
+        }
+
+        if (_game is not null && _game.Winner is null)
+        {
+            throw new InvalidOperationException("Cannot start a new game while one is already ongoing");
+        }
+
+        _game = new Game("game", _roomOwner, _roomGuest);
     }
 }

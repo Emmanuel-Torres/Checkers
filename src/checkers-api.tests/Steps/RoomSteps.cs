@@ -20,7 +20,7 @@ public class RoomSteps
     public void PlayerCreatesAPrivateRoom(string playerId, string roomId, string roomCode)
     {
         var room = new Room(roomId, new Player(playerId, playerId), roomCode);
-        _scenarioContext.Add(roomId, room);
+        _scenarioContext.Add("currentRoom", room);
     }
 
     [Given(@"player (.*) and player (.*) are in room '(.*)':'(.*)'")]
@@ -31,7 +31,15 @@ public class RoomSteps
         var room = new Room(roomId, p1, roomCode);
         room.JoinRoom(p2, roomCode);
 
-        _scenarioContext.Add(roomId, room);
+        _scenarioContext.Add("currentRoom", room);
+    }
+
+    [Given(@"room '(.*)' already has an ongoing game")]
+    public void RoomAlreadyHasAnOngoingGame(string roomId)
+    {
+        var room = _scenarioContext.Get<Room>("currentRoom");
+        room.StartGame(room.RoomOwner.PlayerId);
+        _scenarioContext["currentRoom"] = room;
     }
 
     [When(@"player (.*) tries to join room '(.*)' with code '(.*)'")]
@@ -39,9 +47,23 @@ public class RoomSteps
     {
         try 
         {
-            var room = _scenarioContext.Get<Room>(roomId);
+            var room = _scenarioContext.Get<Room>("currentRoom");
             room.JoinRoom(new Player(playerId, playerId), roomCode);
             _scenarioContext[roomId] = room;
+        }
+        catch (Exception ex)
+        {
+            _scenarioContext.Add("actionException", ex);
+        }
+    }
+
+    [When(@"player (.*) tries to start a game")]
+    public void PlayerTriesToStartAGame(string ownerId)
+    {
+        try
+        {
+            var room = _scenarioContext.Get<Room>("currentRoom");
+            room.StartGame(ownerId);
         }
         catch (Exception ex)
         {
@@ -52,7 +74,7 @@ public class RoomSteps
     [Then(@"room '(.*)' should exist with player (.*) as its owner")]
     public void RoomShouldExist(string expectedRoomId, string expectedPlayerId)
     {
-        var room = _scenarioContext.Get<Room>(expectedRoomId);
+        var room = _scenarioContext.Get<Room>("currentRoom");
         room.RoomId.Should().Be(expectedRoomId);
         room.RoomOwner.PlayerId.Should().Be(expectedPlayerId);
     }
@@ -60,8 +82,15 @@ public class RoomSteps
     [Then(@"player (.*) successfully joined room '(.*)'")]
     public void PlayerSuccessfullyJoinedRoom(string expectedPlayerId, string expectedRoomId)
     {
-        var room = _scenarioContext.Get<Room>(expectedRoomId);
+        var room = _scenarioContext.Get<Room>("currentRoom");
         room.RoomGuest?.PlayerId.Should().Be(expectedPlayerId);
+    }
+
+    [Then(@"a game should now exist for room '(.*)'")]
+    public void AGameShouldNowExistForRoom(string roomId)
+    {
+        var room = _scenarioContext.Get<Room>("currentRoom");
+        room.Game.Should().NotBeNull();
     }
 
     [Then(@"the action should fail with error '(.*)'")]

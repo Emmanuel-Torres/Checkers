@@ -12,7 +12,7 @@ Scenario: Joining an existing room with code
   Then player X successfully joined room 'room1'
 
 Scenario: Joining a full room
-  Given player O and player X are in room 'room1':'123' 
+  Given player O and player X are in room 'room1':'123'
   When player Y tries to join room 'room1' with code '123'
   Then the action should fail with error 'Cannot join room because it is already full'
 
@@ -25,3 +25,24 @@ Scenario: Room owner tries joining its own room as a guest
   Given player O has a room 'room1' with code '123'
   When player O tries to join room 'room1' with code '123'
   Then the action should fail with error 'Cannot join room because you are already in the room'
+
+Scenario: Room owner starts a new game
+  Given player O and player X are in room 'room1':'123'
+  When player O tries to start a game
+  Then a game should now exist for room 'room1'
+
+Scenario: Room owner tries to start a game without a room guest
+  Given player O has a room 'room1' with code '123'
+  When player O tries to start a game
+  Then the action should fail with error 'Cannot start a game with only one player'
+
+Scenario: Room guest triest to start a game
+  Given player O and player X are in room 'room1':'123'
+  When player X tries to start a game
+  Then the action should fail with error 'Room guest cannot start a game'
+
+Scenario: Room owner tries to start a new game while one is already ongoing
+  Given player O and player X are in room 'room1':'123'
+  And room 'room1' already has an ongoing game
+  When player O tries to start a game
+  Then the action should fail with error 'Cannot start a new game while one is already ongoing'
