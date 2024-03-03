@@ -1,4 +1,6 @@
 using checkers_api.Models.GameModels;
+using checkers_api.Models.Requests;
+using checkers_api.Models.Responses;
 
 namespace checkers_api.Models.GameLogic;
 
@@ -60,5 +62,33 @@ public class Room
         }
 
         _game = new Game("game", _roomOwner, _roomGuest);
+    }
+
+    public MoveResult MakeMove(string playerId, IEnumerable<MoveRequest> requests)
+    {
+        if (_game is null)
+        {
+            throw new InvalidOperationException("Cannot make move because a game has not started");
+        }
+
+        if (playerId != _roomOwner.PlayerId || playerId != _roomGuest?.PlayerId)
+        {
+            throw new InvalidOperationException("Cannot make move because player is not in this room");
+        }
+
+        _game.MakeMove(playerId, requests);
+
+        return new MoveResult(_roomId, _game.CurrentTurn, _game.IsGameOver, _game.Board);
+    }
+
+    public void KickGuestPlayer(string requestorId)
+    {
+        if (requestorId != _roomOwner.PlayerId)
+        {
+            throw new InvalidOperationException("Only room owner can kick guest player from room");
+        }
+
+        _roomGuest = null;
+        _game = null;
     }
 }

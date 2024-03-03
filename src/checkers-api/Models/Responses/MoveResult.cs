@@ -2,17 +2,17 @@ using checkers_api.Models.GameModels;
 
 namespace checkers_api.Models.Responses;
 
-public class MoveResponse
+public class MoveResult
 {
-    public string GameId { get; }
-    public bool WasMoveSuccessful { get; }
+    public string RoomId { get; }
     public bool IsGameOver { get; }
+    public Player NextPlayerTurn { get; }
     public IEnumerable<Piece?> Board { get; }
 
-    public MoveResponse(string gameId, bool wasMoveSuccessful, bool isGameOver, IEnumerable<Piece?> board)
+    public MoveResult(string roomId, Player nextPlayerTurn, bool isGameOver, IEnumerable<Piece?> board)
     {
-        GameId = gameId;
-        WasMoveSuccessful = wasMoveSuccessful;
+        RoomId = roomId;
+        NextPlayerTurn = nextPlayerTurn;
         Board = board;
         IsGameOver = isGameOver;
     }

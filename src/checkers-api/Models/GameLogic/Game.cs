@@ -47,14 +47,14 @@ public class Game
     public IEnumerable<Piece?> Board => _board;
     public Player CurrentTurn => _currentTurn;
     public Player? Winner => _winner;
+    public bool IsGameOver => _winner is not null;
 
-    public bool MakeMove(string playerId, IEnumerable<MoveRequest> requests)
+    public void MakeMove(string playerId, IEnumerable<MoveRequest> requests)
     {
         ProcessMoveRequests(playerId, requests);
         CycleTurn();
         var canGameContinue = CanGameContinue();
         _winner = canGameContinue ? null : GetOppositePlayer();
-        return canGameContinue;
     }
 
     private void ProcessMoveRequests(string playerId, IEnumerable<MoveRequest> requests)

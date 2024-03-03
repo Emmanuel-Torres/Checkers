@@ -71,6 +71,20 @@ public class RoomSteps
         }
     }
 
+    [When(@"player (.*) tries to kick the guest player of room '(.*)'")]
+    public void PlayerTriesToKickPlayerFromRoom(string requestorId, string roomId)
+    {
+        try
+        {
+            var room = _scenarioContext.Get<Room>("currentRoom");
+            room.KickGuestPlayer(requestorId);
+        }
+        catch(Exception ex)
+        {
+            _scenarioContext.Add("actionException", ex);
+        }
+    }
+
     [Then(@"room '(.*)' should exist with player (.*) as its owner")]
     public void RoomShouldExist(string expectedRoomId, string expectedPlayerId)
     {
@@ -91,6 +105,20 @@ public class RoomSteps
     {
         var room = _scenarioContext.Get<Room>("currentRoom");
         room.Game.Should().NotBeNull();
+    }
+
+    [Then(@"the guest player should no longer be in room '(.*)'")]
+    public void PlayerShouldNotBeInRoom(string roomId)
+    {
+        var room = _scenarioContext.Get<Room>("currentRoom");
+        room.RoomGuest.Should().BeNull();
+    }
+
+    [Then(@"any ongoing game should be terminated")]
+    public void AnyOngoingGameShouldBeTerminated()
+    {
+        var room = _scenarioContext.Get<Room>("currentRoom");
+        room.Game.Should().BeNull();
     }
 
     [Then(@"the action should fail with error '(.*)'")]

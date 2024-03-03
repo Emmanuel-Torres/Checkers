@@ -68,10 +68,9 @@ namespace checkers_api.tests.Steps
         [Then(@"player (.*) won the game")]
         public void PlayerWonTheGame(string expectedPlayer)
         {
-            var isGameOver = _scenarioContext.Get<bool>("isGameOver");
             var currentGame = _scenarioContext.Get<Game>("currentGame");
 
-            isGameOver.Should().BeTrue();
+            currentGame.IsGameOver.Should().BeTrue();
             currentGame.Winner?.PlayerId.Should().Be(expectedPlayer);
         }
 
@@ -90,9 +89,8 @@ namespace checkers_api.tests.Steps
             try 
             {
                 var game = _scenarioContext.Get<Game>("currentGame");
-                var canGameContinue = game.MakeMove(player, requests);
+                game.MakeMove(player, requests);
                 _scenarioContext["currentGame"] = game;
-                _scenarioContext.Add("isGameOver", !canGameContinue);
             }
             catch (Exception ex)
             {
