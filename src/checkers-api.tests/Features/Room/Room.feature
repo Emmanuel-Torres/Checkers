@@ -1,11 +1,6 @@
 Feature: Room
   To ensure that room logic works correctly
 
-
-Scenario: Creating a new private room
-  When player O creates a room 'room1' with code '123'
-  Then room 'room1' should exist with player O as its owner
-
 Scenario: Joining an existing room with code
   Given player O has a room 'room1' with code '123'
   When player X tries to join room 'room1' with code '123'

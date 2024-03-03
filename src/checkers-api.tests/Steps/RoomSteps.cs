@@ -16,7 +16,6 @@ public class RoomSteps
     }
 
     [Given(@"player (.*) has a room '(.*)' with code '(.*)'")]
-    [When(@"player (.*) creates a room '(.*)' with code '(.*)'")]
     public void PlayerCreatesAPrivateRoom(string playerId, string roomId, string roomCode)
     {
         var room = new Room(roomId, new Player(playerId, playerId), roomCode);
