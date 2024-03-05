@@ -44,7 +44,7 @@ public class Room
         _roomGuest = guestPlayer;
     }
 
-    public void StartGame(string requestorId)
+    public GameInfo StartGame(string requestorId)
     {
         if (_roomGuest is null)
         {
@@ -62,9 +62,10 @@ public class Room
         }
 
         _game = new Game("game", _roomOwner, _roomGuest);
+        return new GameInfo(_roomId, _game.CurrentTurn, _game.Board, _game.Winner);
     }
 
-    public MoveResult MakeMove(string playerId, IEnumerable<MoveRequest> requests)
+    public GameInfo MakeMove(string playerId, IEnumerable<MoveRequest> requests)
     {
         if (_game is null)
         {
@@ -77,8 +78,7 @@ public class Room
         }
 
         _game.MakeMove(playerId, requests);
-
-        return new MoveResult(_roomId, _game.CurrentTurn, _game.IsGameOver, _game.Board);
+        return new GameInfo(_roomId, _game.CurrentTurn, _game.Board, _game.Winner);
     }
 
     public void KickGuestPlayer(string requestorId)

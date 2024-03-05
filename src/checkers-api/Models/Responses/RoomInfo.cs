@@ -8,7 +8,7 @@ public class RoomInfo
     public Player RoomOwner { get; }
     public Player? RoomGuest { get; }
 
-    public RoomInfo(string roomId, Player roomOwner, Player? roomGuest)
+    public RoomInfo(string roomId, Player roomOwner, Player? roomGuest = null)
     {
         RoomId = roomId;
         RoomOwner = roomOwner;

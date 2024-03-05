@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using checkers_api.Models.GameLogic;
 using checkers_api.Models.GameModels;
+using checkers_api.Models.Requests;
 using checkers_api.Models.Responses;
 
 namespace checkers_api.Services.RoomManager;
@@ -18,7 +19,7 @@ public class RoomManager : IRoomManager
         _playerRoom = new();
     }
 
-    public void CreateRoom(Player roomOwner, string roomCode, string? roomId = null)
+    public RoomInfo CreateRoom(Player roomOwner, string roomCode, string? roomId = null)
     {
         roomId ??= Guid.NewGuid().ToString();
         var room = new Room(roomId, roomOwner, roomCode);
@@ -34,6 +35,39 @@ public class RoomManager : IRoomManager
         }
 
         _playerRoom.TryAdd(roomOwner.PlayerId, roomId);
+        return new RoomInfo(roomId, roomOwner);
+    }
+
+    public RoomInfo JoinRoom(string roomId, Player roomGuest, string roomCode)
+    {
+        if(_playerRoom.ContainsKey(roomGuest.PlayerId))
+        {
+            throw new InvalidOperationException("Cannot join room because player is already in a room");
+        }
+
+        ValidateRoomExists(roomId, "Join Room");
+        _rooms[roomId].JoinRoom(roomGuest, roomCode);
+        _playerRoom.TryAdd(roomGuest.PlayerId, roomId);
+
+        return new RoomInfo(roomId, _rooms[roomId].RoomOwner, roomGuest);
+    }
+
+    public GameInfo StartGame(string roomId, string requestorId)
+    {
+        ValidateRoomExists(roomId, "Start Game");
+        return _rooms[roomId].StartGame(requestorId);
+    }
+
+    public GameInfo MakeMove(string roomId, string requestorId, IEnumerable<MoveRequest> requests)
+    {
+        ValidateRoomExists(roomId, "Make Move");
+        return _rooms[roomId].MakeMove(requestorId, requests);
+    }
+
+    public void KickGuestPlayer(string roomId, string requestorId)
+    {
+        ValidateRoomExists(roomId, "Kick Guest Player");
+        _rooms[roomId].KickGuestPlayer(requestorId);
     }
 
     public RoomInfo? GetRoomInfo(string roomId)
@@ -44,24 +78,11 @@ public class RoomManager : IRoomManager
         return new RoomInfo(room.RoomId, room.RoomOwner, room.RoomGuest);
     }
 
-    public void JoinRoom(string roomId, Player roomGuest, string roomCode)
+    private void ValidateRoomExists(string roomId, string action)
     {
         if (!_rooms.ContainsKey(roomId))
         {
-            throw new InvalidOperationException("Cannot join room because room does not exist");
+            throw new InvalidOperationException($"Cannot complete action <{action}> because room does not exist");
         }
-
-        if(_playerRoom.ContainsKey(roomGuest.PlayerId))
-        {
-            throw new InvalidOperationException("Cannot join room because player is already in a room");
-        }
-
-        _rooms[roomId].JoinRoom(roomGuest, roomCode);
-        _playerRoom.TryAdd(roomGuest.PlayerId, roomId);
     }
-
-    //     public GameInfo MakeMove(string playerId, MoveRequest moveRequest)
-    //     {
-    //         throw new NotImplementedException();
-    //     }
 }

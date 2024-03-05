@@ -55,7 +55,7 @@ Scenario: Joining a room that does not exist
   | Player | RoomId | RoomCode |
   | O      | room1  | 123      |
   When player X tries to join room 'room2' with code '123'
-  Then the action should fail with error 'Cannot join room because room does not exist'
+  Then the action should fail with error 'Cannot complete action <Join Room> because room does not exist'
 
 Scenario: Joining a room when player is already in another room
   Given a room manager exists

@@ -335,7 +335,8 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.When("player X tries to join room \'room2\' with code \'123\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 58
-  testRunner.Then("the action should fail with error \'Cannot join room because room does not exist\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+  testRunner.Then("the action should fail with error \'Cannot complete action <Join Room> because roo" +
+                        "m does not exist\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

@@ -4,14 +4,17 @@ namespace checkers_api.Models.Responses;
 
 public class GameInfo
 {
-    public string GameId { get; set; }
-    public IEnumerable<Piece?> Board { get; set; }
-    public string CurrentTurnId { get; set; }
+    public string RoomId { get; }
+    public bool IsGameOver { get => Winner is not null; }
+    public Player NextPlayerTurn { get; }
+    public Player? Winner { get; }
+    public IEnumerable<Piece?> Board { get; }
 
-    public GameInfo(string gameId, IEnumerable<Piece?> board, string currentTurnId)
+    public GameInfo(string roomId, Player nextPlayerTurn, IEnumerable<Piece?> board, Player? winner = null)
     {
-        GameId = gameId;
+        RoomId = roomId;
+        NextPlayerTurn = nextPlayerTurn;
         Board = board;
-        CurrentTurnId = currentTurnId;
+        Winner = winner;
     }
 }
