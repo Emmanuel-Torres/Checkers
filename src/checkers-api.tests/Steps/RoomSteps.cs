@@ -93,6 +93,7 @@ public class RoomSteps
         room.RoomOwner.PlayerId.Should().Be(expectedPlayerId);
     }
 
+    [Scope(Feature = "Room")]
     [Then(@"player (.*) successfully joined room '(.*)'")]
     public void PlayerSuccessfullyJoinedRoom(string expectedPlayerId, string expectedRoomId)
     {

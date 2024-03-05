@@ -87,10 +87,12 @@ public class RoomManagerSteps
         actualRooms.Select(r => r?.RoomId).Should().Equal(expectedRoomIds);
     }
 
-    [Then(@"the action should succeed without error")]
-    public void TheActionShouldSucceedWithoutError()
+    [Scope(Feature = "Room Manager")]
+    [Then(@"player (.*) successfully joined room '(.*)'")]
+    public void PlayerSuccessfullyJoinedRoom(string expectedPlayerId, string expectedRoomId)
     {
-        _scenarioContext.ContainsKey("actionException").Should().BeFalse();
+        var roomInfo = GetRoomInfo(expectedRoomId);
+        roomInfo?.RoomGuest?.PlayerId.Should().Be(expectedPlayerId);
     }
 
     private RoomInfo? GetRoomInfo(string roomId)

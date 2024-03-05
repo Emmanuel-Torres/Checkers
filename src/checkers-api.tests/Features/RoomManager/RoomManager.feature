@@ -47,7 +47,7 @@ Scenario: Joining an available room with code
   | Player | RoomId | RoomCode |
   | O      | room1  | 123      |
   When player X tries to join room 'room1' with code '123'
-  Then the action should succeed without error
+  Then player X successfully joined room 'room1'
 
 Scenario: Joining a room that does not exist
   Given a room manager exists

@@ -41,7 +41,7 @@ public class RoomManager : IRoomManager
         if (!_rooms.TryGetValue(roomId, out var room))
             return null;
 
-        return new RoomInfo(room.RoomId);
+        return new RoomInfo(room.RoomId, room.RoomOwner, room.RoomGuest);
     }
 
     public void JoinRoom(string roomId, Player roomGuest, string roomCode)
