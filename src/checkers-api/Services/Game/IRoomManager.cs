@@ -12,6 +12,7 @@ public interface IRoomManager
     public GameInfo MakeMove(string roomId, string requestorId, IEnumerable<MoveRequest> requests);
     public void KickGuestPlayer(string roomId, string requestorId);
     public RoomInfo? GetRoomInfo(string roomId);
+    public bool PlayerExists(string playerId);
 
     // public GameInfo MakeMove(string playerId, MoveRequest moveRequest);
     // public string StartGame(Player player1, Player player2);

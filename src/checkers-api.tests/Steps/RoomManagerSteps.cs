@@ -28,12 +28,20 @@ public class RoomManagerSteps
         _scenarioContext.Add("roomManager", roomManager);
     }
 
+    [Scope(Feature = "Room Manager")]
+    [Given(@"player (.*) and player (.*) are in room '(.*)':'(.*)'")]
+    public void PlayerAndPlayerAreInRoom(string player1Id, string player2Id, string roomId, string roomCode)
+    {
+        CreateRoom(player1Id, roomId, roomCode);
+        JoinRoom(player2Id, roomId, roomCode);
+    }
+
     [When(@"player (.*) creates room '(.*)' with code '(.*)'")]
     public void PlayerCreatesRoomWithCode(string playerId, string roomId, string roomCode)
     {
         try
         {
-            ((RoomManager)_scenarioContext["roomManager"]).CreateRoom(new Player(playerId, playerId), roomCode, roomId);
+            CreateRoom(playerId, roomId, roomCode);
         }
         catch (Exception ex)
         {
@@ -46,7 +54,7 @@ public class RoomManagerSteps
     public void TheFollowingRoomsAreCreated(Table table)
     {
         var rooms = table.CreateSet<(string Player, string RoomId, string RoomCode)>();
-        foreach(var r in rooms)
+        foreach (var r in rooms)
         {
             PlayerCreatesRoomWithCode(r.Player, r.RoomId, r.RoomCode);
         }
@@ -58,9 +66,23 @@ public class RoomManagerSteps
     {
         try
         {
-            ((RoomManager)_scenarioContext["roomManager"]).JoinRoom(roomId, new Player(playerId, playerId), roomCode);
+            JoinRoom(playerId, roomId, roomCode);
         }
         catch (Exception ex)
+        {
+            _scenarioContext.Add("actionException", ex);
+        }
+    }
+
+    [Scope(Feature = "Room Manager")]
+    [When(@"player (.*) tries to kick the guest player of room '(.*)'")]
+    public void PlayerTriesToKickPlayerFromRoom(string requestorId, string roomId)
+    {
+        try
+        {
+            KickGuestPlayer(roomId, requestorId);
+        }
+        catch(Exception ex)
         {
             _scenarioContext.Add("actionException", ex);
         }
@@ -79,7 +101,7 @@ public class RoomManagerSteps
         var expectedRoomIds = table.Rows.Select(r => r.Values.First());
         var actualRooms = new List<RoomInfo?>();
 
-        foreach(var id in expectedRoomIds)
+        foreach (var id in expectedRoomIds)
         {
             actualRooms.Add(GetRoomInfo(id));
         }
@@ -95,8 +117,40 @@ public class RoomManagerSteps
         roomInfo?.RoomGuest?.PlayerId.Should().Be(expectedPlayerId);
     }
 
+    [Then(@"player (.*) now exists in the player-room list")]
+    public void PlayerNowExistsInThePlayerRoomList(string playerId)
+    {
+        PlayerExists(playerId).Should().BeTrue();
+    }
+
+    [Then(@"player (.*) should not exists in player-room list")]
+    public void ThenPlayerShouldNotExistInPlayerRoomList(string playerId)
+    {
+        PlayerExists(playerId).Should().BeFalse();
+    }
+
     private RoomInfo? GetRoomInfo(string roomId)
     {
-        return ((RoomManager)_scenarioContext["roomManager"]).GetRoomInfo(roomId);
+        return _scenarioContext.Get<RoomManager>("roomManager").GetRoomInfo(roomId);
+    }
+
+    private void CreateRoom(string playerId, string roomId, string roomCode)
+    {
+        ((RoomManager)_scenarioContext["roomManager"]).CreateRoom(new Player(playerId, playerId), roomCode, roomId);
+    }
+
+    private void JoinRoom(string playerId, string roomId, string roomCode)
+    {
+        ((RoomManager)_scenarioContext["roomManager"]).JoinRoom(roomId, new Player(playerId, playerId), roomCode);
+    }
+
+    private void KickGuestPlayer(string roomId, string playerId)
+    {
+        ((RoomManager)_scenarioContext["roomManager"]).KickGuestPlayer(roomId, playerId);
+    }
+
+    private bool PlayerExists(string playerId)
+    {
+        return _scenarioContext.Get<RoomManager>("roomManager").PlayerExists(playerId);
     }
 }

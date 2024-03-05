@@ -22,6 +22,7 @@ public class RoomSteps
         _scenarioContext.Add("currentRoom", room);
     }
 
+    [Scope(Feature = "Room")]
     [Given(@"player (.*) and player (.*) are in room '(.*)':'(.*)'")]
     public void PlayerAndPlayerAreInRoom(string player1Id, string player2Id, string roomId, string roomCode)
     {
@@ -71,6 +72,7 @@ public class RoomSteps
         }
     }
 
+    [Scope(Feature = "Room")]
     [When(@"player (.*) tries to kick the guest player of room '(.*)'")]
     public void PlayerTriesToKickPlayerFromRoom(string requestorId, string roomId)
     {

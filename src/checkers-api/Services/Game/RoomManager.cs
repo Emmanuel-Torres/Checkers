@@ -67,7 +67,14 @@ public class RoomManager : IRoomManager
     public void KickGuestPlayer(string roomId, string requestorId)
     {
         ValidateRoomExists(roomId, "Kick Guest Player");
+        var guestId = _rooms[roomId].RoomGuest?.PlayerId;
+        if (guestId is null)
+        {
+            return;
+        }
+
         _rooms[roomId].KickGuestPlayer(requestorId);
+        _playerRoom.TryRemove(guestId, out var _);
     }
 
     public RoomInfo? GetRoomInfo(string roomId)
@@ -76,6 +83,11 @@ public class RoomManager : IRoomManager
             return null;
 
         return new RoomInfo(room.RoomId, room.RoomOwner, room.RoomGuest);
+    }
+
+    public bool PlayerExists(string playerId)
+    {
+        return _playerRoom.ContainsKey(playerId);
     }
 
     private void ValidateRoomExists(string roomId, string action)
