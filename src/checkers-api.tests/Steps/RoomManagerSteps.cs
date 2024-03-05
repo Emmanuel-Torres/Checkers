@@ -52,6 +52,20 @@ public class RoomManagerSteps
         }
     }
 
+    [Scope(Feature = "Room Manager")]
+    [When(@"player (.*) tries to join room '(.*)' with code '(.*)'")]
+    public void PlayerTriesToJoinRoomWithCode(string playerId, string roomId, string roomCode)
+    {
+        try
+        {
+            ((RoomManager)_scenarioContext["roomManager"]).JoinRoom(roomId, new Player(playerId, playerId), roomCode);
+        }
+        catch (Exception ex)
+        {
+            _scenarioContext.Add("actionException", ex);
+        }
+    }
+
     [Then(@"room '(.*)' should now exist")]
     public void RoomShouldNowExist(string expectedRoomId)
     {
@@ -71,6 +85,12 @@ public class RoomManagerSteps
         }
 
         actualRooms.Select(r => r?.RoomId).Should().Equal(expectedRoomIds);
+    }
+
+    [Then(@"the action should succeed without error")]
+    public void TheActionShouldSucceedWithoutError()
+    {
+        _scenarioContext.ContainsKey("actionException").Should().BeFalse();
     }
 
     private RoomInfo? GetRoomInfo(string roomId)

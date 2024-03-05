@@ -41,6 +41,7 @@ public class RoomSteps
         _scenarioContext["currentRoom"] = room;
     }
 
+    [Scope(Feature = "Room")]
     [When(@"player (.*) tries to join room '(.*)' with code '(.*)'")]
     public void PlayerTriesToJoinRoomWithCode(string playerId, string roomId, string roomCode)
     {

@@ -39,11 +39,29 @@ Scenario: Creating a room while already being in one
   | Player | RoomId | RoomCode |
   | O      | room1  | 123      |
   When player O creates room 'room2' with code '123'
-  Then the action should fail with error 'Room cannot be created because player is already in a room'
+  Then the action should fail with error 'Cannot create room because player is already in a room'
 
-# Scenario: Joining a room with code
-#   Given a room manager exists
-#   And the following rooms exist
-#   | Player | RoomId | RoomCode |
-#   | O      | room1  | 123      |
-#   When player X
+Scenario: Joining an available room with code
+  Given a room manager exists
+  And the following rooms exist
+  | Player | RoomId | RoomCode |
+  | O      | room1  | 123      |
+  When player X tries to join room 'room1' with code '123'
+  Then the action should succeed without error
+
+Scenario: Joining a room that does not exist
+  Given a room manager exists
+  And the following rooms exist
+  | Player | RoomId | RoomCode |
+  | O      | room1  | 123      |
+  When player X tries to join room 'room2' with code '123'
+  Then the action should fail with error 'Cannot join room because room does not exist'
+
+Scenario: Joining a room when player is already in another room
+  Given a room manager exists
+  And the following rooms exist
+  | Player | RoomId | RoomCode |
+  | O      | room1  | 123      |
+  | P      | room2  | 123      |
+  When player O tries to join room 'room2' with code '123'
+  Then the action should fail with error 'Cannot join room because player is already in a room'

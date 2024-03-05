@@ -18,14 +18,14 @@ public class RoomManager : IRoomManager
         _playerRoom = new();
     }
 
-    public void CreateRoom(Player roomOwner, string roomCode, string? roomId)
+    public void CreateRoom(Player roomOwner, string roomCode, string? roomId = null)
     {
         roomId ??= Guid.NewGuid().ToString();
         var room = new Room(roomId, roomOwner, roomCode);
 
         if(_playerRoom.ContainsKey(roomOwner.PlayerId))
         {
-            throw new InvalidOperationException("Room cannot be created because player is already in a room");
+            throw new InvalidOperationException("Cannot create room because player is already in a room");
         }
 
         if(!_rooms.TryAdd(roomId, room))
@@ -42,6 +42,22 @@ public class RoomManager : IRoomManager
             return null;
 
         return new RoomInfo(room.RoomId);
+    }
+
+    public void JoinRoom(string roomId, Player roomGuest, string roomCode)
+    {
+        if (!_rooms.ContainsKey(roomId))
+        {
+            throw new InvalidOperationException("Cannot join room because room does not exist");
+        }
+
+        if(_playerRoom.ContainsKey(roomGuest.PlayerId))
+        {
+            throw new InvalidOperationException("Cannot join room because player is already in a room");
+        }
+
+        _rooms[roomId].JoinRoom(roomGuest, roomCode);
+        _playerRoom.TryAdd(roomGuest.PlayerId, roomId);
     }
 
     //     public GameInfo MakeMove(string playerId, MoveRequest moveRequest)

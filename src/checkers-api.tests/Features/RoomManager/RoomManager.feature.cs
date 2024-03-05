@@ -252,8 +252,136 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.When("player O creates room \'room2\' with code \'123\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 42
-  testRunner.Then("the action should fail with error \'Room cannot be created because player is alrea" +
-                        "dy in a room\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+  testRunner.Then("the action should fail with error \'Cannot create room because player is already i" +
+                        "n a room\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Joining an available room with code")]
+        public void JoiningAnAvailableRoomWithCode()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Joining an available room with code", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 44
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 45
+  testRunner.Given("a room manager exists", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+                TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Player",
+                            "RoomId",
+                            "RoomCode"});
+                table5.AddRow(new string[] {
+                            "O",
+                            "room1",
+                            "123"});
+#line 46
+  testRunner.And("the following rooms exist", ((string)(null)), table5, "And ");
+#line hidden
+#line 49
+  testRunner.When("player X tries to join room \'room1\' with code \'123\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 50
+  testRunner.Then("the action should succeed without error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Joining a room that does not exist")]
+        public void JoiningARoomThatDoesNotExist()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Joining a room that does not exist", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 52
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 53
+  testRunner.Given("a room manager exists", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Player",
+                            "RoomId",
+                            "RoomCode"});
+                table6.AddRow(new string[] {
+                            "O",
+                            "room1",
+                            "123"});
+#line 54
+  testRunner.And("the following rooms exist", ((string)(null)), table6, "And ");
+#line hidden
+#line 57
+  testRunner.When("player X tries to join room \'room2\' with code \'123\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 58
+  testRunner.Then("the action should fail with error \'Cannot join room because room does not exist\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Joining a room when player is already in another room")]
+        public void JoiningARoomWhenPlayerIsAlreadyInAnotherRoom()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Joining a room when player is already in another room", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 60
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 61
+  testRunner.Given("a room manager exists", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+                TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Player",
+                            "RoomId",
+                            "RoomCode"});
+                table7.AddRow(new string[] {
+                            "O",
+                            "room1",
+                            "123"});
+                table7.AddRow(new string[] {
+                            "P",
+                            "room2",
+                            "123"});
+#line 62
+  testRunner.And("the following rooms exist", ((string)(null)), table7, "And ");
+#line hidden
+#line 66
+  testRunner.When("player O tries to join room \'room2\' with code \'123\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 67
+  testRunner.Then("the action should fail with error \'Cannot join room because player is already in " +
+                        "a room\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
