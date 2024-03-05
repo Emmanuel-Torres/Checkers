@@ -1,7 +1,3 @@
-using checkers_api.Models.GameModels;
-using checkers_api.Models.Requests;
-using checkers_api.Services.GameManager;
-using checkers_api.Services.Matchmaking;
 using Microsoft.AspNetCore.SignalR;
 
 namespace checkers_api.Hubs;

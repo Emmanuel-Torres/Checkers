@@ -1,17 +1,11 @@
 using System.Text.Json.Serialization;
 using checkers_api.Hubs;
-using checkers_api.Services;
-using checkers_api.Services.GameManager;
 using checkers_api.Services.Matchmaking;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
-// builder.Services.AddSingleton<IGameManager, GameManager>();
 builder.Services.AddSingleton<IMatchmakingService, MatchmakingService>();
-// builder.Services.AddTransient<IDbService, DbService>();
-// builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddSignalR().AddJsonProtocol(options =>
    options.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter())

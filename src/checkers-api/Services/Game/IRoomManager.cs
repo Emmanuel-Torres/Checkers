@@ -2,13 +2,14 @@ using checkers_api.Models.GameModels;
 using checkers_api.Models.Requests;
 using checkers_api.Models.Responses;
 
-namespace checkers_api.Services.GameManager;
+namespace checkers_api.Services.RoomManager;
 
-public interface IGameManager
+public interface IRoomManager
 {
-    public GameInfo CreateGame(Player player1, Player player2);
-    public GameInfo MakeMove(string playerId, MoveRequest moveRequest);
+    public void CreateRoom(Player roomOwner, string roomCode, string? roomId);
+    public RoomInfo? GetRoomInfo(string roomId);
 
+    // public GameInfo MakeMove(string playerId, MoveRequest moveRequest);
     // public string StartGame(Player player1, Player player2);
     // public Game? GetGameByGameId(string gameId);
     // public Game? GetGameByPlayerId(string playerId);
