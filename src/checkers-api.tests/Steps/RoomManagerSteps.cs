@@ -1,7 +1,7 @@
 using checkers_api.Models.GameLogic;
 using checkers_api.Models.GameModels;
 using checkers_api.Models.Responses;
-using checkers_api.Services.RoomManager;
+using checkers_api.Services;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -24,7 +24,8 @@ public class RoomManagerSteps
     public void ARoomManagerExists()
     {
         var mockLogger = new Mock<ILogger<RoomManager>>();
-        var roomManager = new RoomManager(mockLogger.Object);
+        var mockGenerator = new Mock<ICodeGenerator>();
+        var roomManager = new RoomManager(mockLogger.Object, mockGenerator.Object);
         _scenarioContext.Add("roomManager", roomManager);
     }
 
@@ -155,7 +156,7 @@ public class RoomManagerSteps
 
     private void CreateRoom(string playerId, string roomId, string roomCode)
     {
-        ((RoomManager)_scenarioContext["roomManager"]).CreateRoom(new Player(playerId, playerId), roomCode, roomId);
+        ((RoomManager)_scenarioContext["roomManager"]).CreateRoom(roomId, new Player(playerId, playerId), roomCode);
     }
 
     private void JoinRoom(string playerId, string roomId, string roomCode)

@@ -4,24 +4,26 @@ using checkers_api.Models.GameModels;
 using checkers_api.Models.Requests;
 using checkers_api.Models.Responses;
 
-namespace checkers_api.Services.RoomManager;
+namespace checkers_api.Services;
 
 public class RoomManager : IRoomManager
 {
     private readonly ILogger<RoomManager> _logger;
+    private readonly ICodeGenerator _codeGenerator;
     private readonly ConcurrentDictionary<string, Room> _rooms;
     private readonly ConcurrentDictionary<string, string> _playerRoom;
 
-    public RoomManager(ILogger<RoomManager> logger)
+    public RoomManager(ILogger<RoomManager> logger, ICodeGenerator codeGenerator)
     {
         _logger = logger;
+        _codeGenerator = codeGenerator;
         _rooms = new();
         _playerRoom = new();
     }
 
-    public RoomInfo CreateRoom(Player roomOwner, string roomCode, string? roomId = null)
+    public RoomInfo CreateRoom(string roomId, Player roomOwner, string? roomCode = null)
     {
-        roomId ??= Guid.NewGuid().ToString();
+        roomCode ??= _codeGenerator.GenerateCode();
         var room = new Room(roomId, roomOwner, roomCode);
 
         if(_playerRoom.ContainsKey(roomOwner.PlayerId))
