@@ -52,6 +52,30 @@ public class RoomManager : IRoomManager
         return new RoomInfo(roomId, _rooms[roomId].RoomOwner, roomGuest);
     }
 
+    public RoomInfo? RemoveRoom(string roomId)
+    {
+        if(!_rooms.ContainsKey(roomId))
+        {
+            return null;
+        }
+
+        if (!_rooms.TryRemove(roomId, out var room))
+        {
+            return null;
+        }
+
+        var roomOwnerId = room.RoomOwner.PlayerId;
+        var roomGuest = room.RoomGuest?.PlayerId;
+
+        _playerRoom.TryRemove(roomOwnerId, out var _);
+        if (roomGuest is not null)
+        {
+            _playerRoom.TryRemove(roomGuest, out var _);
+        }
+
+        return new RoomInfo(room.RoomId, room.RoomOwner, room.RoomGuest);
+    }
+
     public GameInfo StartGame(string roomId, string requestorId)
     {
         ValidateRoomExists(roomId, "Start Game");

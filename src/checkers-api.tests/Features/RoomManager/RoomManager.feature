@@ -73,3 +73,12 @@ Scenario: A kicked player is removed from room-game list
   And player O and player X are in room 'room1':'123'
   When player O tries to kick the guest player of room 'room1'
   Then player X should not exists in player-room list
+
+Scenario: Removing a room also removes players from player-room list
+  Given a room manager exists
+  And player O and player X are in room 'room1':'123'
+  When room 'room1' gets removed
+  Then room 'room1' should not exist
+  And player O should not exists in player-room list
+  And player X should not exists in player-room list
+

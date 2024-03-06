@@ -88,6 +88,19 @@ public class RoomManagerSteps
         }
     }
 
+    [When(@"room '(.*)' gets removed")]
+    public void RoomGetsRemoved(string roomId)
+    {
+        try
+        {
+            RemoveRoom(roomId);
+        }
+        catch (Exception ex)
+        {
+            _scenarioContext.Add("actionException", ex);
+        }
+    }
+
     [Then(@"room '(.*)' should now exist")]
     public void RoomShouldNowExist(string expectedRoomId)
     {
@@ -123,6 +136,12 @@ public class RoomManagerSteps
         PlayerExists(playerId).Should().BeTrue();
     }
 
+    [Then(@"room '(.*)' should not exist")]
+    public void RoomShouldNotExist(string roomId)
+    {
+        GetRoomInfo(roomId).Should().BeNull();
+    }
+
     [Then(@"player (.*) should not exists in player-room list")]
     public void ThenPlayerShouldNotExistInPlayerRoomList(string playerId)
     {
@@ -147,6 +166,11 @@ public class RoomManagerSteps
     private void KickGuestPlayer(string roomId, string playerId)
     {
         ((RoomManager)_scenarioContext["roomManager"]).KickGuestPlayer(roomId, playerId);
+    }
+
+    private void RemoveRoom(string roomId)
+    {
+        ((RoomManager)_scenarioContext["roomManager"]).RemoveRoom(roomId);
     }
 
     private bool PlayerExists(string playerId)
