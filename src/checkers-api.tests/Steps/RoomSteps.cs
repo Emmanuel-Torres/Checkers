@@ -15,21 +15,21 @@ public class RoomSteps
         _scenarioContext = scenarioContext;
     }
 
-    [Given(@"player (.*) has a room '(.*)' with code '(.*)'")]
-    public void PlayerCreatesAPrivateRoom(string playerId, string roomId, string roomCode)
+    [Given(@"player (.*) has a room '(.*)'")]
+    public void PlayerCreatesAPrivateRoom(string playerId, string roomId)
     {
-        var room = new Room(roomId, new Player(playerId, playerId), roomCode);
+        var room = new Room(roomId, new Player(playerId, playerId));
         _scenarioContext.Add("currentRoom", room);
     }
 
     [Scope(Feature = "Room")]
-    [Given(@"player (.*) and player (.*) are in room '(.*)':'(.*)'")]
-    public void PlayerAndPlayerAreInRoom(string player1Id, string player2Id, string roomId, string roomCode)
+    [Given(@"player (.*) and player (.*) are in room '(.*)'")]
+    public void PlayerAndPlayerAreInRoom(string player1Id, string player2Id, string roomId)
     {
         var p1 = new Player(player1Id, player1Id);
         var p2 = new Player(player2Id, player2Id);
-        var room = new Room(roomId, p1, roomCode);
-        room.JoinRoom(p2, roomCode);
+        var room = new Room(roomId, p1);
+        room.JoinRoom(p2);
 
         _scenarioContext.Add("currentRoom", room);
     }
@@ -43,13 +43,13 @@ public class RoomSteps
     }
 
     [Scope(Feature = "Room")]
-    [When(@"player (.*) tries to join room '(.*)' with code '(.*)'")]
-    public void PlayerTriesToJoinRoomWithCode(string playerId, string roomId, string roomCode)
+    [When(@"player (.*) tries to join room '(.*)'")]
+    public void PlayerTriesToJoinRoom(string playerId, string roomId)
     {
         try 
         {
             var room = _scenarioContext.Get<Room>("currentRoom");
-            room.JoinRoom(new Player(playerId, playerId), roomCode);
+            room.JoinRoom(new Player(playerId, playerId));
             _scenarioContext[roomId] = room;
         }
         catch (Exception ex)

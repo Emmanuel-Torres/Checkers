@@ -30,19 +30,19 @@ public class RoomManagerSteps
     }
 
     [Scope(Feature = "Room Manager")]
-    [Given(@"player (.*) and player (.*) are in room '(.*)':'(.*)'")]
-    public void PlayerAndPlayerAreInRoom(string player1Id, string player2Id, string roomId, string roomCode)
+    [Given(@"player (.*) and player (.*) are in room '(.*)'")]
+    public void PlayerAndPlayerAreInRoom(string player1Id, string player2Id, string roomId)
     {
-        CreateRoom(player1Id, roomId, roomCode);
-        JoinRoom(player2Id, roomId, roomCode);
+        CreateRoom(player1Id, roomId);
+        JoinRoom(player2Id, roomId);
     }
 
-    [When(@"player (.*) creates room '(.*)' with code '(.*)'")]
-    public void PlayerCreatesRoomWithCode(string playerId, string roomId, string roomCode)
+    [When(@"player (.*) creates room '(.*)'")]
+    public void PlayerCreatesRoom(string playerId, string roomId)
     {
         try
         {
-            CreateRoom(playerId, roomId, roomCode);
+            CreateRoom(playerId, roomId);
         }
         catch (Exception ex)
         {
@@ -54,20 +54,20 @@ public class RoomManagerSteps
     [When(@"the following rooms are created")]
     public void TheFollowingRoomsAreCreated(Table table)
     {
-        var rooms = table.CreateSet<(string Player, string RoomId, string RoomCode)>();
+        var rooms = table.CreateSet<(string Player, string RoomId)>();
         foreach (var r in rooms)
         {
-            PlayerCreatesRoomWithCode(r.Player, r.RoomId, r.RoomCode);
+            PlayerCreatesRoom(r.Player, r.RoomId);
         }
     }
 
     [Scope(Feature = "Room Manager")]
-    [When(@"player (.*) tries to join room '(.*)' with code '(.*)'")]
-    public void PlayerTriesToJoinRoomWithCode(string playerId, string roomId, string roomCode)
+    [When(@"player (.*) tries to join room '(.*)'")]
+    public void PlayerTriesToJoinRoom(string playerId, string roomId)
     {
         try
         {
-            JoinRoom(playerId, roomId, roomCode);
+            JoinRoom(playerId, roomId);
         }
         catch (Exception ex)
         {
@@ -154,14 +154,14 @@ public class RoomManagerSteps
         return _scenarioContext.Get<RoomManager>("roomManager").GetRoomInfo(roomId);
     }
 
-    private void CreateRoom(string playerId, string roomId, string roomCode)
+    private void CreateRoom(string playerId, string roomId)
     {
-        ((RoomManager)_scenarioContext["roomManager"]).CreateRoom(roomId, new Player(playerId, playerId), roomCode);
+        ((RoomManager)_scenarioContext["roomManager"]).CreateRoom(new Player(playerId, playerId), roomId);
     }
 
-    private void JoinRoom(string playerId, string roomId, string roomCode)
+    private void JoinRoom(string playerId, string roomId)
     {
-        ((RoomManager)_scenarioContext["roomManager"]).JoinRoom(roomId, new Player(playerId, playerId), roomCode);
+        ((RoomManager)_scenarioContext["roomManager"]).JoinRoom(roomId, new Player(playerId, playerId));
     }
 
     private void KickGuestPlayer(string roomId, string playerId)

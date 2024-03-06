@@ -21,10 +21,11 @@ public class RoomManager : IRoomManager
         _playerRoom = new();
     }
 
-    public RoomInfo CreateRoom(string roomId, Player roomOwner, string? roomCode = null)
+    public RoomInfo CreateRoom(Player roomOwner, string? roomId = null)
     {
-        roomCode ??= _codeGenerator.GenerateCode();
-        var room = new Room(roomId, roomOwner, roomCode);
+        roomId ??= _codeGenerator.GenerateCode();
+
+        var room = new Room(roomId, roomOwner);
 
         if(_playerRoom.ContainsKey(roomOwner.PlayerId))
         {
@@ -40,7 +41,7 @@ public class RoomManager : IRoomManager
         return new RoomInfo(roomId, roomOwner);
     }
 
-    public RoomInfo JoinRoom(string roomId, Player roomGuest, string roomCode)
+    public RoomInfo JoinRoom(string roomId, Player roomGuest)
     {
         if(_playerRoom.ContainsKey(roomGuest.PlayerId))
         {
@@ -48,7 +49,7 @@ public class RoomManager : IRoomManager
         }
 
         ValidateRoomExists(roomId, "Join Room");
-        _rooms[roomId].JoinRoom(roomGuest, roomCode);
+        _rooms[roomId].JoinRoom(roomGuest);
         _playerRoom.TryAdd(roomGuest.PlayerId, roomId);
 
         return new RoomInfo(roomId, _rooms[roomId].RoomOwner, roomGuest);

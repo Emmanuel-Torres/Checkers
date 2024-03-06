@@ -8,15 +8,13 @@ public class Room
 {
     private readonly string _roomId;
     private readonly Player _roomOwner;
-    private readonly string _roomCode;
     private Player? _roomGuest;
     private Game? _game;
 
-    public Room(string roomId, Player roomOwner, string roomCode)
+    public Room(string roomId, Player roomOwner)
     {
         _roomId = roomId;
         _roomOwner = roomOwner;
-        _roomCode = roomCode;
     }
 
     public string RoomId => _roomId;
@@ -24,7 +22,7 @@ public class Room
     public Player? RoomGuest => _roomGuest;
     public Game? Game => _game;
 
-    public void JoinRoom(Player guestPlayer, string roomCode)
+    public void JoinRoom(Player guestPlayer)
     {
         if (guestPlayer.PlayerId == _roomOwner.PlayerId)
         {
@@ -34,11 +32,6 @@ public class Room
         if (_roomGuest is not null)
         {
             throw new InvalidOperationException("Cannot join room because it is already full");
-        }
-
-        if (roomCode != _roomCode)
-        {
-            throw new InvalidOperationException("Cannot join room because code was incorrect");
         }
 
         _roomGuest = guestPlayer;
