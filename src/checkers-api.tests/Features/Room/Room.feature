@@ -11,11 +11,6 @@ Scenario: Joining a full room
   When player Y tries to join room 'room1'
   Then the action should fail with error 'Cannot join room because it is already full'
 
-# Scenario: Joining an existing room with incorrect code
-#   Given player O has a room 'room1' with code '123'
-#   When player X tries to join room 'room1' with code '234'
-#   Then the action should fail with error 'Cannot join room because code was incorrect'
-
 Scenario: Room owner tries joining its own room as a guest
   Given player O has a room 'room1'
   When player O tries to join room 'room1'
