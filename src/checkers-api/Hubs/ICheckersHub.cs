@@ -1,15 +1,20 @@
+using checkers_api.Models.Requests;
+using checkers_api.Models.Responses;
+
 namespace checkers_api.Hubs;
 
 public interface ICheckersHub
 {
-    // //Server Methods
-    // public Task FindGameAsync();
+    //Server Methods
+    public Task CreateRoomAsync(string ownerName, RoomOptions? options = null);
+    public Task JoinRoomAsync(string roomId, string guestName);
+
+    //Client methods
+    public Task SendRoomInfoAsync(RoomInfo roomInfo);
+
     // public Task MakeMoveAsync(MoveRequest moveRequest);
-    // public Task GetValidMovesAsync(Location source);
-    // public Task QuitGameAsync();
     // public Task MoveCompletedAsync();
 
-    // //Client methods
     // public Task YourTurnToMoveAsync(IEnumerable<Piece?> board);
     // public Task MoveSuccessfulAsync(IEnumerable<Piece?> board);
     // public Task GameOverAsync(string winner, IEnumerable<Piece?> board);
