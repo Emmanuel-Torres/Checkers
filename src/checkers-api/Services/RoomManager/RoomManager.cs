@@ -27,12 +27,12 @@ public class RoomManager : IRoomManager
 
         var room = new Room(roomId, roomOwner);
 
-        if(_playerRoom.ContainsKey(roomOwner.PlayerId))
+        if (_playerRoom.ContainsKey(roomOwner.PlayerId))
         {
             throw new InvalidOperationException("Cannot create room because player is already in a room");
         }
 
-        if(!_rooms.TryAdd(roomId, room))
+        if (!_rooms.TryAdd(roomId, room))
         {
             throw new InvalidOperationException("Cannot create room because room id already exists");
         }
@@ -43,7 +43,7 @@ public class RoomManager : IRoomManager
 
     public RoomInfo JoinRoom(string roomId, Player roomGuest)
     {
-        if(_playerRoom.ContainsKey(roomGuest.PlayerId))
+        if (_playerRoom.ContainsKey(roomGuest.PlayerId))
         {
             throw new InvalidOperationException("Cannot join room because player is already in a room");
         }
@@ -57,7 +57,7 @@ public class RoomManager : IRoomManager
 
     public RoomInfo? RemoveRoom(string roomId)
     {
-        if(!_rooms.ContainsKey(roomId))
+        if (!_rooms.ContainsKey(roomId))
         {
             return null;
         }
@@ -79,29 +79,34 @@ public class RoomManager : IRoomManager
         return new RoomInfo(room.RoomId, room.RoomOwner, room.RoomGuest);
     }
 
-    public GameInfo StartGame(string roomId, string requestorId)
+    public GameInfo StartGame(string requestorId)
     {
+        var roomId = GetRoomIdByPlayerId(requestorId) ?? throw new InvalidOperationException("Cannot start a game because player is not in a room");
         ValidateRoomExists(roomId, "Start Game");
         return _rooms[roomId].StartGame(requestorId);
     }
 
-    public GameInfo MakeMove(string roomId, string requestorId, MoveRequest request)
+    public GameInfo MakeMove(string requestorId, MoveRequest request)
     {
+        var roomId = GetRoomIdByPlayerId(requestorId) ?? throw new InvalidOperationException("Cannot make move because player is not in a room");
         ValidateRoomExists(roomId, "Make Move");
         return _rooms[roomId].MakeMove(requestorId, request);
     }
 
-    public void KickGuestPlayer(string roomId, string requestorId)
+    public (RoomInfo roomInfo, Player? kickedPlayer) KickGuestPlayer(string requestorId)
     {
+        var roomId = GetRoomIdByPlayerId(requestorId) ?? throw new InvalidOperationException("Cannot complete action because player is not in a room");
         ValidateRoomExists(roomId, "Kick Guest Player");
-        var guestId = _rooms[roomId].RoomGuest?.PlayerId;
-        if (guestId is null)
+
+        var guest = _rooms[roomId].RoomGuest;
+        var guestId = guest?.PlayerId;
+        if (guestId is not null)
         {
-            return;
+            _rooms[roomId].KickGuestPlayer(requestorId);
+            _playerRoom.TryRemove(guestId, out var _);
         }
 
-        _rooms[roomId].KickGuestPlayer(requestorId);
-        _playerRoom.TryRemove(guestId, out var _);
+        return (GetRoomInfo(roomId)!, guest);
     }
 
     public RoomInfo? GetRoomInfo(string roomId)
@@ -123,5 +128,11 @@ public class RoomManager : IRoomManager
         {
             throw new InvalidOperationException($"Cannot complete action <{action}> because room does not exist");
         }
+    }
+
+    private string? GetRoomIdByPlayerId(string playerId)
+    {
+        _playerRoom.TryGetValue(playerId, out var roomId);
+        return roomId;
     }
 }
