@@ -4,12 +4,10 @@ namespace checkers_api.Models.Requests;
 
 public class MoveRequest
 {
-    public Location Source { get; set; }
-    public Location Destination { get; set; }
+    public IEnumerable<Move> Moves;
 
-    public MoveRequest(Location source, Location destination)
+    public MoveRequest(IEnumerable<Move> moves)
     {
-        Source = source;
-        Destination = destination;
+        Moves = moves;
     }
 }

@@ -85,10 +85,10 @@ public class RoomManager : IRoomManager
         return _rooms[roomId].StartGame(requestorId);
     }
 
-    public GameInfo MakeMove(string roomId, string requestorId, IEnumerable<MoveRequest> requests)
+    public GameInfo MakeMove(string roomId, string requestorId, MoveRequest request)
     {
         ValidateRoomExists(roomId, "Make Move");
-        return _rooms[roomId].MakeMove(requestorId, requests);
+        return _rooms[roomId].MakeMove(requestorId, request);
     }
 
     public void KickGuestPlayer(string roomId, string requestorId)

@@ -5,7 +5,7 @@ namespace checkers_api.tests.Helpers;
 
 public static class Parser
 {
-    public static IEnumerable<MoveRequest> ParseMoveRequestsFromString(string request)
+    public static IEnumerable<Move> ParseMoveRequestsFromString(string request)
     {
         var locations = request.Split('>');
 
@@ -14,14 +14,14 @@ public static class Parser
             throw new InvalidOperationException("Invalid string for move request");
         }
 
-        var requests = new List<MoveRequest>();
+        var requests = new List<Move>();
 
         for (int i = 0; i < locations.Length - 1; i++)
         {
             var source = ParseLocationFromString(locations[i]);
             var destination = ParseLocationFromString(locations[i + 1]);
 
-            requests.Add(new MoveRequest(source, destination));
+            requests.Add(new Move(source, destination));
         }
 
         return requests;

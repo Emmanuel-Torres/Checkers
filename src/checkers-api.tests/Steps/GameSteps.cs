@@ -84,12 +84,12 @@ namespace checkers_api.tests.Steps
             currentTurn.PlayerId.Should().Be(expectedPlayer);
         }
 
-        private void MakeMoves(string player, IEnumerable<MoveRequest> requests)
+        private void MakeMoves(string player, IEnumerable<Move> requests)
         {
             try 
             {
                 var game = _scenarioContext.Get<Game>("currentGame");
-                game.MakeMove(player, requests);
+                game.MakeMove(player, new MoveRequest(requests));
                 _scenarioContext["currentGame"] = game;
             }
             catch (Exception ex)

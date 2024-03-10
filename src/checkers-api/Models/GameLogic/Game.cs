@@ -49,15 +49,15 @@ public class Game
     public Player? Winner => _winner;
     public bool IsGameOver => _winner is not null;
 
-    public void MakeMove(string playerId, IEnumerable<MoveRequest> requests)
+    public void MakeMove(string playerId, MoveRequest request)
     {
-        ProcessMoveRequests(playerId, requests);
+        ProcessMoveRequests(playerId, request.Moves);
         CycleTurn();
         var canGameContinue = CanGameContinue();
         _winner = canGameContinue ? null : GetOppositePlayer();
     }
 
-    private void ProcessMoveRequests(string playerId, IEnumerable<MoveRequest> requests)
+    private void ProcessMoveRequests(string playerId, IEnumerable<Move> requests)
     {
         var toRemove = new List<int>();
         Location? source = null;
@@ -107,7 +107,7 @@ public class Game
         }
     }
 
-    private (bool isValid, string? errorMessage) ValidateMove(string playerId, MoveRequest request, out bool isAttackMove)
+    private (bool isValid, string? errorMessage) ValidateMove(string playerId, Move request, out bool isAttackMove)
     {
         var sourceRow = request.Source.Row;
         var sourceColumn = request.Source.Column;
@@ -189,7 +189,7 @@ public class Game
                                                        new Location(source.Row - 2, source.Column + 2),
                                                        new Location(source.Row - 2, source.Column - 2) };
 
-            var moveRequests = possibleMoves.Select(l => new MoveRequest(source, l));
+            var moveRequests = possibleMoves.Select(l => new Move(source, l));
             foreach (var mr in moveRequests)
             {
                 var result = ValidateMove(_currentTurn.PlayerId, mr, out _);

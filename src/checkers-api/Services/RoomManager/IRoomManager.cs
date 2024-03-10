@@ -10,7 +10,7 @@ public interface IRoomManager
     public RoomInfo JoinRoom(string roomId, Player roomGuest);
     public RoomInfo? RemoveRoom(string roomId);
     public GameInfo StartGame(string roomId, string requestorId);
-    public GameInfo MakeMove(string roomId, string requestorId, IEnumerable<MoveRequest> requests);
+    public GameInfo MakeMove(string roomId, string requestorId, MoveRequest request);
     public void KickGuestPlayer(string roomId, string requestorId);
     public RoomInfo? GetRoomInfo(string roomId);
     public bool PlayerExists(string playerId);

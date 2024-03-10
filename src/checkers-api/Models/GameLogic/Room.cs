@@ -58,7 +58,7 @@ public class Room
         return new GameInfo(_roomId, _game.CurrentTurn, _game.Board, _game.Winner);
     }
 
-    public GameInfo MakeMove(string playerId, IEnumerable<MoveRequest> requests)
+    public GameInfo MakeMove(string playerId, MoveRequest request)
     {
         if (_game is null)
         {
@@ -70,7 +70,7 @@ public class Room
             throw new InvalidOperationException("Cannot make move because player is not in this room");
         }
 
-        _game.MakeMove(playerId, requests);
+        _game.MakeMove(playerId, request);
         return new GameInfo(_roomId, _game.CurrentTurn, _game.Board, _game.Winner);
     }
 
