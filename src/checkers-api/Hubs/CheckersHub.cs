@@ -39,6 +39,7 @@ public class CheckersHub : Hub<ICheckersHub>
 
     public async Task CreateRoomAsync(string name, RoomOptions? options = null)
     {
+        _logger.LogInformation("Creating new room");
         try
         {
             var roomOwner = new Player(Context.ConnectionId, name);
