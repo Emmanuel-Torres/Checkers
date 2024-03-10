@@ -1,11 +1,12 @@
 using System.Text.Json.Serialization;
 using checkers_api.Hubs;
-using checkers_api.Services.Matchmaking;
+using checkers_api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
-builder.Services.AddSingleton<IMatchmakingService, MatchmakingService>();
+builder.Services.AddSingleton<IRoomManager, RoomManager>();
+builder.Services.AddSingleton<ICodeGenerator, CodeGenerator>();
 
 builder.Services.AddSignalR().AddJsonProtocol(options =>
    options.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter())

@@ -4,6 +4,8 @@ import BoardLocation from "../../models/game/location";
 import MoveRequest from "../../models/game/moveRequest";
 import PlayerIndicatorComponent from "../../components/game/player-indicator/PlayerIndicatorComponent";
 import styles from "./DemoView.module.css";
+import JoinRoomComponent from "../../components/room/join-room/JoinRoomComponent";
+import CreateRoomComponent from "../../components/room/create-room/CreateRoomComponent";
 
 const DemoView: FC = (): JSX.Element => {
   const board = JSON.parse(
@@ -12,16 +14,18 @@ const DemoView: FC = (): JSX.Element => {
   const validLocations = [new BoardLocation(4, 2), new BoardLocation(4, 4)];
 
   return (
-    <>
-      <PlayerIndicatorComponent
+    <div id='demo-container'>
+      <CreateRoomComponent onCreateRoom={(name: string) => { console.log(name) }} />
+      <JoinRoomComponent onJoinRoom={(name: string, roomId: string) => { console.log(name + " " + roomId) }} />
+      {/* <PlayerIndicatorComponent
         yourTurn={false} />
       <BoardComponent
         board={board}
         isReversed={false}
         validLocations={validLocations}
         onGetValidMoves={(location: BoardLocation) => {}}
-        onMakeMove={(request: MoveRequest) => {}} />
-    </>
+        onMakeMove={(request: MoveRequest) => {}} /> */}
+    </div>
   );
 };
 

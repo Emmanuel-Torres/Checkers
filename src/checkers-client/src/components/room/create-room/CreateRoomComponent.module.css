@@ -1,0 +1,23 @@
+.container {
+    width: fit-content;
+    border: 2px solid black;
+    border-radius: 15px;
+  }
+  
+  .header {
+    margin: 0;
+    border-bottom: 2px solid black;
+    padding: 1rem;
+  }
+  
+  .form {
+    padding: 1rem;
+  }
+  
+  .form-label,
+  .form-input,
+  .form-button {
+    display: block;
+    margin-bottom: .5rem;
+  }
+  
