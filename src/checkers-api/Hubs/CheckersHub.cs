@@ -78,6 +78,7 @@ public class CheckersHub : Hub<ICheckersHub>
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex.Message);
             // _logger.LogError("[{location}]: Could not start game for players {p1} and {p2}. Ex: {ex}", nameof(CheckersHub), p1.PlayerId, p2.PlayerId, ex);
         }
     }
@@ -91,6 +92,7 @@ public class CheckersHub : Hub<ICheckersHub>
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex.Message);
             // _logger.LogError("[{location}]: Could not make move. Ex: {ex}", nameof(CheckersHub), ex);
             // await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "Something went wrong when making your move");
         }
@@ -109,6 +111,7 @@ public class CheckersHub : Hub<ICheckersHub>
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex.Message);
             // _logger.LogError("[{location}]: Could not make move. Ex: {ex}", nameof(CheckersHub), ex);
             // await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "Something went wrong when making your move");
         }
