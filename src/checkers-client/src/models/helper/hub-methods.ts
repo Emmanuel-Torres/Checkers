@@ -1,7 +1,10 @@
 export default class HubMethods {
     static createRoom = "CreateRoomAsync";
     static joinRoom = "JoinRoomAsync";
+    static startGame = "StartGameAsync";
+    static sendPlayerInfo = "SendPlayerInfoAsync";
     static sendRoomInfo = "SendRoomInfoAsync";
+    static sendGameInfo = "SendGameInfoAsync";
     // static moveSuccessful = "MoveSuccessfulAsync";
     // static gameOver = "GameOverAsync";
     // static sendMessage = "SendMessageAsync";

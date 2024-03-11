@@ -1,9 +1,9 @@
 export default class Piece {
-  public readonly color: string;
+  public readonly ownerId: string;
   public readonly state: string;
 
-  constructor(color: string, state: string) {
-    this.color = color;
+  constructor(ownerId: string, state: string) {
+    this.ownerId = ownerId;
     this.state = state;
   }
 }

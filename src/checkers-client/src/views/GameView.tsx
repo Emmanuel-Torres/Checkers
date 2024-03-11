@@ -9,10 +9,15 @@ import PlayerIndicatorComponent from "../components/game/player-indicator/Player
 import RoomInfo from "../models/room/roomInfo";
 import JoinView from "./JoinView";
 import RoomView from "../components/room/room-info/RoomInfoComponent";
+import GameInfo from "../models/game/gameInfo";
+import Player from "../models/game/player";
 
 const GameView: FC = (): JSX.Element => {
     const [connection, setConnection] = useState<HubConnection>();
+    const [player, setPlayer] = useState<Player>();
+    const [isRoomOwner, setIsRoomOwner] = useState<boolean>(false);
     const [roomInfo, setRoomInfo] = useState<RoomInfo>();
+    const [gameInfo, setGameInfo] = useState<GameInfo>();
     // const [isLoading, setIsLoading] = useState<boolean>(true);
     // const [isMatchMaking, setIsMatchMaking] = useState<boolean>(false);
     // const [inGame, setInGame] = useState<boolean>(false);
@@ -44,40 +49,25 @@ const GameView: FC = (): JSX.Element => {
                     console.error("Connection failed: ", err);
                 });
 
+            connection.on(HubMethods.sendPlayerInfo, (player: Player, isRoomOwner: boolean) => {
+                console.log(player);
+                setPlayer(player);
+                setIsRoomOwner(isRoomOwner);
+            });
+
             connection.on(HubMethods.sendRoomInfo, (roomInfo: RoomInfo) => {
                 console.log(roomInfo);
                 setRoomInfo(roomInfo);
             });
 
-            // connection.on(HubMethods.moveSuccessful, (board: Square[]) => {
-            //     setYourTurn(false);
-            //     setBoard(board);
-            //     setValidMoves([]);
-            //     connection.send(HubMethods.moveCompleted);
-            // });
-            // connection.on(HubMethods.sendJoinConfirmation, (name: string, color: string, board: Square[]) => {
-            //     setIsMatchMaking(false);
-            //     setInGame(true);
-            //     setYourColor(color);
-            //     setBoard(board);
-            // });
-            // connection.on(HubMethods.sendValidMoveLocations, (locations: BoardLocation[]) => {
-            //     setValidMoves(locations);
-            // });
+            connection.on(HubMethods.sendGameInfo, (gameInfo: GameInfo) => {
+                console.log(gameInfo);
+                setGameInfo(gameInfo);
+            });
+
             // connection.on(HubMethods.sendMessage, (sender: string, message: string) => {
             //     console.log(message);
             // });
-            // connection.on(HubMethods.yourTurnToMove, (board: Square[]) => {
-            //     setYourTurn(true);
-            //     setBoard(board);
-            // });
-            // connection.on(HubMethods.gameOver, (winner: string, board: Square[]) => {
-            //     setIsGameOver(true);
-            //     setWinner(winner);
-            //     setBoard(board);
-            // });
-
-            // setIsLoading(false);
         }
     }, [connection])
 
@@ -101,16 +91,15 @@ const GameView: FC = (): JSX.Element => {
         }
     }
 
-    // const matchMake = async () => {
-    //     try {
-    //         console.log("finding game");
-    //         setIsMatchMaking(true);
-    //         await connection?.send(HubMethods.matchMake);
-    //     }
-    //     catch (e) {
-    //         console.error(e);
-    //     }
-    // }
+    const startGame = async () => {
+        try {
+            console.log("starting game");
+            await connection?.send(HubMethods.startGame);
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
     // const makeMove = async (moveRequest: MoveRequest) => {
     //     try {
     //         if (yourTurn && !isGameOver) {
@@ -121,28 +110,15 @@ const GameView: FC = (): JSX.Element => {
     //         console.error(e);
     //     }
     // }
-    // const getValidMoves = async (source: BoardLocation) => {
-    //     try {
-    //         if (yourTurn && !isGameOver) {
-    //             await connection?.send(HubMethods.getValidMoves, source);
-    //         }
-    //     }
-    //     catch (e) {
-    //         console.error(e);
-    //     }
-    // }
     return (
         <>
             {!roomInfo && <JoinView onCreateRoom={createRoom} onJoinRoom={joinRoom} />}
             {roomInfo && <RoomView roomInfo={roomInfo} />}
-            {/* {isLoading && <h2>Loading, please wait</h2>}
-            {!isLoading && !isMatchMaking && !inGame && <button type="button" onClick={matchMake}>Match Make</button>}
-            {isMatchMaking && <h2>You are MatchMaking, please wait</h2>}
-            {inGame && <>
-                <PlayerIndicatorComponent yourTurn={yourTurn} />
-                <BoardComponent board={board} isReversed={yourColor === "White"} validLocations={validLocations} onGetValidMoves={getValidMoves} onMakeMove={makeMove} />
+            {roomInfo?.roomGuest && !gameInfo && <button type="button" onClick={startGame}>Start Game</button>}
+            {gameInfo && <>
+                <PlayerIndicatorComponent yourTurn={gameInfo.nextPlayerTurn.playerId === player?.playerId} />
+                <BoardComponent blackPieceId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} />
             </>}
-            {isGameOver && <h2>Player {winner} won!</h2>} */}
         </>
     )
 }
