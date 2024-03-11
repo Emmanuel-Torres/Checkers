@@ -2,7 +2,7 @@ import { ChangeEvent, FC, FormEvent, useState } from 'react';
 import styles from './JoinRoomComponent.module.css'
 
 type Props = {
-    onJoinRoom: (name: string, roomId: string) => void;
+    onJoinRoom: (roomId: string, name: string) => void;
 }
 
 const JoinRoomComponent: FC<Props> = (props): JSX.Element => {
@@ -20,7 +20,7 @@ const JoinRoomComponent: FC<Props> = (props): JSX.Element => {
     const submitFormHandler = (event: FormEvent) => {
         //TODO: validate inputs before form submission
         event.preventDefault();
-        props.onJoinRoom(name, roomId);
+        props.onJoinRoom(roomId, name);
     }
     return <>
         <div className={styles.container}>

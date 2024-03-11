@@ -3,7 +3,7 @@ import JoinRoomComponent from "../components/room/join-room/JoinRoomComponent";
 import CreateRoomComponent from "../components/room/create-room/CreateRoomComponent";
 
 type Props = {
-    onJoinRoom: (name: string, roomId: string) => void;
+    onJoinRoom: (roomId: string, name: string) => void;
     onCreateRoom: (name: string) => void;
 }
 

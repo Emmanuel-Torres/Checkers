@@ -8,7 +8,7 @@ import HubMethods from "../models/helper/hub-methods";
 import PlayerIndicatorComponent from "../components/game/player-indicator/PlayerIndicatorComponent";
 import RoomInfo from "../models/room/roomInfo";
 import JoinView from "./JoinView";
-import RoomView from "./RoomView";
+import RoomView from "./Room/RoomView";
 
 const GameView: FC = (): JSX.Element => {
     const [connection, setConnection] = useState<HubConnection>();
@@ -91,6 +91,16 @@ const GameView: FC = (): JSX.Element => {
         }
     }
 
+    const joinRoom = async (roomId: string, name: string) => {
+        try {
+            console.log("creating room");
+            await connection?.send(HubMethods.joinRoom, roomId, name);
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+
     // const matchMake = async () => {
     //     try {
     //         console.log("finding game");
@@ -123,7 +133,7 @@ const GameView: FC = (): JSX.Element => {
     // }
     return (
         <>
-            {!roomInfo && <JoinView onCreateRoom={createRoom} onJoinRoom={(name: string, roomId: string) => { }} />}
+            {!roomInfo && <JoinView onCreateRoom={createRoom} onJoinRoom={joinRoom} />}
             {roomInfo && <RoomView roomInfo={roomInfo} />}
             {/* {isLoading && <h2>Loading, please wait</h2>}
             {!isLoading && !isMatchMaking && !inGame && <button type="button" onClick={matchMake}>Match Make</button>}

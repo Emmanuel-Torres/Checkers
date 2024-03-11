@@ -1,5 +1,6 @@
 export default class HubMethods {
     static createRoom = "CreateRoomAsync";
+    static joinRoom = "JoinRoomAsync";
     static sendRoomInfo = "SendRoomInfoAsync";
     // static moveSuccessful = "MoveSuccessfulAsync";
     // static gameOver = "GameOverAsync";
