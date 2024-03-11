@@ -1,3 +1,4 @@
+using checkers_api.Models.GameModels;
 using checkers_api.Models.Requests;
 using checkers_api.Models.Responses;
 
@@ -15,4 +16,5 @@ public interface ICheckersHub
     //Client methods
     public Task SendRoomInfoAsync(RoomInfo roomInfo);
     public Task SendGameInfoAsync(GameInfo gameInfo);
+    public Task SendPlayerInfoAsync(Player player, bool roomOwner);
 }

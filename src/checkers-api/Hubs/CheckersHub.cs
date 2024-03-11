@@ -23,19 +23,19 @@ public class CheckersHub : Hub<ICheckersHub>
     }
 
     // TODO: How to properly handle player disconnects when they are in a room/game
-    // public override async Task OnDisconnectedAsync(Exception? exception)
-    // {
-    //     if (exception is not null)
-    //     {
-    //         _logger.LogError("[{location}]: Player {connectionId} disconnected from the sever due to an exception. Ex: {ex}", nameof(CheckersHub), Context.ConnectionId, exception);
-    //     }
-    //     else
-    //     {
-    //         _logger.LogDebug("[{location}]: Player {connectionId} disconnected from the server", nameof(CheckersHub), Context.ConnectionId);
-    //     }
+    public override async Task OnDisconnectedAsync(Exception? exception)
+    {
+        if (exception is not null)
+        {
+            _logger.LogError("[{location}]: Player {connectionId} disconnected from the sever due to an exception. Ex: {ex}", nameof(CheckersHub), Context.ConnectionId, exception);
+        }
+        else
+        {
+            _logger.LogDebug("[{location}]: Player {connectionId} disconnected from the server", nameof(CheckersHub), Context.ConnectionId);
+        }
 
-    //     await base.OnDisconnectedAsync(exception);
-    // }
+        await base.OnDisconnectedAsync(exception);
+    }
 
     public async Task CreateRoomAsync(string name, RoomOptions? options = null)
     {
@@ -45,6 +45,7 @@ public class CheckersHub : Hub<ICheckersHub>
             var roomOwner = new Player(Context.ConnectionId, name);
             var roomInfo = _roomManager.CreateRoom(roomOwner, options?.RoomId);
             await Groups.AddToGroupAsync(Context.ConnectionId, roomInfo.RoomId);
+            await Clients.Client(Context.ConnectionId).SendPlayerInfoAsync(roomInfo.RoomOwner, true);
             await Clients.Client(Context.ConnectionId).SendRoomInfoAsync(roomInfo);
         }
         catch (Exception ex)
@@ -56,11 +57,13 @@ public class CheckersHub : Hub<ICheckersHub>
 
     public async Task JoinRoomAsync(string roomId, string name)
     {
+        _logger.LogInformation("Joining room");
         try
         {
             var roomGuest = new Player(Context.ConnectionId, name);
             var roomInfo = _roomManager.JoinRoom(roomId, roomGuest);
             await Groups.AddToGroupAsync(Context.ConnectionId, roomInfo.RoomId);
+            await Clients.Client(Context.ConnectionId).SendPlayerInfoAsync(roomInfo.RoomGuest!, false);
             await Clients.Group(roomInfo.RoomId).SendRoomInfoAsync(roomInfo);
         }
         catch (Exception ex)
@@ -70,11 +73,13 @@ public class CheckersHub : Hub<ICheckersHub>
         }
     }
 
-    private async Task StartGameAsync()
+    public async Task StartGameAsync()
     {
+        _logger.LogInformation("Starting Game");
         try
         {
             var gameInfo = _roomManager.StartGame(Context.ConnectionId);
+            _logger.LogInformation("Created game for room {roomId}", gameInfo.RoomId);
             await Clients.Group(gameInfo.RoomId).SendGameInfoAsync(gameInfo);
         }
         catch (Exception ex)

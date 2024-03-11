@@ -5,7 +5,7 @@ namespace checkers_api.Models.Responses;
 public class GameInfo
 {
     public string RoomId { get; }
-    public bool IsGameOver { get => Winner is not null; }
+    public bool IsGameOver { get; }
     public Player NextPlayerTurn { get; }
     public Player? Winner { get; }
     public IEnumerable<Piece?> Board { get; }
@@ -16,5 +16,6 @@ public class GameInfo
         NextPlayerTurn = nextPlayerTurn;
         Board = board;
         Winner = winner;
+        IsGameOver = winner is not null;
     }
 }
