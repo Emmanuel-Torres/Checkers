@@ -8,7 +8,7 @@ import HubMethods from "../models/helper/hub-methods";
 import PlayerIndicatorComponent from "../components/game/player-indicator/PlayerIndicatorComponent";
 import RoomInfo from "../models/room/roomInfo";
 import JoinView from "./JoinView";
-import RoomView from "./Room/RoomView";
+import RoomView from "../components/room/room-info/RoomInfoComponent";
 
 const GameView: FC = (): JSX.Element => {
     const [connection, setConnection] = useState<HubConnection>();

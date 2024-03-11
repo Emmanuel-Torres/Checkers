@@ -1,8 +1,8 @@
 import { FC } from 'react';
-import RoomInfo from "../../models/room/roomInfo";
-import styles from "./RoomView.module.css"
-import crownIcon from "../../assets/crown-icon.svg"
-import SpinnerComponent from '../../components/effects/spinner/SpinnerComponent';
+import RoomInfo from "../../../models/room/roomInfo";
+import styles from "./RoomInfoComponent.module.css"
+import crownIcon from "../../../assets/crown-icon.svg"
+import SpinnerComponent from '../../effects/spinner/SpinnerComponent';
 
 type Props = {
     roomInfo: RoomInfo;

@@ -6,7 +6,7 @@ import PlayerIndicatorComponent from "../../components/game/player-indicator/Pla
 import styles from "./DemoView.module.css";
 import JoinRoomComponent from "../../components/room/join-room/JoinRoomComponent";
 import CreateRoomComponent from "../../components/room/create-room/CreateRoomComponent";
-import RoomView from "../Room/RoomView";
+import RoomView from "../../components/room/room-info/RoomInfoComponent";
 import RoomInfo from "../../models/room/roomInfo";
 import Player from "../../models/game/player";
 
