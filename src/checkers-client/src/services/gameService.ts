@@ -8,8 +8,9 @@ const hasValidMoves = (index: number, board: Piece[], isRoomOwner: boolean): boo
     const forward = isRoomOwner ? 1 : -1;
     const backward = forward * -1;
 
-    if (piece.state === "Regular")
-        return hasAvailableNeighbor(index, board, forward);;
+    const result = hasAvailableNeighbor(index, board, forward);
+    if (result || piece.state === "Regular")
+        return result;
 
     return hasAvailableNeighbor(index, board, backward);
 }
