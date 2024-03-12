@@ -7,12 +7,12 @@ const Navbar: FC = (): JSX.Element => {
             <div className="container-fluid">
                 <Link className="navbar-brand" to="/">Checker's</Link>
                 <div className="navbar-nav">
-                    <div className='nav-item'>
+                    {/* <div className='nav-item'>
                         <Link className="nav-link" to="/">Home</Link>
                     </div>
                     <div className='nav-item'>
                         <Link className="nav-link" to="/game">Play</Link>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </nav>
