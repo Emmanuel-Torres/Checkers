@@ -5,14 +5,13 @@ import SquareComponent from "../square/SquareComponent";
 import styles from "./BoardComponent.module.css"
 import MoveRequest from "../../../models/game/moveRequest";
 import Piece from "../../../models/game/piece";
+import gameService from "../../../services/gameService";
 
 type Props = {
     board: Piece[];
-    blackPieceId: string;
-    // validLocations: BoardLocation[];
-    isReversed: boolean;
-    // onGetValidMoves: (location: BoardLocation) => void;
-    // onMakeMove: (request: MoveRequest) => void;
+    isReversed: boolean; //Is Room Owner
+    yourId: string;
+    currentTurnId: string;
 }
 
 const BoardComponent: FC<Props> = (props): JSX.Element => {
@@ -61,10 +60,14 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
             return undefined;
         }
         
-        if (ownerId === props.blackPieceId)
+        if (ownerId === props.yourId)
             return "Black";
 
         return "White";
+    }
+
+    const getIsHighlighted = (index: number): boolean => {
+        return props.currentTurnId === props.yourId && props.board[index]?.ownerId === props.yourId && gameService.hasValidMoves(index, props.board, props.isReversed);
     }
 
     const boardStyles = styles.board + (props.isReversed ? " " + styles['board-reversed'] : '');
@@ -74,7 +77,7 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
             <div className={boardStyles}>
                 {props.board.map((p, i) => {
                     // const isSelected = p.location.column === source?.location.column && p.location.row === source?.location.row;
-                    return <SquareComponent pieceColor={getPieceColor(p?.ownerId)} pieceState={p?.state} color={getSquareColor(i)} key={i} isReversed={props.isReversed} />
+                    return <SquareComponent isHighlighted={getIsHighlighted(i)} pieceColor={getPieceColor(p?.ownerId)} pieceState={p?.state} color={getSquareColor(i)} key={i} isReversed={props.isReversed} />
                 })}
             </div>
         </div>

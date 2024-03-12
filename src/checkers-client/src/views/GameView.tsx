@@ -18,15 +18,6 @@ const GameView: FC = (): JSX.Element => {
     const [isRoomOwner, setIsRoomOwner] = useState<boolean>(false);
     const [roomInfo, setRoomInfo] = useState<RoomInfo>();
     const [gameInfo, setGameInfo] = useState<GameInfo>();
-    // const [isLoading, setIsLoading] = useState<boolean>(true);
-    // const [isMatchMaking, setIsMatchMaking] = useState<boolean>(false);
-    // const [inGame, setInGame] = useState<boolean>(false);
-    // const [isGameOver, setIsGameOver] = useState<boolean>(false);
-    // const [board, setBoard] = useState<Square[]>([]);
-    // const [validLocations, setValidMoves] = useState<BoardLocation[]>([]);
-    // const [yourTurn, setYourTurn] = useState<boolean>(false);
-    // const [yourColor, setYourColor] = useState<string>("");
-    // const [winner, setWinner] = useState<string>("");
 
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
@@ -61,7 +52,7 @@ const GameView: FC = (): JSX.Element => {
             });
 
             connection.on(HubMethods.sendGameInfo, (gameInfo: GameInfo) => {
-                console.log(gameInfo);
+                console.log(JSON.stringify(gameInfo));
                 setGameInfo(gameInfo);
             });
 
@@ -117,7 +108,7 @@ const GameView: FC = (): JSX.Element => {
             {roomInfo?.roomGuest && !gameInfo && <button type="button" onClick={startGame}>Start Game</button>}
             {gameInfo && <>
                 <PlayerIndicatorComponent yourTurn={gameInfo.nextPlayerTurn.playerId === player?.playerId} />
-                <BoardComponent blackPieceId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} />
+                <BoardComponent currentTurnId={gameInfo.nextPlayerTurn.playerId} yourId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} />
             </>}
         </>
     )

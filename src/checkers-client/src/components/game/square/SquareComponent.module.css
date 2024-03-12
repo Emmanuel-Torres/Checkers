@@ -17,20 +17,27 @@
 }
 
 .square {
-  color: white;
-  aspect-ratio: 1/1;
-  display: flex;
-  justify-content: center;
   padding: .25rem;
 }
 
 .square-reversed {
   transform: rotate(180deg);
 }
-
+/* 
 .square-selected {
   position: relative;
   z-index: 1;
   transition: box-shadow 0.5s ease-in-out;
   box-shadow: 0px 0px 10px 5px rgb(255, 0, 0);
+} */
+
+.square-highlighted {
+  z-index: 1;
+  animation: breath 2s infinite;
+}
+
+@keyframes breath {
+  0% { box-shadow: 0px 0px 10px 0px red; }
+  50% { box-shadow: 0px 0px 12px 4px red; }
+  100% { box-shadow: 0px 0px 10px 0px red; }
 }

@@ -9,14 +9,15 @@ type Props = {
     color: string;
     pieceColor?: string;
     pieceState?: string;
-    // isValidMoveLocation: boolean;
     isReversed: boolean;
-    // isSelected: boolean;
-    // onSquareClicked: (square: Square) => void;
+    isHighlighted: boolean;
 }
 
 const SquareComponent: FC<Props> = (props): JSX.Element => {
-    const squareStyle = styles.square + " " + styles[`bg-${props.color}`] + (props.isReversed ? " " + styles['square-reversed'] : "");
+    const colorStyle = " " + styles[`bg-${props.color}`];
+    const reversedStyle = props.isReversed ? " " + styles['square-reversed'] : "";
+    const highlightedStyle = props.isHighlighted ? " " + styles['square-highlighted'] : "";
+    const squareStyle = styles.square +  colorStyle + reversedStyle + highlightedStyle;
 
     return (
         <>
