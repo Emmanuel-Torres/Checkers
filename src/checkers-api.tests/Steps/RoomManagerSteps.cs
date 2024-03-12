@@ -166,7 +166,7 @@ public class RoomManagerSteps
 
     private void KickGuestPlayer(string roomId, string playerId)
     {
-        ((RoomManager)_scenarioContext["roomManager"]).KickGuestPlayer(roomId, playerId);
+        ((RoomManager)_scenarioContext["roomManager"]).KickGuestPlayer(playerId);
     }
 
     private void RemoveRoom(string roomId)
