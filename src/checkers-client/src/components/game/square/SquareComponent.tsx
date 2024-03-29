@@ -11,6 +11,7 @@ type Props = {
     pieceState?: string;
     isReversed: boolean;
     isHighlighted: boolean;
+    onSquareClicked: () => void;
 }
 
 const SquareComponent: FC<Props> = (props): JSX.Element => {
@@ -21,7 +22,7 @@ const SquareComponent: FC<Props> = (props): JSX.Element => {
 
     return (
         <>
-            <div className={squareStyle}>
+            <div className={squareStyle} onClick={props.onSquareClicked}>
                 {/* {props.isValidMoveLocation &&
                     <ValidMoveIndicatorComponent />} */}
                 {props.pieceColor && <PieceComponent color={props.pieceColor!} state={props.pieceState!}/>}

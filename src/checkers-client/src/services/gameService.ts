@@ -15,6 +15,10 @@ const hasValidMoves = (index: number, board: Piece[], isRoomOwner: boolean): boo
     return hasAvailableNeighbor(index, board, backward);
 }
 
+const getValidMoves = (index: number, board: Piece[], isRoomOwner: boolean): number[][] => {
+    return [];
+}
+
 const hasAvailableNeighbor = (index: number, board: Piece[], rowDirection: number): boolean => {
     const piece = board[index];
     const row = Math.floor(index / 8);
@@ -42,8 +46,11 @@ const hasAvailableNeighbor = (index: number, board: Piece[], rowDirection: numbe
     return false;
 }
 
+
+
 const gameService = {
-    hasValidMoves
+    hasValidMoves,
+    getValidMoves
 }
 
 export default gameService;

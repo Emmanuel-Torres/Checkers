@@ -1,21 +1,18 @@
 import { FC, useState } from "react";
-import Square from "../../../models/game/square";
-import BoardLocation from "../../../models/game/location";
 import SquareComponent from "../square/SquareComponent";
 import styles from "./BoardComponent.module.css"
-import MoveRequest from "../../../models/game/moveRequest";
 import Piece from "../../../models/game/piece";
 import gameService from "../../../services/gameService";
 
 type Props = {
     board: Piece[];
-    isReversed: boolean; //Is Room Owner
+    isReversed: boolean; //true for room owner
     yourId: string;
     currentTurnId: string;
 }
 
 const BoardComponent: FC<Props> = (props): JSX.Element => {
-    // const [source, setSource] = useState<Square>();
+    const [source, setSource] = useState<number>();
 
     // const validIndices: number[] = [];
 
@@ -45,6 +42,18 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
     //     setSource(undefined);
     // }
 
+    const squareSelected = (index: number) => {
+        const square = props.board[index];
+
+        if (square?.ownerId !== props.yourId)
+            return;
+
+        if (!gameService.hasValidMoves(index, props.board, props.isReversed))
+            return;
+
+        setSource(index);
+    }
+
     const getSquareColor = (index: number): string => {
         const row = Math.floor(index / 8);
         const colum = index % 8;
@@ -67,7 +76,10 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
     }
 
     const getIsHighlighted = (index: number): boolean => {
-        return props.currentTurnId === props.yourId && props.board[index]?.ownerId === props.yourId && gameService.hasValidMoves(index, props.board, props.isReversed);
+        const yourTurn = props.currentTurnId === props.yourId;
+        const yourPiece = props.board[index]?.ownerId === props.yourId;
+        const hasValidMoves = gameService.hasValidMoves(index, props.board, props.isReversed);
+        return yourTurn && yourPiece && hasValidMoves;
     }
 
     const boardStyles = styles.board + (props.isReversed ? " " + styles['board-reversed'] : '');
@@ -76,8 +88,13 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
         <div className={styles.container}>
             <div className={boardStyles}>
                 {props.board.map((p, i) => {
-                    // const isSelected = p.location.column === source?.location.column && p.location.row === source?.location.row;
-                    return <SquareComponent isHighlighted={getIsHighlighted(i)} pieceColor={getPieceColor(p?.ownerId)} pieceState={p?.state} color={getSquareColor(i)} key={i} isReversed={props.isReversed} />
+                    const isHighlighted = source === undefined ? getIsHighlighted(i) : i === source;
+                    return <SquareComponent onSquareClicked={() => squareSelected(i)}
+                                            isHighlighted={isHighlighted}
+                                            pieceColor={getPieceColor(p?.ownerId)}
+                                            pieceState={p?.state} color={getSquareColor(i)} 
+                                            isReversed={props.isReversed} 
+                                            key={i} />
                 })}
             </div>
         </div>
