@@ -423,7 +423,7 @@ Scenario: Player O tries a twisty triple jump when capturing
     |   |   |   |   |   |   |  
   """
 
-Scenario: Player O tries an invalid double jump
+Scenario: Player O tries to jump over 2 pieces
   Given the following board with players O and X and player O is moving
   """
   O |   |   |   |   |   |   |   .
@@ -437,6 +437,36 @@ Scenario: Player O tries an invalid double jump
   """
   When player O makes a move from '0,0 > 2,2 > 5,5'
   Then the move should fail with error 'Pieces can only move one square when not capturing'
+
+Scenario: Player O tries to do a regular move after a jump
+  Given the following board with players O and X and player O is moving
+  """
+  O |   |   |   |   |   |   |   .
+    | X |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |  
+  """
+  When player O makes a move from '0,0 > 2,2 > 3,3'
+  Then the move should fail with error 'Piece cannot make a regular move after capturing'
+
+Scenario: Player O tries to make 2 regular moves
+  Given the following board with players O and X and player O is moving
+  """
+  O |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |  
+  """
+  When player O makes a move from '0,0 > 1,1 > 2,2'
+  Then the move should fail with error 'Piece can only make one regular move per turn'
 
 Scenario: Player O tries to double jump backwards with regular piece
   Given the following board with players O and X and player O is moving

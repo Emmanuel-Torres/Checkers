@@ -63,9 +63,14 @@ public class Game
         Location? source = null;
         Location? destination = null;
         Piece? initialPiece = null;
-
+        bool? wasPreviousAttack = null;
         foreach (var request in requests)
         {
+            if (wasPreviousAttack == false)
+            {
+                throw new InvalidOperationException("Piece can only make one regular move per turn");
+            }
+
             var result = ValidateMove(playerId, request, out var isAttackMove);
             if (!result.isValid)
             {
@@ -76,6 +81,12 @@ public class Game
                 }
 
                 throw new InvalidOperationException(result.errorMessage);
+            }
+
+            wasPreviousAttack ??= isAttackMove;
+            if (wasPreviousAttack != isAttackMove)
+            {
+                throw new InvalidOperationException("Piece cannot make a regular move after capturing");
             }
             source ??= request.Source;
             destination = request.Destination;
@@ -215,6 +226,12 @@ public class Game
 
     private bool IsPlayerCapturing(Location source, Location destination)
     {
+        var rowDiff = Math.Abs(source.Row - destination.Row);
+        if (rowDiff < 2)
+        {
+            return false;
+        }
+
         var middle = GetMiddleLocation(source, destination);
         return _board[middle.Row][middle.Column] is not null;
     }
