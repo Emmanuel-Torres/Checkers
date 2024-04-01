@@ -1,10 +1,9 @@
+using System.Text.Json;
 using checkers_api.Models.GameLogic;
 using checkers_api.Models.GameModels;
 using checkers_api.Models.Requests;
 using checkers_api.tests.Helpers;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using Moq;
 using TechTalk.SpecFlow;
 
 namespace checkers_api.tests.Steps
@@ -22,7 +21,7 @@ namespace checkers_api.tests.Steps
         [Given(@"the following board with players (.*) and (.*) and player (.*) is moving")]
         public void GivenTheFollowingBoard(string player1, string player2, string currentTurn, string startingBoard)
         {
-            var parsedBoard = Parser.ParseStringBoardToPieceIEnumerable(startingBoard).ToArray();
+            var parsedBoard = Parser.ParseStringToPieceBoard(startingBoard);
             var game = new Game("game", new Player(player1, player1), new Player(player2, player2), parsedBoard, new Player(currentTurn, currentTurn));
             _scenarioContext.Add("startingBoard", startingBoard);
             _scenarioContext.Add("currentGame", game);
@@ -45,11 +44,15 @@ namespace checkers_api.tests.Steps
         [Then(@"the board should look like this")]
         public void ThenTheFollowingBoardShouldGetCreated(string expectedBoard)
         {
-            var parsedExpectedBoard = Parser.ParseStringBoardToStringArray(expectedBoard);
-            var board = _scenarioContext.Get<Game>("currentGame").Board.ToList();
+            var parsedExpectedBoard = Parser.ParseStringToStringBoard(expectedBoard);
+            var board = _scenarioContext.Get<Game>("currentGame").Board;
 
             _scenarioContext.ContainsKey("moveException").Should().BeFalse();
-            board.Select(p => p?.ToString()).Should().Equal(parsedExpectedBoard);
+            
+            // var actual = board.Select(p => p?.ToString());
+            var actual = board.Select(r => r.Select(p => p?.ToString()));
+
+            actual.Should().BeEquivalentTo(parsedExpectedBoard);
         }
 
         [Then(@"the move should fail with error '(.*)'")]
@@ -58,11 +61,13 @@ namespace checkers_api.tests.Steps
             var moveException = _scenarioContext.Get<Exception>("moveException");
             
             var startingBoard = _scenarioContext.Get<string>("startingBoard");
-            var parsedExpectedBoard = Parser.ParseStringBoardToStringArray(startingBoard);
-            var currentBoard = _scenarioContext.Get<Game>("currentGame").Board.ToList();
+            var parsedExpectedBoard = Parser.ParseStringToStringBoard(startingBoard);
+            var currentBoard = _scenarioContext.Get<Game>("currentGame").Board;
             
             moveException.Message.Should().Contain(expectedError);
-            currentBoard.Select(p => p?.ToString()).Should().Equal(parsedExpectedBoard);
+
+            var actual = currentBoard.Select(r => r.Select(p => p?.ToString()));
+            actual.Should().BeEquivalentTo(parsedExpectedBoard);
         }
 
         [Then(@"player (.*) won the game")]

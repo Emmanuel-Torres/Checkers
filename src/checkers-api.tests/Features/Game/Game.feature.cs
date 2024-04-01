@@ -94,13 +94,13 @@ this.ScenarioInitialize(scenarioInfo);
     testRunner.When("I start a game with players O and X", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 6
-    testRunner.Then("the board should look like this", @" O |   | O |   | O |   | O |   |
-   | O |   | O |   | O |   | O |
- O |   | O |   | O |   | O |   |
-   |   |   |   |   |   |   |   |
-   |   |   |   |   |   |   |   |
-   | X |   | X |   | X |   | X |
- X |   | X |   | X |   | X |   |
+    testRunner.Then("the board should look like this", @" O |   | O |   | O |   | O |   .
+   | O |   | O |   | O |   | O .
+ O |   | O |   | O |   | O |   .
+   |   |   |   |   |   |   |   .
+   |   |   |   |   |   |   |   .
+   | X |   | X |   | X |   | X .
+ X |   | X |   | X |   | X |   .
    | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -125,23 +125,23 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 19
-  testRunner.Given("the following board with players O and X and player X is moving", @"  O |   | O |   | O |   | O |   |
-    | O |   | O |   | O |   | O |
-  O |   | O |   | O |   |   |   |
-    |   |   |   |   | O |   |   |
-    |   |   |   |   |   |   |   |
-    | X |   | X |   | X |   | X |
-  X |   | X |   | X |   | X |   |
+  testRunner.Given("the following board with players O and X and player X is moving", @"  O |   | O |   | O |   | O |   .
+    | O |   | O |   | O |   | O .
+  O |   | O |   | O |   |   |   .
+    |   |   |   |   | O |   |   .
+    |   |   |   |   |   |   |   .
+    | X |   | X |   | X |   | X .
+  X |   | X |   | X |   | X |   .
     | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 30
-  testRunner.Then("the board should look like this", @"  O |   | O |   | O |   | O |   |
-    | O |   | O |   | O |   | O |
-  O |   | O |   | O |   |   |   |
-    |   |   |   |   | O |   |   |
-    |   |   |   |   |   |   |   |
-    | X |   | X |   | X |   | X |
-  X |   | X |   | X |   | X |   |
+  testRunner.Then("the board should look like this", @"  O |   | O |   | O |   | O |   .
+    | O |   | O |   | O |   | O .
+  O |   | O |   | O |   |   |   .
+    |   |   |   |   | O |   |   .
+    |   |   |   |   |   |   |   .
+    | X |   | X |   | X |   | X .
+  X |   | X |   | X |   | X |   .
     | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -166,26 +166,26 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 43
-  testRunner.Given("the following board with players O and X and player X is moving", @"  O |   | O |   | O |   | O |   |
-    | O |   | O |   | O |   | O |
-  O |   | O |   | O |   | O |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    | X |   | X |   | X |   | X |
-  X |   | X |   | X |   | X |   |
+  testRunner.Given("the following board with players O and X and player X is moving", @"  O |   | O |   | O |   | O |   .
+    | O |   | O |   | O |   | O .
+  O |   | O |   | O |   | O |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    | X |   | X |   | X |   | X .
+  X |   | X |   | X |   | X |   .
     | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 54
   testRunner.When("player X makes a move from \'5,1 > 4,2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 55
-  testRunner.Then("the board should look like this", @"  O |   | O |   | O |   | O |   |
-    | O |   | O |   | O |   | O |
-  O |   | O |   | O |   | O |   |
-    |   |   |   |   |   |   |   |
-    |   | X |   |   |   |   |   |
-    |   |   | X |   | X |   | X |
-  X |   | X |   | X |   | X |   |
+  testRunner.Then("the board should look like this", @"  O |   | O |   | O |   | O |   .
+    | O |   | O |   | O |   | O .
+  O |   | O |   | O |   | O |   .
+    |   |   |   |   |   |   |   .
+    |   | X |   |   |   |   |   .
+    |   |   | X |   | X |   | X .
+  X |   | X |   | X |   | X |   .
     | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 66
@@ -213,26 +213,26 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 69
-  testRunner.Given("the following board with players O and X and player O is moving", @"  O |   | O |   | O |   | O |   |
-    | O |   | O |   | O |   | O |
-  O |   | O |   | O |   | O |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    | X |   | X |   | X |   | X |
-  X |   | X |   | X |   | X |   |
+  testRunner.Given("the following board with players O and X and player O is moving", @"  O |   | O |   | O |   | O |   .
+    | O |   | O |   | O |   | O .
+  O |   | O |   | O |   | O |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    | X |   | X |   | X |   | X .
+  X |   | X |   | X |   | X |   .
     | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 80
   testRunner.When("player O makes a move from \'2,6 > 3,5\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 81
-  testRunner.Then("the board should look like this", @"  O |   | O |   | O |   | O |   |
-    | O |   | O |   | O |   | O |
-  O |   | O |   | O |   |   |   |
-    |   |   |   |   | O |   |   |
-    |   |   |   |   |   |   |   |
-    | X |   | X |   | X |   | X |
-  X |   | X |   | X |   | X |   |
+  testRunner.Then("the board should look like this", @"  O |   | O |   | O |   | O |   .
+    | O |   | O |   | O |   | O .
+  O |   | O |   | O |   |   |   .
+    |   |   |   |   | O |   |   .
+    |   |   |   |   |   |   |   .
+    | X |   | X |   | X |   | X .
+  X |   | X |   | X |   | X |   .
     | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 92
@@ -279,13 +279,13 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 95
-  testRunner.Given(string.Format("the following board with players O and X and player {0} is moving", turn), @"    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-  O |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    | X |   |   |   | O |   |   |
-  X |   |   |   | X |   |   |   |
+  testRunner.Given(string.Format("the following board with players O and X and player {0} is moving", turn), @"    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+  O |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    | X |   |   |   | O |   |   .
+  X |   |   |   | X |   |   |   .
     |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 106
@@ -316,26 +316,26 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 128
-  testRunner.Given("the following board with players O and X and player X is moving", @"    |   |   |   |   |   |   |   |
-    | X |   |   |   |   |   |   |
-  O |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
+  testRunner.Given("the following board with players O and X and player X is moving", @"    |   |   |   |   |   |   |   .
+    | X |   |   |   |   |   |   .
+  O |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 139
   testRunner.When("player X makes a move from \'1,1 > 0,0\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 140
-  testRunner.Then("the board should look like this", @"  X$ |   |   |   |   |   |   |   |
-     |   |   |   |   |   |   |   |
-   O |   |   |   |   |   |   |   |
-     |   |   |   |   |   |   |   |
-     |   |   |   |   |   |   |   |
-     |   |   |   |   |   |   |   |
-     |   |   |   |   |   |   |   |
+  testRunner.Then("the board should look like this", @"  X$ |   |   |   |   |   |   |   .
+     |   |   |   |   |   |   |   .
+   O |   |   |   |   |   |   |   .
+     |   |   |   |   |   |   |   .
+     |   |   |   |   |   |   |   .
+     |   |   |   |   |   |   |   .
+     |   |   |   |   |   |   |   .
      |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -360,26 +360,26 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 153
-  testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |   |   |   |
-    | X |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   | O |   |
+  testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |   |   |   .
+    | X |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   | O |   .
     |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 164
   testRunner.When("player O makes a move from \'6,6 > 7,7\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 165
-  testRunner.Then("the board should look like this", @"    |   |   |   |   |   |   |   |
-    | X |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
+  testRunner.Then("the board should look like this", @"    |   |   |   |   |   |   |   .
+    | X |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
     |   |   |   |   |   |   | O$", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -404,23 +404,23 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 178
-  testRunner.Given("the following board with players O and X and player O is moving", @" O$ |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
+  testRunner.Given("the following board with players O and X and player O is moving", @" O$ |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 189
-  testRunner.Then("the board should look like this", @" O$ |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
-    |   |   |   |   |   |   |   |
+  testRunner.Then("the board should look like this", @" O$ |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
+    |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -445,26 +445,26 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 202
-  testRunner.Given("the following board with players O and X and player X is moving", @"  |    |   |   |   |   |   |   |
-  | X$ |   |   |   |   |   |   |
-  |    |   |   |   |   |   |   |
-  |    |   |   |   |   |   |   |
-  |    |   |   |   |   |   |   |
-  |    |   |   |   |   |   |   |
-  |    |   |   |   |   | O |   |
+  testRunner.Given("the following board with players O and X and player X is moving", @"  |    |   |   |   |   |   |   .
+  | X$ |   |   |   |   |   |   .
+  |    |   |   |   |   |   |   .
+  |    |   |   |   |   |   |   .
+  |    |   |   |   |   |   |   .
+  |    |   |   |   |   |   |   .
+  |    |   |   |   |   | O |   .
   |    |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 213
   testRunner.When("player X makes a move from \'1,1 > 2,2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 214
-  testRunner.Then("the board should look like this", @"  |   |    |   |   |   |   |   |
-  |   |    |   |   |   |   |   |
-  |   | X$ |   |   |   |   |   |
-  |   |    |   |   |   |   |   |
-  |   |    |   |   |   |   |   |
-  |   |    |   |   |   |   |   |
-  |   |    |   |   |   | O |   |
+  testRunner.Then("the board should look like this", @"  |   |    |   |   |   |   |   .
+  |   |    |   |   |   |   |   .
+  |   | X$ |   |   |   |   |   .
+  |   |    |   |   |   |   |   .
+  |   |    |   |   |   |   |   .
+  |   |    |   |   |   |   |   .
+  |   |    |   |   |   | O |   .
   |   |    |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -489,26 +489,26 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 227
-  testRunner.Given("the following board with players O and X and player O is moving", @"  |   |   |   |   |   |    |   |
-  | X |   |   |   |   |    |   |
-  |   |   |   |   |   |    |   |
-  |   |   |   |   |   |    |   |
-  |   |   |   |   |   |    |   |
-  |   |   |   |   |   |    |   |
-  |   |   |   |   |   | O$ |   |
+  testRunner.Given("the following board with players O and X and player O is moving", @"  |   |   |   |   |   |    |   .
+  | X |   |   |   |   |    |   .
+  |   |   |   |   |   |    |   .
+  |   |   |   |   |   |    |   .
+  |   |   |   |   |   |    |   .
+  |   |   |   |   |   |    |   .
+  |   |   |   |   |   | O$ |   .
   |   |   |   |   |   |    |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 238
   testRunner.When("player O makes a move from \'6,6 > 5,5\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 239
-  testRunner.Then("the board should look like this", @"  |   |   |   |   |    |   |   |
-  | X |   |   |   |    |   |   |
-  |   |   |   |   |    |   |   |
-  |   |   |   |   |    |   |   |
-  |   |   |   |   |    |   |   |
-  |   |   |   |   | O$ |   |   |
-  |   |   |   |   |    |   |   |
+  testRunner.Then("the board should look like this", @"  |   |   |   |   |    |   |   .
+  | X |   |   |   |    |   |   .
+  |   |   |   |   |    |   |   .
+  |   |   |   |   |    |   |   .
+  |   |   |   |   |    |   |   .
+  |   |   |   |   | O$ |   |   .
+  |   |   |   |   |    |   |   .
   |   |   |   |   |    |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -533,26 +533,26 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 252
-  testRunner.Given("the following board with players O and X and player X is moving", @"  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   | O |   |   |   |   |   |
-  |   |   | X |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
+  testRunner.Given("the following board with players O and X and player X is moving", @"  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   | O |   |   |   |   |   .
+  |   |   | X |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 263
   testRunner.When("player X makes a move from \'3,3 > 1,1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 264
-  testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   |
-  | X |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
+  testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   .
+  | X |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -577,26 +577,26 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 277
-  testRunner.Given("the following board with players O and X and player O is moving", @"  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   | O |   |   |   |   |   |
-  |   |   | X |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
+  testRunner.Given("the following board with players O and X and player O is moving", @"  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   | O |   |   |   |   |   .
+  |   |   | X |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 288
   testRunner.When("player O makes a move from \'2,2 > 4,4\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 289
-  testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   | O |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
+  testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   | O |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -621,26 +621,26 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 302
-  testRunner.Given("the following board with players O and X and player X is moving", @"  |    |   |   |   |   |   |   |
-  | X$ |   |   |   |   |   |   |
-  |    | O |   |   |   |   |   |
-  |    |   |   |   |   |   |   |
-  |    |   |   |   |   |   |   |
-  |    |   |   |   |   |   |   |
-  |    |   |   |   |   |   |   |
+  testRunner.Given("the following board with players O and X and player X is moving", @"  |    |   |   |   |   |   |   .
+  | X$ |   |   |   |   |   |   .
+  |    | O |   |   |   |   |   .
+  |    |   |   |   |   |   |   .
+  |    |   |   |   |   |   |   .
+  |    |   |   |   |   |   |   .
+  |    |   |   |   |   |   |   .
   |    |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 313
   testRunner.When("player X makes a move from \'1,1 > 3,3\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 314
-  testRunner.Then("the board should look like this", @"  |   |   |    |   |   |   |   |
-  |   |   |    |   |   |   |   |
-  |   |   |    |   |   |   |   |
-  |   |   | X$ |   |   |   |   |
-  |   |   |    |   |   |   |   |
-  |   |   |    |   |   |   |   |
-  |   |   |    |   |   |   |   |
+  testRunner.Then("the board should look like this", @"  |   |   |    |   |   |   |   .
+  |   |   |    |   |   |   |   .
+  |   |   |    |   |   |   |   .
+  |   |   | X$ |   |   |   |   .
+  |   |   |    |   |   |   |   .
+  |   |   |    |   |   |   |   .
+  |   |   |    |   |   |   |   .
   |   |   |    |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -665,26 +665,26 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 327
-  testRunner.Given("the following board with players O and X and player O is moving", @"  |   |    |   |   |   |   |   |
-  | X |    |   |   |   |   |   |
-  |   | O$ |   |   |   |   |   |
-  |   |    |   |   |   |   |   |
-  |   |    |   |   |   |   |   |
-  |   |    |   |   |   |   |   |
-  |   |    |   |   |   |   |   |
+  testRunner.Given("the following board with players O and X and player O is moving", @"  |   |    |   |   |   |   |   .
+  | X |    |   |   |   |   |   .
+  |   | O$ |   |   |   |   |   .
+  |   |    |   |   |   |   |   .
+  |   |    |   |   |   |   |   .
+  |   |    |   |   |   |   |   .
+  |   |    |   |   |   |   |   .
   |   |    |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 338
   testRunner.When("player O makes a move from \'2,2 > 0,0\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 339
-  testRunner.Then("the board should look like this", @"O$ |   |   |   |   |   |   |   |
-   |   |   |   |   |   |   |   |
-   |   |   |   |   |   |   |   |
-   |   |   |   |   |   |   |   |
-   |   |   |   |   |   |   |   |
-   |   |   |   |   |   |   |   |
-   |   |   |   |   |   |   |   |
+  testRunner.Then("the board should look like this", @"O$ |   |   |   |   |   |   |   .
+   |   |   |   |   |   |   |   .
+   |   |   |   |   |   |   |   .
+   |   |   |   |   |   |   |   .
+   |   |   |   |   |   |   |   .
+   |   |   |   |   |   |   |   .
+   |   |   |   |   |   |   |   .
    |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -709,26 +709,26 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 352
-  testRunner.Given("the following board with players O and X and player X is moving", @"  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   | O |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   | O |   |   |   |
-  |   |   |   |   | X |   |   |
-  |   |   |   |   |   |   |   |
+  testRunner.Given("the following board with players O and X and player X is moving", @"  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   | O |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   | O |   |   |   .
+  |   |   |   |   | X |   |   .
+  |   |   |   |   |   |   |   .
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 363
   testRunner.When("player X makes a move from \'5,5 > 3,3 > 1,1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 364
-  testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   |
-  | X |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
+  testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   .
+  | X |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -753,22 +753,22 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 377
-  testRunner.Given("the following board with players O and X and player O is moving", @"O |   |   |   |   |   |   |   |
-  | X |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   | X |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   | X |   |   |
-  |   |   |   |   |   |   |   |
+  testRunner.Given("the following board with players O and X and player O is moving", @"O |   |   |   |   |   |   |   .
+  | X |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   | X |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   | X |   |   .
+  |   |   |   |   |   |   |   .
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 388
   testRunner.When("player O makes a move from \'0,0 > 2,2 > 4,4 > 6,6\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 389
-  testRunner.Then("the board should look like this", "|   |   |   |   |   |   |   |\r\n|   |   |   |   |   |   |   |\r\n|   |   |   |   |  " +
-                        " |   |   |\r\n|   |   |   |   |   |   |   |\r\n|   |   |   |   |   |   |   |\r\n|   | " +
-                        "  |   |   |   |   |   |\r\n|   |   |   |   |   | O |   |\r\n|   |   |   |   |   |   " +
+  testRunner.Then("the board should look like this", "|   |   |   |   |   |   |   .\r\n|   |   |   |   |   |   |   .\r\n|   |   |   |   |  " +
+                        " |   |   .\r\n|   |   |   |   |   |   |   .\r\n|   |   |   |   |   |   |   .\r\n|   | " +
+                        "  |   |   |   |   |   .\r\n|   |   |   |   |   | O |   .\r\n|   |   |   |   |   |   " +
                         "|  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -793,22 +793,22 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 402
-  testRunner.Given("the following board with players O and X and player O is moving", @"O |   |   |   |   |   |   |   |
-  | X |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  | X |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  | X |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
+  testRunner.Given("the following board with players O and X and player O is moving", @"O |   |   |   |   |   |   |   .
+  | X |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  | X |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  | X |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 413
   testRunner.When("player O makes a move from \'0,0 > 2,2 > 4,0 > 6,2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 414
-  testRunner.Then("the board should look like this", "|   |   |   |   |   |   |   |\r\n|   |   |   |   |   |   |   |\r\n|   |   |   |   |  " +
-                        " |   |   |\r\n|   |   |   |   |   |   |   |\r\n|   |   |   |   |   |   |   |\r\n|   | " +
-                        "  |   |   |   |   |   |\r\n|   | O |   |   |   |   |   |\r\n|   |   |   |   |   |   " +
+  testRunner.Then("the board should look like this", "|   |   |   |   |   |   |   .\r\n|   |   |   |   |   |   |   .\r\n|   |   |   |   |  " +
+                        " |   |   .\r\n|   |   |   |   |   |   |   .\r\n|   |   |   |   |   |   |   .\r\n|   | " +
+                        "  |   |   |   |   |   .\r\n|   | O |   |   |   |   |   .\r\n|   |   |   |   |   |   " +
                         "|  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -833,13 +833,13 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 427
-  testRunner.Given("the following board with players O and X and player O is moving", @"O |   |   |   |   |   |   |   |
-  | X |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   | X |   |   |   |   |
-  |   |   |   | X |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
+  testRunner.Given("the following board with players O and X and player O is moving", @"O |   |   |   |   |   |   |   .
+  | X |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   | X |   |   |   |   .
+  |   |   |   | X |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 438
@@ -871,13 +871,13 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 442
-  testRunner.Given("the following board with players O and X and player O is moving", @"O |   |   |   |   |   |   |   |
-  | X |   | X |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
+  testRunner.Given("the following board with players O and X and player O is moving", @"O |   |   |   |   |   |   |   .
+  | X |   | X |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 453
@@ -908,22 +908,22 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 457
-  testRunner.Given("the following board with players O and X and player O is moving", @"  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   | X |   |
-  | O |   |   |   |   |   |   |
-  |   | X |   | X |   |   |   |
+  testRunner.Given("the following board with players O and X and player O is moving", @"  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   | X |   .
+  | O |   |   |   |   |   |   .
+  |   | X |   | X |   |   |   .
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 468
   testRunner.When("player O makes a move from \'5,1 > 7,3 > 5,5 > 3,7\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 469
-  testRunner.Then("the board should look like this", "|   |   |   |   |   |   |    |\r\n|   |   |   |   |   |   |    |\r\n|   |   |   |   |" +
-                        "   |   |    |\r\n|   |   |   |   |   |   | O$ |\r\n|   |   |   |   |   |   |    |\r\n|" +
-                        "   |   |   |   |   |   |    |\r\n|   |   |   |   |   |   |    |\r\n|   |   |   |   |" +
+  testRunner.Then("the board should look like this", "|   |   |   |   |   |   |    .\r\n|   |   |   |   |   |   |    .\r\n|   |   |   |   |" +
+                        "   |   |    .\r\n|   |   |   |   |   |   | O$ .\r\n|   |   |   |   |   |   |    .\r\n|" +
+                        "   |   |   |   |   |   |    .\r\n|   |   |   |   |   |   |    .\r\n|   |   |   |   |" +
                         "   |   |   ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -948,26 +948,26 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 482
-  testRunner.Given("the following board with players O and X and player X is moving", @"  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   | O |   |   |   |   |   |
-  | X |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
+  testRunner.Given("the following board with players O and X and player X is moving", @"  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   | O |   |   |   |   |   .
+  | X |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 493
   testRunner.When("player X makes a move from \'5,1 > 3,3\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 494
-  testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   | X |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
+  testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   | X |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 505
@@ -995,26 +995,26 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 508
-  testRunner.Given("the following board with players O and X and player O is moving", @"  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  | O |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  | O |   |   |   |   |   |   |
-X |   |   |   |   |   |   |   |
+  testRunner.Given("the following board with players O and X and player O is moving", @"  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  | O |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  | O |   |   |   |   |   |   .
+X |   |   |   |   |   |   |   .
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 519
   testRunner.When("player O makes a move from \'3,1 > 4,2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 520
-  testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   | O |   |   |   |   |   |
-  | O |   |   |   |   |   |   |
-X |   |   |   |   |   |   |   |
+  testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   | O |   |   |   |   |   .
+  | O |   |   |   |   |   |   .
+X |   |   |   |   |   |   |   .
   |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 531
@@ -1042,26 +1042,26 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 534
-  testRunner.Given("the following board with players O and X and player X is moving", @"  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  | O |   |   |   |   |   |   |
-X |   |   |   |   |   |   |   |
+  testRunner.Given("the following board with players O and X and player X is moving", @"  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  | O |   |   |   |   |   |   .
+X |   |   |   |   |   |   |   .
   | X |   | X |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 545
   testRunner.When("player X makes a move from \'7,1 > 6,2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 546
-  testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  |   |   |   |   |   |   |   |
-  | O |   |   |   |   |   |   |
-X |   | X |   |   |   |   |   |
+  testRunner.Then("the board should look like this", @"  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  |   |   |   |   |   |   |   .
+  | O |   |   |   |   |   |   .
+X |   | X |   |   |   |   |   .
   |   |   | X |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 557

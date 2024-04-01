@@ -8,9 +8,9 @@ public class GameInfo
     public bool IsGameOver { get; }
     public Player NextPlayerTurn { get; }
     public Player? Winner { get; }
-    public IEnumerable<Piece?> Board { get; }
+    public List<List<Piece?>> Board { get; }
 
-    public GameInfo(string roomId, Player nextPlayerTurn, IEnumerable<Piece?> board, Player? winner = null)
+    public GameInfo(string roomId, Player nextPlayerTurn, List<List<Piece?>> board, Player? winner = null)
     {
         RoomId = roomId;
         NextPlayerTurn = nextPlayerTurn;

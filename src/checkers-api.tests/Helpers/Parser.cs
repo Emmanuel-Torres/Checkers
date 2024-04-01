@@ -27,14 +27,14 @@ public static class Parser
         return requests;
     }
 
-    public static IEnumerable<string?> ParseStringBoardToStringArray(string board)
+    public static IEnumerable<IEnumerable<string?>> ParseStringToStringBoard(string stringBoard)
     {
-        return board.Split('|').ToList().Select(c => string.IsNullOrWhiteSpace(c) ? null : c.Trim());
+        return stringBoard.Split('.').Select(r => r.Split('|').ToList().Select(c => string.IsNullOrWhiteSpace(c) ? null : c.Trim()));
     }
 
-    public static IEnumerable<Piece?> ParseStringBoardToPieceIEnumerable(string board)
+    public static List<List<Piece?>> ParseStringToPieceBoard(string board)
     {
-        return ParseStringBoardToStringArray(board).Select(ParsePieceFromString);
+        return ParseStringToStringBoard(board).Select(r => r.Select(ParsePieceFromString).ToList()).ToList();
     }
 
     public static Location ParseLocationFromString(string location)

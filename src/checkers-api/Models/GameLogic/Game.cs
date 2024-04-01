@@ -12,10 +12,10 @@ public class Game
     private readonly Player _player1;
     private readonly Player _player2;
     private readonly List<Player> _players;
-    private readonly Piece?[] _board;
+    private readonly List<List<Piece?>> _board;
     private Player _currentTurn;
     private Player? _winner;
-    public Game(string gameId, Player player1, Player player2, Piece?[]? startingBoard = null, Player? startingPlayer = null)
+    public Game(string gameId, Player player1, Player player2, List<List<Piece?>>? startingBoard = null, Player? startingPlayer = null)
     {
         _id = gameId;
         _player1 = player1;
@@ -33,7 +33,7 @@ public class Game
 
         if (startingBoard is null)
         {
-            _board = new Piece[64];
+            _board = new() { new Piece?[8].ToList(), new Piece?[8].ToList(), new Piece?[8].ToList(), new Piece?[8].ToList(), new Piece?[8].ToList(), new Piece?[8].ToList(), new Piece?[8].ToList(), new Piece?[8].ToList() };
             InitBoard(player1.PlayerId, player2.PlayerId);
         }
         else
@@ -44,7 +44,7 @@ public class Game
 
     public string Id => _id;
     public IEnumerable<Player> Players => _players;
-    public IEnumerable<Piece?> Board => _board;
+    public List<List<Piece?>> Board => _board;
     public Player CurrentTurn => _currentTurn;
     public Player? Winner => _winner;
     public bool IsGameOver => _winner is not null;
@@ -59,7 +59,7 @@ public class Game
 
     private void ProcessMoveRequests(string playerId, IEnumerable<Move> requests)
     {
-        var toRemove = new List<int>();
+        var toRemove = new List<Location>();
         Location? source = null;
         Location? destination = null;
         Piece? initialPiece = null;
@@ -71,8 +71,8 @@ public class Game
             {
                 if (source is not null && destination is not null)
                 {
-                    _board[source.ToIndex()] = initialPiece;
-                    _board[destination.ToIndex()] = null;
+                    _board[source.Row][source.Column] = initialPiece;
+                    _board[destination.Row][destination.Column] = null;
                 }
 
                 throw new InvalidOperationException(result.errorMessage);
@@ -80,14 +80,11 @@ public class Game
             source ??= request.Source;
             destination = request.Destination;
 
-            var sourceIndex = request.Source.ToIndex();
-            var destinationIndex = request.Destination.ToIndex();
-
-            var piece = initialPiece ??= _board[sourceIndex]!;
+            var piece = initialPiece ??= _board[source.Row][source.Column]!;
 
             if (isAttackMove)
             {
-                var middleSource = (sourceIndex + destinationIndex) / 2;
+                var middleSource = GetMiddleLocation(request.Source, request.Destination);
                 toRemove.Add(middleSource);
             }
 
@@ -96,14 +93,14 @@ public class Game
                 piece.KingPiece();
             }
 
-            _board[sourceIndex] = null;
-            _board[destinationIndex] = piece;
+            _board[request.Source.Row][request.Source.Column] = null;
+            _board[request.Destination.Row][request.Destination.Column] = piece;
         }
 
 
         foreach (var i in toRemove)
         {
-            _board[i] = null;
+            _board[i.Row][i.Column] = null;
         }
     }
 
@@ -114,8 +111,6 @@ public class Game
         var destinationRow = request.Destination.Row;
         var destinationColumn = request.Destination.Column;
 
-        var sourceIndex = request.Source.ToIndex();
-        var destinationIndex = request.Destination.ToIndex();
         isAttackMove = false;
 
         if (_currentTurn.PlayerId != playerId)
@@ -131,7 +126,7 @@ public class Game
             return (false, $"Destination location ({destinationRow},{destinationColumn}) is out of bounds");
         }
 
-        var piece = _board[sourceIndex];
+        var piece = _board[sourceRow][sourceColumn];
         if (piece is null)
         {
             return (false, $"Source location ({sourceRow},{sourceColumn}) does not contain a piece");
@@ -140,7 +135,7 @@ public class Game
         {
             return (false, $"Player {playerId} does not own the piece at source location ({sourceRow},{sourceColumn})");
         }
-        if (_board[destinationIndex] is not null)
+        if (_board[destinationRow][destinationColumn] is not null)
         {
             return (false, $"Destination location ({destinationRow},{destinationColumn}) is not empty");
         }
@@ -158,7 +153,7 @@ public class Game
             return (false, $"Pieces can only move diagonally");
         }
 
-        var isPlayerCapturing = IsPlayerCapturing(sourceIndex, destinationIndex);
+        var isPlayerCapturing = IsPlayerCapturing(request.Source, request.Destination);
         if (rowDelta > 2 || (rowDelta > 1 && !isPlayerCapturing))
         {
             return (false, "Pieces can only move one square when not capturing");
@@ -170,7 +165,17 @@ public class Game
 
     private bool CanGameContinue()
     {
-        var remainingPieces = _board.Where(p => p?.OwnerId == _currentTurn.PlayerId);
+        var remainingPieces = new List<(int row, int column)>();
+        for (int r = 0; r < 8; r++)
+        {
+            for (int c = 0; c < 8; c++)
+            {
+                if (_board[r][c]?.OwnerId == _currentTurn.PlayerId)
+                {
+                    remainingPieces.Add((r, c));
+                }
+            }
+        }
 
         if (!remainingPieces.Any())
         {
@@ -179,16 +184,16 @@ public class Game
 
         foreach (var p in remainingPieces)
         {
-            var source = Array.IndexOf(_board, p).ToLocation();
-            var possibleMoves = new List<Location>() { new Location(source.Row + 1, source.Column + 1),
-                                                       new Location(source.Row + 1, source.Column - 1),
-                                                       new Location(source.Row - 1, source.Column + 1),
-                                                       new Location(source.Row - 1, source.Column - 1),
-                                                       new Location(source.Row + 2, source.Column + 2),
-                                                       new Location(source.Row + 2, source.Column - 2),
-                                                       new Location(source.Row - 2, source.Column + 2),
-                                                       new Location(source.Row - 2, source.Column - 2) };
+            var possibleMoves = new List<Location>() { new Location(p.row + 1, p.column + 1),
+                                                       new Location(p.row + 1, p.column - 1),
+                                                       new Location(p.row - 1, p.column + 1),
+                                                       new Location(p.row - 1, p.column - 1),
+                                                       new Location(p.row + 2, p.column + 2),
+                                                       new Location(p.row + 2, p.column - 2),
+                                                       new Location(p.row - 2, p.column + 2),
+                                                       new Location(p.row - 2, p.column - 2) };
 
+            var source = new Location(p.row, p.column);
             var moveRequests = possibleMoves.Select(l => new Move(source, l));
             foreach (var mr in moveRequests)
             {
@@ -208,10 +213,10 @@ public class Game
         return (playerId == _player1.PlayerId && row == PLAYER_2_HOME_ROW) || (playerId == _player2.PlayerId && row == PLAYER_1_HOME_ROW);
     }
 
-    private bool IsPlayerCapturing(int sourceIndex, int destinationIndex)
+    private bool IsPlayerCapturing(Location source, Location destination)
     {
-        var middleIndex = (sourceIndex + destinationIndex) / 2;
-        return _board[middleIndex] is not null;
+        var middle = GetMiddleLocation(source, destination);
+        return _board[middle.Row][middle.Column] is not null;
     }
 
     private int GetRowDelta(int sourceRow, int destinationRow, string playerId)
@@ -230,6 +235,14 @@ public class Game
         return _currentTurn.PlayerId == _player1.PlayerId ? _player2 : _player1;
     }
 
+    private Location GetMiddleLocation(Location source, Location destination)
+    {
+        var middleRow = (source.Row + destination.Row) / 2;
+        var middleColumn = (source.Column + destination.Column) / 2;
+
+        return new Location(middleRow, middleColumn);
+    }
+
     private void InitBoard(string player1Id, string player2Id)
     {
         for (int row = 0; row < 3; row++)
@@ -239,8 +252,7 @@ public class Game
 
                 if (row % 2 == col % 2)
                 {
-                    var index = row * 8 + col;
-                    _board[index] = new Piece(player1Id);
+                    _board[row][col] = new Piece(player1Id);
                 }
             }
         }
@@ -252,8 +264,7 @@ public class Game
 
                 if (row % 2 == col % 2)
                 {
-                    var index = row * 8 + col;
-                    _board[index] = new Piece(player2Id);
+                    _board[row][col] = new Piece(player2Id);
                 }
             }
         }
