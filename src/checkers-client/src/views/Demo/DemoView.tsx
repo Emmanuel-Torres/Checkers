@@ -1,6 +1,6 @@
 import { FC } from "react";
 import BoardComponent from "../../components/game/board/BoardComponent";
-import BoardLocation from "../../models/game/location";
+import Location from "../../models/game/location";
 import MoveRequest from "../../models/game/moveRequest";
 import PlayerIndicatorComponent from "../../components/game/player-indicator/PlayerIndicatorComponent";
 import styles from "./DemoView.module.css";
@@ -18,7 +18,7 @@ const DemoView: FC = (): JSX.Element => {
   const currentTurn = "8YPHrkNXKobAze68aASORQ";
   const isReversed = false
   const room = new RoomInfo('AB123', new Player("p1", "Emmanuel"));
-  const validLocations = [new BoardLocation(4, 2), new BoardLocation(4, 4)];
+  const validLocations = [new Location(4, 2), new Location(4, 4)];
 
   /* <PlayerIndicatorComponent
   yourTurn={false} />

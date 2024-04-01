@@ -1,10 +1,10 @@
-import BoardLocation from "./location";
+import Location from "./location";
 
 export default class MoveRequest {
-    public readonly source: BoardLocation;
-    public readonly destination: BoardLocation;
+    public readonly source: Location;
+    public readonly destination: Location;
 
-    constructor(source: BoardLocation, destination: BoardLocation) {
+    constructor(source: Location, destination: Location) {
         this.source = source;
         this.destination = destination;
     }

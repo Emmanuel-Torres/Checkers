@@ -5,14 +5,14 @@ export default class GameInfo {
   public readonly roomId: string;
   public readonly isGameOver: boolean;
   public readonly nextPlayerTurn: Player;
-  public readonly board: Piece[];
+  public readonly board: Piece[][];
   public readonly winner?: Player;
 
   constructor(
     roomId: string,
     isGameOver: boolean,
     nextPlayerTurn: Player,
-    board: Piece[],
+    board: Piece[][],
     winner?: Player
   ) {
     this.roomId = roomId;

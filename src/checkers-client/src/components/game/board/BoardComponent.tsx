@@ -3,16 +3,17 @@ import SquareComponent from "../square/SquareComponent";
 import styles from "./BoardComponent.module.css"
 import Piece from "../../../models/game/piece";
 import gameService from "../../../services/gameService";
+import Location from "../../../models/game/location";
 
 type Props = {
-    board: Piece[];
+    board: Piece[][];
     isReversed: boolean; //true for room owner
     yourId: string;
     currentTurnId: string;
 }
 
 const BoardComponent: FC<Props> = (props): JSX.Element => {
-    const [source, setSource] = useState<number>();
+    const [source, setSource] = useState<Location>();
 
     // const validIndices: number[] = [];
 
@@ -42,23 +43,20 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
     //     setSource(undefined);
     // }
 
-    const squareSelected = (index: number) => {
-        const square = props.board[index];
+    const squareSelected = (row: number, column: number) => {
+        const piece = props.board[row][column];
 
-        if (square?.ownerId !== props.yourId)
+        if (piece?.ownerId !== props.yourId)
             return;
 
-        if (!gameService.hasValidMoves(index, props.board, props.isReversed))
+        if (!gameService.hasValidMoves(row, column, props.board, props.isReversed))
             return;
 
-        setSource(index);
+        setSource(new Location(row, column));
     }
 
-    const getSquareColor = (index: number): string => {
-        const row = Math.floor(index / 8);
-        const colum = index % 8;
-
-        if (row % 2 == colum % 2)
+    const getSquareColor = (row: number, column: number): string => {
+        if (row % 2 == column % 2)
             return "Black"
 
         return "White";
@@ -75,11 +73,15 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
         return "White";
     }
 
-    const getIsHighlighted = (index: number): boolean => {
-        const yourTurn = props.currentTurnId === props.yourId;
-        const yourPiece = props.board[index]?.ownerId === props.yourId;
-        const hasValidMoves = gameService.hasValidMoves(index, props.board, props.isReversed);
-        return yourTurn && yourPiece && hasValidMoves;
+    const getIsHighlighted = (row: number, column: number): boolean => {
+        if (source === undefined) {
+            const yourTurn = props.currentTurnId === props.yourId;
+            const yourPiece = props.board[row][column]?.ownerId === props.yourId;
+            const hasValidMoves = gameService.hasValidMoves(row, column, props.board, props.isReversed);
+            return yourTurn && yourPiece && hasValidMoves;
+        }
+
+        return source.row === row && source.column === column;
     }
 
     const boardStyles = styles.board + (props.isReversed ? " " + styles['board-reversed'] : '');
@@ -87,14 +89,17 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
     return (
         <div className={styles.container}>
             <div className={boardStyles}>
-                {props.board.map((p, i) => {
-                    const isHighlighted = source === undefined ? getIsHighlighted(i) : i === source;
-                    return <SquareComponent onSquareClicked={() => squareSelected(i)}
-                                            isHighlighted={isHighlighted}
-                                            pieceColor={getPieceColor(p?.ownerId)}
-                                            pieceState={p?.state} color={getSquareColor(i)} 
-                                            isReversed={props.isReversed} 
-                                            key={i} />
+                {props.board.map((row, r) => {
+                    return row.map((p, c) => {
+                        const isHighlighted = getIsHighlighted(r, c);
+                        return <SquareComponent onSquareClicked={() => squareSelected(r, c)}
+                                                isHighlighted={getIsHighlighted(r,c)}
+                                                pieceColor={getPieceColor(p?.ownerId)}
+                                                pieceState={p?.state} color={getSquareColor(r, c)} 
+                                                isReversed={props.isReversed} 
+                                                key={r + c} />
+
+                    })
                 })}
             </div>
         </div>
