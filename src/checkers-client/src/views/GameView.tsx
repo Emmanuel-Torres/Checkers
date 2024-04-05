@@ -2,7 +2,7 @@ import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signal
 import { FC, useEffect, useState } from "react";
 import BoardComponent from "../components/game/board/BoardComponent";
 import Location from "../models/game/location";
-import MoveRequest from "../models/game/moveRequest";
+import Move from "../models/game/move";
 import Square from "../models/game/square";
 import HubMethods from "../models/helper/hub-methods";
 import PlayerIndicatorComponent from "../components/game/player-indicator/PlayerIndicatorComponent";
@@ -91,6 +91,16 @@ const GameView: FC = (): JSX.Element => {
             console.error(e);
         }
     }
+
+    const makeMove = async (moves: Move[]) => {
+        try {
+            console.log("making move");
+            await connection?.send(HubMethods.makeMove, { moves: moves })
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
     // const makeMove = async (moveRequest: MoveRequest) => {
     //     try {
     //         if (yourTurn && !isGameOver) {
@@ -108,7 +118,7 @@ const GameView: FC = (): JSX.Element => {
             {roomInfo?.roomGuest && !gameInfo && <button type="button" onClick={startGame}>Start Game</button>}
             {gameInfo && <>
                 <PlayerIndicatorComponent yourTurn={gameInfo.nextPlayerTurn.playerId === player?.playerId} />
-                <BoardComponent currentTurnId={gameInfo.nextPlayerTurn.playerId} yourId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} />
+                <BoardComponent currentTurnId={gameInfo.nextPlayerTurn.playerId} yourId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} getValidMoves={() => []} makeMove={makeMove}/>
             </>}
         </>
     )

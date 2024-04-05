@@ -18,6 +18,7 @@
 
 .square {
   padding: .25rem;
+  display: flex;
 }
 
 .square-reversed {
@@ -42,10 +43,13 @@
   100% { box-shadow: 0px 0px 10px 0px rgb(151, 151, 151); }
 }
 
-@media screen and (min-width: 800px) { 
+@media screen and (min-width: 800px) {
+  .square {
+    padding: .5rem;
+  }
   .square-highlighted {
     z-index: 1;
-    animation: breath 2s infinite;
+    animation: breath 2s infinite ease-in-out;
   }
   
   @keyframes breath {

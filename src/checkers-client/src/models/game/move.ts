@@ -1,6 +1,6 @@
 import Location from "./location";
 
-export default class MoveRequest {
+export default class Move {
     public readonly source: Location;
     public readonly destination: Location;
 
