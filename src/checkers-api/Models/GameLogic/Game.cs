@@ -1,6 +1,7 @@
 using checkers_api.Helpers;
 using checkers_api.Models.GameModels;
 using checkers_api.Models.Requests;
+using checkers_api.Models.Responses;
 
 namespace checkers_api.Models.GameLogic;
 
@@ -49,8 +50,26 @@ public class Game
     public Player? Winner => _winner;
     public bool IsGameOver => _winner is not null;
 
+    public IEnumerable<ValidMove> GetValidMoves(string playerId, Location source)
+    {
+        var moves = new List<ValidMove>();
+
+        if (_board[source.Row][source.Column]?.OwnerId != playerId)
+        {
+            return moves;
+        }
+
+        moves.AddRange(GetRegularMoves(playerId, source));
+        // moves.AddRange(GetAttackMoves(playerId, source));
+        return moves;
+    }
     public void MakeMove(string playerId, MoveRequest request)
     {
+        if (_currentTurn.PlayerId != playerId)
+        {
+            throw new InvalidOperationException($"Player {playerId} tried to move outside its turn");
+        }
+
         ProcessMoveRequests(playerId, request.Moves);
         CycleTurn();
         var canGameContinue = CanGameContinue();
@@ -124,10 +143,6 @@ public class Game
 
         isAttackMove = false;
 
-        if (_currentTurn.PlayerId != playerId)
-        {
-            return (false, $"Player {playerId} tried to move outside its turn");
-        }
         if (sourceRow < 0 || sourceRow > 7 || sourceColumn < 0 || sourceColumn > 7)
         {
             return (false, $"Source location ({sourceRow},{sourceColumn}) is out of bounds");
@@ -172,6 +187,32 @@ public class Game
 
         isAttackMove = isPlayerCapturing;
         return (true, null);
+    }
+
+    private List<ValidMove> GetRegularMoves(string playerId, Location source)
+    {
+        var moves = new List<ValidMove>();
+        var possibleMoves = new List<Location>() { new Location(source.Row + 1, source.Column + 1),
+                                                   new Location(source.Row + 1, source.Column - 1),
+                                                   new Location(source.Row - 1, source.Column + 1),
+                                                   new Location(source.Row - 1, source.Column - 1) };
+
+        foreach (var d in possibleMoves)
+        {
+            var move = new Move(source, d);
+            var res = ValidateMove(playerId, move, out _);
+            if (res.isValid)
+            {
+                moves.Add(new ValidMove(d, new List<Move>() { move }));
+            }
+        }
+
+        return moves;
+    }
+
+    private List<ValidMove> GetAttackMoves(string playerId, Location source)
+    {
+        throw new NotImplementedException();
     }
 
     private bool CanGameContinue()

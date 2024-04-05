@@ -89,6 +89,10 @@ public class CheckersHub : Hub<ICheckersHub>
         }
     }
 
+    public Task GetValidMovesAsync(Location source) {
+        throw new NotImplementedException();
+    }
+
     public async Task MakeMoveAsync(MoveRequest moveRequest)
     {
         try

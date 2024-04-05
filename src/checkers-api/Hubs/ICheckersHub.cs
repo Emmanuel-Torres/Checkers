@@ -10,6 +10,7 @@ public interface ICheckersHub
     public Task CreateRoomAsync(string ownerName, RoomOptions? options = null);
     public Task JoinRoomAsync(string roomId, string guestName);
     public Task StartGameAsync();
+    public Task GetValidMovesAsync(Location source);
     public Task MakeMoveAsync(MoveRequest request);
     public Task KickGuestPlayer();
 

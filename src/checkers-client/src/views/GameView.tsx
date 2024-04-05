@@ -92,6 +92,16 @@ const GameView: FC = (): JSX.Element => {
         }
     }
 
+    const getValidMoves = async (source: Location) => {
+        try {
+            console.log("getting valid moves");
+            await connection?.send(HubMethods.getValidMoves, source);
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+
     const makeMove = async (moves: Move[]) => {
         try {
             console.log("making move");
@@ -118,7 +128,7 @@ const GameView: FC = (): JSX.Element => {
             {roomInfo?.roomGuest && !gameInfo && <button type="button" onClick={startGame}>Start Game</button>}
             {gameInfo && <>
                 <PlayerIndicatorComponent yourTurn={gameInfo.nextPlayerTurn.playerId === player?.playerId} />
-                <BoardComponent currentTurnId={gameInfo.nextPlayerTurn.playerId} yourId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} getValidMoves={() => []} makeMove={makeMove}/>
+                <BoardComponent currentTurnId={gameInfo.nextPlayerTurn.playerId} yourId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} getValidMoves={() => []} makeMove={makeMove} />
             </>}
         </>
     )
