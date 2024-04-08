@@ -89,8 +89,17 @@ public class CheckersHub : Hub<ICheckersHub>
         }
     }
 
-    public Task GetValidMovesAsync(Location source) {
-        throw new NotImplementedException();
+    public async Task GetValidMovesAsync(Location source) {
+        try
+        {
+            _logger.LogInformation($"Getting valid moves for player {Context.ConnectionId}");
+            var moves = _roomManager.GetValidMoves(Context.ConnectionId, source);
+            await Clients.Client(Context.ConnectionId).SendValidMovesAsync(source, moves);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+        }
     }
 
     public async Task MakeMoveAsync(MoveRequest moveRequest)

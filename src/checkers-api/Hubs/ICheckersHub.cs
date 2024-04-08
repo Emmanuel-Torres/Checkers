@@ -18,4 +18,5 @@ public interface ICheckersHub
     public Task SendRoomInfoAsync(RoomInfo roomInfo);
     public Task SendGameInfoAsync(GameInfo gameInfo);
     public Task SendPlayerInfoAsync(Player player, bool roomOwner);
+    public Task SendValidMovesAsync(Location source, IEnumerable<ValidMove> validMoves);
 }

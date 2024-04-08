@@ -5,37 +5,37 @@ import Piece from "../../../models/game/piece";
 import gameService from "../../../services/gameService";
 import Location from "../../../models/game/location";
 import Move from "../../../models/game/move";
+import ValidMove from "../../../models/game/validMove";
 
 type Props = {
     board: Piece[][];
     isReversed: boolean; //true for room owner
     yourId: string;
     currentTurnId: string;
-    getValidMoves: (source: Location) => { destination: Location, moveSeq: Move[] }[];
+    validMoves: ValidMove[];
+    getValidMoves: (source: Location) => void;
     makeMove: (moves: Move[]) => void;
 }
 
 const BoardComponent: FC<Props> = (props): JSX.Element => {
     const [source, setSource] = useState<Location>();
-    const [validMoves, setValidMoves] = useState<{ destination: Location, moveSeq: Move[] }[]>([]);
 
     const selectSquare = (row: number, column: number) => {
         if (props.board[row][column] && props.board[row][column]?.ownerId !== props.yourId)
             return;
 
-        const moves = validMoves.filter(m => m.destination.row === row && m.destination.column === column);
+        const moves = props.validMoves.filter(m => m.destination.row === row && m.destination.column === column);
         console.log(moves);
         if (!source || moves.length === 0) {
             if (gameService.hasValidMoves(row, column, props.board, props.isReversed)) {
                 setSource(new Location(row, column));
-                const moves = props.getValidMoves(new Location(row, column));
-                setValidMoves(moves);
+                props.getValidMoves(new Location(row, column));
             }
             return
         }
 
         if (moves.length === 1) {
-            props.makeMove(moves[0].moveSeq);
+            props.makeMove(moves[0].moveSequence);
             return;
         }
 
@@ -72,7 +72,7 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
     }
 
     const getHasMoveIndicator = (row: number, column: number): boolean => {
-        const res = validMoves?.find(m => m.destination.row === row && m.destination.column === column);
+        const res = props.validMoves?.find(m => m.destination.row === row && m.destination.column === column);
         return res !== undefined;
     }
 

@@ -86,6 +86,15 @@ public class RoomManager : IRoomManager
         return _rooms[roomId].StartGame(requestorId);
     }
 
+    public IEnumerable<ValidMove> GetValidMoves(string requestorId, Location source)
+    {
+        _logger.LogDebug("Getting valid moves for player {pId}", requestorId);
+        var roomId = GetRoomIdByPlayerId(requestorId) ?? throw new InvalidOperationException("Cannot get valid moves because player is not in a room");
+
+        ValidateRoomExists(roomId, "Get Valid Moves");
+        return _rooms[roomId].GetValidMoves(requestorId, source);
+    }
+
     public GameInfo MakeMove(string requestorId, MoveRequest request)
     {
         var roomId = GetRoomIdByPlayerId(requestorId) ?? throw new InvalidOperationException("Cannot make move because player is not in a room");

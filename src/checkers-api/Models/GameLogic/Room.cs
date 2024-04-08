@@ -58,6 +58,21 @@ public class Room
         return new GameInfo(_roomId, _game.CurrentTurn, _game.Board, _game.Winner);
     }
 
+    public IEnumerable<ValidMove> GetValidMoves(string playerId, Location source)
+    {
+        if (_game is null)
+        {
+            throw new InvalidOperationException("Cannot get valid moves because a game has not started");
+        }
+
+        if (playerId != _roomOwner.PlayerId && playerId != _roomGuest?.PlayerId)
+        {
+            throw new InvalidOperationException("Cannot get valid moves because player is not in this room");
+        }
+
+        return _game.GetValidMoves(playerId, source);
+    }
+
     public GameInfo MakeMove(string playerId, MoveRequest request)
     {
         if (_game is null)
@@ -65,7 +80,7 @@ public class Room
             throw new InvalidOperationException("Cannot make move because a game has not started");
         }
 
-        if (playerId != _roomOwner.PlayerId || playerId != _roomGuest?.PlayerId)
+        if (playerId != _roomOwner.PlayerId && playerId != _roomGuest?.PlayerId)
         {
             throw new InvalidOperationException("Cannot make move because player is not in this room");
         }

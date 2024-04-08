@@ -1,5 +1,6 @@
 using checkers_api.Models.GameLogic;
 using checkers_api.Models.GameModels;
+using checkers_api.tests.Helpers;
 using FluentAssertions;
 using TechTalk.SpecFlow;
 
@@ -87,6 +88,21 @@ public class RoomSteps
         }
     }
 
+    [Scope(Feature = "Room")]
+    [When (@"player (.*) tries to get valid moves for location '(.*)' in room '(.*)'")]
+    public void PlayerTriesToGetValidMovesForLocationInRoom(string playerId, string source, string roomId)
+    {
+        try
+        {
+            var room = _scenarioContext.Get<Room>("currentRoom");
+            room.GetValidMoves(playerId, Parser.ParseLocationFromString(source));
+        }
+        catch (Exception ex)
+        {
+            _scenarioContext.Add("actionException", ex);
+        }
+    }
+
     [Then(@"room '(.*)' should exist with player (.*) as its owner")]
     public void RoomShouldExist(string expectedRoomId, string expectedPlayerId)
     {
@@ -129,5 +145,11 @@ public class RoomSteps
     {
         var actionException = _scenarioContext.Get<Exception>("actionException");
         actionException?.Message.Should().Be(expectedError);
+    }
+
+    [Then (@"the action should not thrown an exception")]
+    public void TheActionShouldNotThrowAnException()
+    {
+        _scenarioContext.ContainsKey("actionException").Should().BeFalse();
     }
 }

@@ -11,6 +11,7 @@ import JoinView from "./JoinView";
 import RoomView from "../components/room/room-info/RoomInfoComponent";
 import GameInfo from "../models/game/gameInfo";
 import Player from "../models/game/player";
+import ValidMove from "../models/game/validMove";
 
 const GameView: FC = (): JSX.Element => {
     const [connection, setConnection] = useState<HubConnection>();
@@ -18,6 +19,7 @@ const GameView: FC = (): JSX.Element => {
     const [isRoomOwner, setIsRoomOwner] = useState<boolean>(false);
     const [roomInfo, setRoomInfo] = useState<RoomInfo>();
     const [gameInfo, setGameInfo] = useState<GameInfo>();
+    const [validMoves, setValidMoves] = useState<ValidMove[]>([]);
 
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
@@ -41,7 +43,7 @@ const GameView: FC = (): JSX.Element => {
                 });
 
             connection.on(HubMethods.sendPlayerInfo, (player: Player, isRoomOwner: boolean) => {
-                console.log(player);
+                console.log(player.playerId);
                 setPlayer(player);
                 setIsRoomOwner(isRoomOwner);
             });
@@ -56,9 +58,10 @@ const GameView: FC = (): JSX.Element => {
                 setGameInfo(gameInfo);
             });
 
-            // connection.on(HubMethods.sendMessage, (sender: string, message: string) => {
-            //     console.log(message);
-            // });
+            connection.on(HubMethods.sendValidMoves, (source: Location, validMoves: ValidMove[]) => {
+                console.log("valid moves for:" + source);
+                setValidMoves(validMoves);
+            });
         }
     }, [connection])
 
@@ -128,7 +131,7 @@ const GameView: FC = (): JSX.Element => {
             {roomInfo?.roomGuest && !gameInfo && <button type="button" onClick={startGame}>Start Game</button>}
             {gameInfo && <>
                 <PlayerIndicatorComponent yourTurn={gameInfo.nextPlayerTurn.playerId === player?.playerId} />
-                <BoardComponent currentTurnId={gameInfo.nextPlayerTurn.playerId} yourId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} getValidMoves={() => []} makeMove={makeMove} />
+                <BoardComponent currentTurnId={gameInfo.nextPlayerTurn.playerId} yourId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} validMoves={validMoves} getValidMoves={getValidMoves} makeMove={makeMove} />
             </>}
         </>
     )

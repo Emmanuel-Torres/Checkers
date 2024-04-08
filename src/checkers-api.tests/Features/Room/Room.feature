@@ -26,7 +26,7 @@ Scenario: Room owner tries to start a game without a room guest
   When player O tries to start a game
   Then the action should fail with error 'Cannot start a game with only one player'
 
-Scenario: Room guest triest to start a game
+Scenario: Room guest tries to start a game
   Given player O and player X are in room 'room1'
   When player X tries to start a game
   Then the action should fail with error 'Room guest cannot start a game'
@@ -48,3 +48,37 @@ Scenario: Another player (not room owner) tries to kick guet player from room
   Given player O and player X are in room 'room1'
   When player Y tries to kick the guest player of room 'room1'
   Then the action should fail with error 'Only room owner can kick guest player from room'
+
+Scenario: Room owner tries to get valid moves without starting a game
+  Given player O and player X are in room 'room1'
+  When player O tries to get valid moves for location '0,0' in room 'room1'
+  Then the action should fail with error 'Cannot get valid moves because a game has not started'
+
+Scenario: Room owner tries to get valid moves after the game started
+  Given player O and player X are in room 'room1'
+  And room 'room1' already has an ongoing game
+  When player Y tries to get valid moves for location '0,0' in room 'room1'
+  Then the action should fail with error 'Cannot get valid moves because player is not in this room'
+
+Scenario: Room owner tries getting valid moves after game started
+  Given player O and player X are in room 'room1'
+  And room 'room1' already has an ongoing game
+  When player O tries to get valid moves for location '0,0' in room 'room1'
+  Then the action should not thrown an exception
+
+# Scenario: Room owner tries to make a move without starting a game
+#   Given player O and player X are in room 'room1'
+#   When player O tries to get valid moves for location '0,0' in room 'room1'
+#   Then the action should fail with error 'Cannot get valid moves because a game has not started'
+
+# Scenario: Room owner tries to get valid moves after the game started
+#   Given player O and player X are in room 'room1'
+#   And room 'room1' already has an ongoing game
+#   When player Y tries to get valid moves for location '0,0' in room 'room1'
+#   Then the action should fail with error 'Cannot get valid moves because player is not in this room'
+
+# Scenario: Room owner tries getting valid moves after game started
+#   Given player O and player X are in room 'room1'
+#   And room 'room1' already has an ongoing game
+#   When player O tries to get valid moves for location '0,0' in room 'room1'
+#   Then the action should not thrown an exception
