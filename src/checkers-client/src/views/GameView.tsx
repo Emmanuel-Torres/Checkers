@@ -130,7 +130,7 @@ const GameView: FC = (): JSX.Element => {
             {roomInfo && <RoomView roomInfo={roomInfo} />}
             {roomInfo?.roomGuest && !gameInfo && <button type="button" onClick={startGame}>Start Game</button>}
             {gameInfo && <>
-                <PlayerIndicatorComponent yourTurn={gameInfo.nextPlayerTurn.playerId === player?.playerId} />
+                <PlayerIndicatorComponent yourTurn={gameInfo.nextPlayerTurn.playerId === player?.playerId} currentTurnName={gameInfo.nextPlayerTurn.name}/>
                 <BoardComponent currentTurnId={gameInfo.nextPlayerTurn.playerId} yourId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} validMoves={validMoves} getValidMoves={getValidMoves} makeMove={makeMove} />
             </>}
         </>

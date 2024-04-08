@@ -55,7 +55,7 @@ const DemoView: FC = (): JSX.Element => {
   return (
     <div>
       <RoomView roomInfo={room} />
-      <PlayerIndicatorComponent yourTurn={true} />
+      <PlayerIndicatorComponent yourTurn={true} currentTurnName="Emmanuel"/>
       <BoardComponent currentTurnId={currentTurn} yourId={currentTurn} board={gameInfo.board} isReversed={false} validMoves={moves} getValidMoves={() =>{}} makeMove={(moves: Move[]) => {}}/>
     </div>
   );
