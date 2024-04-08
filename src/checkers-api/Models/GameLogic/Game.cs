@@ -54,7 +54,7 @@ public class Game
     {
         var moves = new List<ValidMove>();
         var piece = _board[source.row][source.column];
-        if (piece?.OwnerId != playerId)
+        if (piece?.OwnerId != playerId || _currentTurn.PlayerId != playerId)
         {
             return moves;
         }

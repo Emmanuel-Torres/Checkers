@@ -20,7 +20,7 @@ Scenario: Player X requests moves for a regular piece
   | 4,2         | 5,1 > 4,2    |
 
 Scenario: Player O requests moves for a regular piece
-  Given the following board with players O and X and player X is moving
+  Given the following board with players O and X and player O is moving
   """
     O |   | O |   | O |   | O |   .
       | O |   | O |   | O |   | O .
@@ -36,6 +36,21 @@ Scenario: Player O requests moves for a regular piece
   | Destination | MoveSequence |
   | 3,1         | 2,2 > 3,1    |
   | 3,3         | 2,2 > 3,3    |
+
+Scenario: Player X requests valid moves for a piece when its not its turn to move
+  Given the following board with players O and X and player O is moving
+  """
+    O |   | O |   | O |   | O |   .
+      | O |   | O |   | O |   | O .
+    O |   | O |   | O |   |   |   .
+      |   |   |   |   | O |   |   .
+      |   |   |   |   |   |   |   .
+      | X |   | X |   | X |   | X .
+    X |   | X |   | X |   | X |   .
+      | X |   | X |   | X |   | X
+  """
+  When player X requests the valid moves for location '5,1'
+  Then no valid moves should be available
 
 Scenario: Player X requests the valid moves for a square owned by player O
   Given the following board with players O and X and player X is moving
@@ -87,7 +102,7 @@ Scenario: Player X requests the valid moves for a King piece
   | 3,5         | 4,4 > 3,5    |
 
 Scenario: Player O requests the valid moves for a King piece
-  Given the following board with players O and X and player X is moving
+  Given the following board with players O and X and player O is moving
   """
     O |   | O |   | O  |   | O |   .
       | O |   | O |    | O |   | O .
@@ -106,7 +121,7 @@ Scenario: Player O requests the valid moves for a King piece
   | 3,5         | 4,4 > 3,5    |
 
 Scenario: Player X requests the valid moves for a piece with 1 attack available
-  Given the following board with players O and X and player O is moving
+  Given the following board with players O and X and player X is moving
   """
       |   |   |   |   |   |   |   .
       |   |   |   |   |   |   |   .
@@ -123,7 +138,7 @@ Scenario: Player X requests the valid moves for a piece with 1 attack available
   | 5,5         | 7,7 > 5,5    |
 
 Scenario: Player X requests the valid moves for a piece with 1 attack move and 1 regular move
-  Given the following board with players O and X and player O is moving
+  Given the following board with players O and X and player X is moving
   """
       |   |   |   |   |   |   |   .
       |   |   |   |   |   |   |   .
@@ -141,7 +156,7 @@ Scenario: Player X requests the valid moves for a piece with 1 attack move and 1
   | 6,4         | 7,5 > 6,4    |
 
 Scenario: Player X requests the valid moves for a piece with 2 attack moves
-  Given the following board with players O and X and player O is moving
+  Given the following board with players O and X and player X is moving
   """
       |   |   |   |   |   |   |   .
       |   |   |   |   |   |   |   .
@@ -177,7 +192,7 @@ Scenario: Player O requests the valid moves for a piece with 2 attack moves
   | 7,3         | 5,5 > 7,3    |
 
 Scenario: Player X requests the valid moves for a king piece with 4 attack moves
-  Given the following board with players O and X and player O is moving
+  Given the following board with players O and X and player X is moving
   """
       |   |   |   |   |    |   |   .
       |   |   |   |   |    |   |   .
@@ -197,7 +212,7 @@ Scenario: Player X requests the valid moves for a king piece with 4 attack moves
   | 7,3         | 5,5 > 7,3    |
 
 Scenario: Player X requests the valid moves for a regular piece with 1 double jump attack available
-  Given the following board with players O and X and player O is moving
+  Given the following board with players O and X and player X is moving
   """
       |   |   |   |   |   |   |   .
       |   |   |   |   |   |   |   .
@@ -215,7 +230,7 @@ Scenario: Player X requests the valid moves for a regular piece with 1 double ju
   | 3,3         | 7,7 > 5,5 > 3,3 |
 
 Scenario: Player X requests the valid moves for a regular piece with 1 linear triple jump attack available
-  Given the following board with players O and X and player O is moving
+  Given the following board with players O and X and player X is moving
   """
       |   |   |   |   |   |   |   .
       |   |   |   |   |   |   |   .
@@ -234,7 +249,7 @@ Scenario: Player X requests the valid moves for a regular piece with 1 linear tr
   | 1,1         | 7,7 > 5,5 > 3,3 > 1,1 |
 
 Scenario: Player X requests the valid moves for a regular piece with 1 triple jump and 1 double jump
-  Given the following board with players O and X and player O is moving
+  Given the following board with players O and X and player X is moving
   """
       |   |   |   |   |   |   |   .
       |   |   |   |   |   |   |   .
@@ -254,7 +269,7 @@ Scenario: Player X requests the valid moves for a regular piece with 1 triple ju
   | 3,7         | 7,7 > 5,5 > 3,7       |
 
 Scenario: Player X requests the valid moves for a regular piece with Y looking attack pattern
-  Given the following board with players O and X and player O is moving
+  Given the following board with players O and X and player X is moving
   """
       |   |   |   |   |   |   |   .
       |   |   |   |   |   |   |   .
@@ -275,7 +290,7 @@ Scenario: Player X requests the valid moves for a regular piece with Y looking a
   | 1,5         | 7,7 > 5,5 > 3,7 > 1,5 |
 
 Scenario: Player X requests the valid moves for a king piece with a single attack move
-  Given the following board with players O and X and player O is moving
+  Given the following board with players O and X and player X is moving
   """
       |   |   |   |   |   |   |   .
       |   |   |   |   |   |   |   .
@@ -292,7 +307,7 @@ Scenario: Player X requests the valid moves for a king piece with a single attac
   | 5,5         | 7,7 > 5,5    |
 
 Scenario: Player X requests the valid moves for a king piece with 1 double jump attack available
-  Given the following board with players O and X and player O is moving
+  Given the following board with players O and X and player X is moving
   """
       |   |   |   |   |   |   |   .
       |   |   |   |   |   |   |   .
@@ -310,7 +325,7 @@ Scenario: Player X requests the valid moves for a king piece with 1 double jump 
   | 3,3         | 7,7 > 5,5 > 3,3 |
 
 Scenario: Player X requests the valid moves for a piece that can turn into king piece
-  Given the following board with players O and X and player O is moving
+  Given the following board with players O and X and player X is moving
   """
       |   |   |   |   |   |   |   .
       | O |   | O |   |   |   |   .
@@ -328,7 +343,7 @@ Scenario: Player X requests the valid moves for a piece that can turn into king 
   | 2,4         | 2,0 > 0,2 > 2,4       |
 
 Scenario: Player X requests the valid moves for a king piece with two double jumps that end in same destination
-  Given the following board with players O and X and player O is moving
+  Given the following board with players O and X and player X is moving
   """
       |   |   |   |   |    |   |   .
       |   |   |   |   |    |   |   .

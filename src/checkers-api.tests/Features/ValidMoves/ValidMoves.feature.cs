@@ -137,7 +137,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 23
-  testRunner.Given("the following board with players O and X and player X is moving", @"  O |   | O |   | O |   | O |   .
+  testRunner.Given("the following board with players O and X and player O is moving", @"  O |   | O |   | O |   | O |   .
     | O |   | O |   | O |   | O .
   O |   | O |   | O |   |   |   .
     |   |   |   |   | O |   |   .
@@ -166,12 +166,12 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Player X requests the valid moves for a square owned by player O")]
-        public void PlayerXRequestsTheValidMovesForASquareOwnedByPlayerO()
+        [NUnit.Framework.DescriptionAttribute("Player X requests valid moves for a piece when its not its turn to move")]
+        public void PlayerXRequestsValidMovesForAPieceWhenItsNotItsTurnToMove()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a square owned by player O", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests valid moves for a piece when its not its turn to move", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 40
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -183,7 +183,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 41
-  testRunner.Given("the following board with players O and X and player X is moving", @"  O |   | O |   | O |   | O |   .
+  testRunner.Given("the following board with players O and X and player O is moving", @"  O |   | O |   | O |   | O |   .
     | O |   | O |   | O |   | O .
   O |   | O |   | O |   |   |   .
     |   |   |   |   | O |   |   .
@@ -193,7 +193,7 @@ this.ScenarioInitialize(scenarioInfo);
     | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 52
-  testRunner.When("player X requests the valid moves for location \'2,2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("player X requests the valid moves for location \'5,1\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 53
   testRunner.Then("no valid moves should be available", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -203,12 +203,12 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Player X requests the valid moves for an empty square")]
-        public void PlayerXRequestsTheValidMovesForAnEmptySquare()
+        [NUnit.Framework.DescriptionAttribute("Player X requests the valid moves for a square owned by player O")]
+        public void PlayerXRequestsTheValidMovesForASquareOwnedByPlayerO()
         {
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for an empty square", null, tagsOfScenario, argumentsOfScenario, featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a square owned by player O", null, tagsOfScenario, argumentsOfScenario, featureTags);
 #line 55
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -230,9 +230,46 @@ this.ScenarioInitialize(scenarioInfo);
     | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 67
-  testRunner.When("player X requests the valid moves for location \'3,3\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+  testRunner.When("player X requests the valid moves for location \'2,2\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 68
+  testRunner.Then("no valid moves should be available", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Player X requests the valid moves for an empty square")]
+        public void PlayerXRequestsTheValidMovesForAnEmptySquare()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for an empty square", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 70
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 71
+  testRunner.Given("the following board with players O and X and player X is moving", @"  O |   | O |   | O |   | O |   .
+    | O |   | O |   | O |   | O .
+  O |   | O |   | O |   |   |   .
+    |   |   |   |   | O |   |   .
+    |   |   |   |   |   |   |   .
+    | X |   | X |   | X |   | X .
+  X |   | X |   | X |   | X |   .
+    | X |   | X |   | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 82
+  testRunner.When("player X requests the valid moves for location \'3,3\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 83
   testRunner.Then("no valid moves should be available", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -246,7 +283,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a King piece", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 70
+#line 85
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -256,7 +293,7 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 71
+#line 86
   testRunner.Given("the following board with players O and X and player X is moving", @"  O |   | O |   | O  |   | O |   .
     | O |   | O |    | O |   | O .
   O |   | O |   | O  |   | O |   .
@@ -266,7 +303,7 @@ this.ScenarioInitialize(scenarioInfo);
   X |   | X |   | X  |   | X |   .
     | X |   | X |    | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 82
+#line 97
   testRunner.When("player X requests the valid moves for location \'4,4\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
@@ -281,7 +318,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table10.AddRow(new string[] {
                             "3,5",
                             "4,4 > 3,5"});
-#line 83
+#line 98
   testRunner.Then("the following moves should be available", ((string)(null)), table10, "Then ");
 #line hidden
             }
@@ -295,7 +332,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player O requests the valid moves for a King piece", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 89
+#line 104
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -305,8 +342,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 90
-  testRunner.Given("the following board with players O and X and player X is moving", @"  O |   | O |   | O  |   | O |   .
+#line 105
+  testRunner.Given("the following board with players O and X and player O is moving", @"  O |   | O |   | O  |   | O |   .
     | O |   | O |    | O |   | O .
   O |   | O |   | O  |   | O |   .
     |   |   |   |    |   |   |   .
@@ -315,7 +352,7 @@ this.ScenarioInitialize(scenarioInfo);
   X |   | X |   | X  |   | X |   .
     | X |   | X |    | X |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 101
+#line 116
   testRunner.When("player O requests the valid moves for location \'4,4\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
@@ -330,7 +367,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table11.AddRow(new string[] {
                             "3,5",
                             "4,4 > 3,5"});
-#line 102
+#line 117
   testRunner.Then("the following moves should be available", ((string)(null)), table11, "Then ");
 #line hidden
             }
@@ -344,7 +381,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a piece with 1 attack available", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 108
+#line 123
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -354,8 +391,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 109
-  testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |   |   |   .
+#line 124
+  testRunner.Given("the following board with players O and X and player X is moving", @"    |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
@@ -364,7 +401,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   | O |   .
     |   |   |   |   |   |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 120
+#line 135
   testRunner.When("player X requests the valid moves for location \'7,7\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
@@ -373,7 +410,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table12.AddRow(new string[] {
                             "5,5",
                             "7,7 > 5,5"});
-#line 121
+#line 136
   testRunner.Then("the following moves should be available", ((string)(null)), table12, "Then ");
 #line hidden
             }
@@ -389,7 +426,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a piece with 1 attack move and 1 regular mo" +
                     "ve", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 125
+#line 140
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -399,8 +436,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 126
-  testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |   |   |   .
+#line 141
+  testRunner.Given("the following board with players O and X and player X is moving", @"    |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
@@ -409,7 +446,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   | O |   .
     |   |   |   |   | X |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 137
+#line 152
   testRunner.When("player X requests the valid moves for location \'7,5\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
@@ -421,7 +458,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table13.AddRow(new string[] {
                             "6,4",
                             "7,5 > 6,4"});
-#line 138
+#line 153
   testRunner.Then("the following moves should be available", ((string)(null)), table13, "Then ");
 #line hidden
             }
@@ -435,7 +472,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a piece with 2 attack moves", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 143
+#line 158
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -445,8 +482,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 144
-  testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |   |   |   .
+#line 159
+  testRunner.Given("the following board with players O and X and player X is moving", @"    |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
@@ -455,7 +492,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   | O |   | O |   .
     |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 155
+#line 170
   testRunner.When("player X requests the valid moves for location \'5,5\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
@@ -467,7 +504,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table14.AddRow(new string[] {
                             "3,3",
                             "5,5 > 3,3"});
-#line 156
+#line 171
   testRunner.Then("the following moves should be available", ((string)(null)), table14, "Then ");
 #line hidden
             }
@@ -481,7 +518,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player O requests the valid moves for a piece with 2 attack moves", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 161
+#line 176
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -491,7 +528,7 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 162
+#line 177
   testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
@@ -501,7 +538,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   | X |   | X |   .
     |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 173
+#line 188
   testRunner.When("player O requests the valid moves for location \'5,5\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
@@ -513,7 +550,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table15.AddRow(new string[] {
                             "7,3",
                             "5,5 > 7,3"});
-#line 174
+#line 189
   testRunner.Then("the following moves should be available", ((string)(null)), table15, "Then ");
 #line hidden
             }
@@ -527,7 +564,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a king piece with 4 attack moves", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 179
+#line 194
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -537,8 +574,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 180
-  testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |    |   |   .
+#line 195
+  testRunner.Given("the following board with players O and X and player X is moving", @"    |   |   |   |   |    |   |   .
     |   |   |   |   |    |   |   .
     |   |   |   |   |    |   |   .
     |   |   |   |   |    |   |   .
@@ -547,7 +584,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   | O |    | O |   .
     |   |   |   |   |    |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 191
+#line 206
   testRunner.When("player X requests the valid moves for location \'5,5\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
@@ -565,7 +602,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table16.AddRow(new string[] {
                             "7,3",
                             "5,5 > 7,3"});
-#line 192
+#line 207
   testRunner.Then("the following moves should be available", ((string)(null)), table16, "Then ");
 #line hidden
             }
@@ -581,7 +618,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a regular piece with 1 double jump attack a" +
                     "vailable", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 199
+#line 214
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -591,8 +628,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 200
-  testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |   |   |   .
+#line 215
+  testRunner.Given("the following board with players O and X and player X is moving", @"    |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
@@ -601,7 +638,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   | O |   .
     |   |   |   |   |   |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 211
+#line 226
   testRunner.When("player X requests the valid moves for location \'7,7\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
@@ -613,7 +650,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table17.AddRow(new string[] {
                             "3,3",
                             "7,7 > 5,5 > 3,3"});
-#line 212
+#line 227
   testRunner.Then("the following moves should be available", ((string)(null)), table17, "Then ");
 #line hidden
             }
@@ -629,7 +666,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a regular piece with 1 linear triple jump a" +
                     "ttack available", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 217
+#line 232
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -639,8 +676,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 218
-  testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |   |   |   .
+#line 233
+  testRunner.Given("the following board with players O and X and player X is moving", @"    |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   | O |   |   |   |   |   .
     |   |   |   |   |   |   |   .
@@ -649,7 +686,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   | O |   .
     |   |   |   |   |   |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 229
+#line 244
   testRunner.When("player X requests the valid moves for location \'7,7\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
@@ -664,7 +701,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table18.AddRow(new string[] {
                             "1,1",
                             "7,7 > 5,5 > 3,3 > 1,1"});
-#line 230
+#line 245
   testRunner.Then("the following moves should be available", ((string)(null)), table18, "Then ");
 #line hidden
             }
@@ -680,7 +717,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a regular piece with 1 triple jump and 1 do" +
                     "uble jump", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 236
+#line 251
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -690,8 +727,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 237
-  testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |   |   |   .
+#line 252
+  testRunner.Given("the following board with players O and X and player X is moving", @"    |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   | O |   |   |   |   |   .
     |   |   |   |   |   |   |   .
@@ -700,7 +737,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   | O |   .
     |   |   |   |   |   |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 248
+#line 263
   testRunner.When("player X requests the valid moves for location \'7,7\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
@@ -718,7 +755,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table19.AddRow(new string[] {
                             "3,7",
                             "7,7 > 5,5 > 3,7"});
-#line 249
+#line 264
   testRunner.Then("the following moves should be available", ((string)(null)), table19, "Then ");
 #line hidden
             }
@@ -734,7 +771,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a regular piece with Y looking attack patte" +
                     "rn", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 256
+#line 271
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -744,8 +781,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 257
-  testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |   |   |   .
+#line 272
+  testRunner.Given("the following board with players O and X and player X is moving", @"    |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   | O |   |   |   | O |   .
     |   |   |   |   |   |   |   .
@@ -754,7 +791,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   | O |   .
     |   |   |   |   |   |   | X", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 268
+#line 283
   testRunner.When("player X requests the valid moves for location \'7,7\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
@@ -775,7 +812,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table20.AddRow(new string[] {
                             "1,5",
                             "7,7 > 5,5 > 3,7 > 1,5"});
-#line 269
+#line 284
   testRunner.Then("the following moves should be available", ((string)(null)), table20, "Then ");
 #line hidden
             }
@@ -789,7 +826,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a king piece with a single attack move", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 277
+#line 292
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -799,8 +836,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 278
-  testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |   |   |   .
+#line 293
+  testRunner.Given("the following board with players O and X and player X is moving", @"    |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
@@ -809,7 +846,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   | O |   .
     |   |   |   |   |   |   | X$", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 289
+#line 304
   testRunner.When("player X requests the valid moves for location \'7,7\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
@@ -818,7 +855,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table21.AddRow(new string[] {
                             "5,5",
                             "7,7 > 5,5"});
-#line 290
+#line 305
   testRunner.Then("the following moves should be available", ((string)(null)), table21, "Then ");
 #line hidden
             }
@@ -834,7 +871,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a king piece with 1 double jump attack avai" +
                     "lable", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 294
+#line 309
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -844,8 +881,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 295
-  testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |   |   |   .
+#line 310
+  testRunner.Given("the following board with players O and X and player X is moving", @"    |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
@@ -854,7 +891,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   | O |   .
     |   |   |   |   |   |   | X$", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 306
+#line 321
   testRunner.When("player X requests the valid moves for location \'7,7\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table22 = new TechTalk.SpecFlow.Table(new string[] {
@@ -866,7 +903,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table22.AddRow(new string[] {
                             "3,3",
                             "7,7 > 5,5 > 3,3"});
-#line 307
+#line 322
   testRunner.Then("the following moves should be available", ((string)(null)), table22, "Then ");
 #line hidden
             }
@@ -880,7 +917,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a piece that can turn into king piece", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 312
+#line 327
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -890,8 +927,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 313
-  testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |   |   |   .
+#line 328
+  testRunner.Given("the following board with players O and X and player X is moving", @"    |   |   |   |   |   |   |   .
     | O |   | O |   |   |   |   .
   X |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |   .
@@ -900,7 +937,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   |   |   |   |   .
     |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 324
+#line 339
   testRunner.When("player X requests the valid moves for location \'2,0\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
@@ -912,7 +949,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table23.AddRow(new string[] {
                             "2,4",
                             "2,0 > 0,2 > 2,4"});
-#line 325
+#line 340
   testRunner.Then("the following moves should be available", ((string)(null)), table23, "Then ");
 #line hidden
             }
@@ -928,7 +965,7 @@ this.ScenarioInitialize(scenarioInfo);
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a king piece with two double jumps that end" +
                     " in same destination", null, tagsOfScenario, argumentsOfScenario, featureTags);
-#line 330
+#line 345
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
@@ -938,8 +975,8 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 331
-  testRunner.Given("the following board with players O and X and player O is moving", @"    |   |   |   |   |    |   |   .
+#line 346
+  testRunner.Given("the following board with players O and X and player X is moving", @"    |   |   |   |   |    |   |   .
     |   |   |   |   |    |   |   .
     |   |   |   |   |    |   |   .
     |   |   |   |   |    |   |   .
@@ -948,7 +985,7 @@ this.ScenarioInitialize(scenarioInfo);
     |   |   |   | O |    | O |   .
     |   |   |   |   | X$ |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 342
+#line 357
   testRunner.When("player X requests the valid moves for location \'7,5\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
@@ -978,7 +1015,7 @@ this.ScenarioInitialize(scenarioInfo);
                 table24.AddRow(new string[] {
                             "7,5",
                             "7,5 > 5,3 > 3,5 > 5,7 > 7,5"});
-#line 343
+#line 358
   testRunner.Then("the following moves should be available", ((string)(null)), table24, "Then ");
 #line hidden
             }

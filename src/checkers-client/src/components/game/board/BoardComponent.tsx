@@ -24,6 +24,9 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
         if (props.board[row][column] && props.board[row][column]?.ownerId !== props.yourId)
             return;
 
+        if (props.yourId !== props.currentTurnId)
+            return;
+
         const moves = props.validMoves.filter(m => m.destination.row === row && m.destination.column === column);
         console.log(moves);
         if (!source || moves.length === 0) {
