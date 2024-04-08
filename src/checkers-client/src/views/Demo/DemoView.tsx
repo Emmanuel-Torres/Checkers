@@ -26,7 +26,8 @@ const DemoView: FC = (): JSX.Element => {
   // const currentTurn = "xUgx2RvbinS6RsPX3UBFvg"; //room owner
   const currentTurn = "L3j9lyBJIgaLY-0TTvW1eA";
   const isReversed = false
-  const room = new RoomInfo('AB123', new Player("p1", "Emmanuel"));
+  const player = new Player("p1", "Emmanuel");
+  const room = new RoomInfo('AB123', player);
   const validLocations = [new Location(4, 2), new Location(4, 4)];
   // const moves = [
   //   { destination: new Location(2, 4), moveSeq: [new Move(new Location(4, 6), new Location(2, 4))] },
@@ -55,8 +56,8 @@ const DemoView: FC = (): JSX.Element => {
   return (
     <div>
       <RoomView roomInfo={room} />
-      <PlayerIndicatorComponent yourTurn={true} currentTurnName="Emmanuel"/>
-      <BoardComponent currentTurnId={currentTurn} yourId={currentTurn} board={gameInfo.board} isReversed={false} validMoves={moves} getValidMoves={() =>{}} makeMove={(moves: Move[]) => {}}/>
+      <PlayerIndicatorComponent gameInfo={gameInfo} player={player}/>
+      <BoardComponent currentTurnId={currentTurn} yourId={currentTurn} board={gameInfo.board} isReversed={isReversed} validMoves={moves} getValidMoves={() =>{}} makeMove={(moves: Move[]) => {}}/>
     </div>
   );
 };

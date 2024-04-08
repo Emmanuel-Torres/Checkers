@@ -54,8 +54,8 @@ const GameView: FC = (): JSX.Element => {
             });
 
             connection.on(HubMethods.sendGameInfo, (gameInfo: GameInfo) => {
-                console.log(JSON.stringify(gameInfo));
                 setGameInfo(gameInfo);
+                setValidMoves([]);
             });
 
             connection.on(HubMethods.sendValidMoves, (source: Location, validMoves: ValidMove[]) => {
@@ -108,7 +108,8 @@ const GameView: FC = (): JSX.Element => {
     const makeMove = async (moves: Move[]) => {
         try {
             console.log("making move");
-            await connection?.send(HubMethods.makeMove, { moves: moves })
+            console.log(moves);
+            await connection?.send(HubMethods.makeMove, moves)
         }
         catch (e) {
             console.error(e);
@@ -129,10 +130,8 @@ const GameView: FC = (): JSX.Element => {
             {!roomInfo && <JoinView onCreateRoom={createRoom} onJoinRoom={joinRoom} />}
             {roomInfo && <RoomView roomInfo={roomInfo} />}
             {roomInfo?.roomGuest && !gameInfo && <button type="button" onClick={startGame}>Start Game</button>}
-            {gameInfo && <>
-                <PlayerIndicatorComponent yourTurn={gameInfo.nextPlayerTurn.playerId === player?.playerId} currentTurnName={gameInfo.nextPlayerTurn.name}/>
-                <BoardComponent currentTurnId={gameInfo.nextPlayerTurn.playerId} yourId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} validMoves={validMoves} getValidMoves={getValidMoves} makeMove={makeMove} />
-            </>}
+            {gameInfo && !gameInfo.winner && <PlayerIndicatorComponent player={player!} gameInfo={gameInfo}/>}
+            {gameInfo && <BoardComponent currentTurnId={gameInfo.nextPlayerTurn?.playerId} yourId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} validMoves={validMoves} getValidMoves={getValidMoves} makeMove={makeMove} />}
         </>
     )
 }

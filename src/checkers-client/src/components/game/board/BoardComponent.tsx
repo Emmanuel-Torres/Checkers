@@ -39,6 +39,7 @@ const BoardComponent: FC<Props> = (props): JSX.Element => {
 
         if (moves.length === 1) {
             props.makeMove(moves[0].moveSequence);
+            setSource(undefined);
             return;
         }
 

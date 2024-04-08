@@ -90,9 +90,9 @@ public class CheckersHub : Hub<ICheckersHub>
     }
 
     public async Task GetValidMovesAsync(Location source) {
+        _logger.LogInformation("Getting valid moves for player {playerId}", Context.ConnectionId);
         try
         {
-            _logger.LogInformation($"Getting valid moves for player {Context.ConnectionId}");
             var moves = _roomManager.GetValidMoves(Context.ConnectionId, source);
             await Clients.Client(Context.ConnectionId).SendValidMovesAsync(source, moves);
         }
@@ -102,11 +102,12 @@ public class CheckersHub : Hub<ICheckersHub>
         }
     }
 
-    public async Task MakeMoveAsync(MoveRequest moveRequest)
+    public async Task MakeMoveAsync(IEnumerable<Move> moves)
     {
+        _logger.LogInformation("Received move request from player {playerId}", Context.ConnectionId);
         try
         {
-            var gameInfo = _roomManager.MakeMove(Context.ConnectionId, moveRequest);
+            var gameInfo = _roomManager.MakeMove(Context.ConnectionId, new MoveRequest(moves));
             await Clients.Group(gameInfo.RoomId).SendGameInfoAsync(gameInfo);
         }
         catch (Exception ex)
