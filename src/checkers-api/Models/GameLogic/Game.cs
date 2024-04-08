@@ -213,61 +213,52 @@ public class Game
     private List<ValidMove> GetAttackMoves(string playerId, Location source, PieceState state)
     {
         var validMoves = new List<ValidMove>();
-        var tempPiece = _board[source.Row][source.Column];
-        _board[source.Row][source.Column] = null;
-        try
-        {
-            Traverse(playerId, source, state, ref validMoves);
-        }
-        finally
-        {
-            _board[source.Row][source.Column] = tempPiece;
-        }
+        Traverse(playerId, source, source, state, ref validMoves);
         return validMoves;
     }
 
-    private void Traverse(string playerId, Location source, PieceState state, ref List<ValidMove> validMoves, IEnumerable<Move>? sequence = null, IEnumerable<Location>? previouslyTakenLocations = null)
+    private void Traverse(string playerId, Location originalSource, Location currentSource, PieceState state, ref List<ValidMove> validMoves, IEnumerable<Move>? sequence = null, IEnumerable<Location>? previouslyTakenLocations = null)
     {
         previouslyTakenLocations ??= new List<Location>();
         sequence ??= new List<Move>();
 
-        if (state != PieceState.King && IsKingRow(playerId, source.Row))
+        if (state != PieceState.King && IsKingRow(playerId, currentSource.Row))
         {
             state = PieceState.King;
         }
 
         var direction = playerId == _player1.PlayerId ? 2 : -2;
-        var possibleLocations = new List<Location>() { new Location(source.Row + direction, source.Column + 2),
-                                                   new Location(source.Row + direction, source.Column - 2), };
+        var possibleLocations = new List<Location>() { new Location(currentSource.Row + direction, currentSource.Column + 2),
+                                                   new Location(currentSource.Row + direction, currentSource.Column - 2), };
 
         if (state == PieceState.King)
         {
-            possibleLocations.Add(new Location(source.Row + (direction * -1), source.Column + 2));
-            possibleLocations.Add(new Location(source.Row + (direction * -1), source.Column - 2));
+            possibleLocations.Add(new Location(currentSource.Row + (direction * -1), currentSource.Column + 2));
+            possibleLocations.Add(new Location(currentSource.Row + (direction * -1), currentSource.Column - 2));
 
         }
 
         foreach (var destination in possibleLocations)
         {
-            var midLocation = GetMiddleLocation(source, destination);
-            if (!IsLocationInBounds(destination) ||
-                previouslyTakenLocations.Any(lt => lt.Row == midLocation.Row && lt.Column == midLocation.Column) ||
-                _board[midLocation.Row][midLocation.Column] == null ||
-                _board[midLocation.Row][midLocation.Column]!.OwnerId == playerId ||
-                _board[destination.Row][destination.Column] != null)
+            var midLocation = GetMiddleLocation(currentSource, destination);
+
+            if (IsLocationInBounds(destination) &&
+                !previouslyTakenLocations.Any(lt => lt.Row == midLocation.Row && lt.Column == midLocation.Column) &&
+                _board[midLocation.Row][midLocation.Column] is not null &&
+                _board[midLocation.Row][midLocation.Column]!.OwnerId != playerId &&
+                    (_board[destination.Row][destination.Column] == null ||
+                     _board[destination.Row][destination.Column] == _board[originalSource.Row][originalSource.Column]))
             {
-                continue;
+                var currentLocationsTaken = previouslyTakenLocations.ToList();
+                currentLocationsTaken.Add(midLocation);
+
+                var currentSequence = sequence.ToList();
+                var move = new Move(currentSource, destination);
+                currentSequence.Add(move);
+
+                validMoves.Add(new ValidMove(destination, currentSequence));
+                Traverse(playerId, originalSource, destination, state, ref validMoves, currentSequence, currentLocationsTaken);
             }
-
-            var currentLocationsTaken = previouslyTakenLocations.ToList();
-            currentLocationsTaken.Add(midLocation);
-
-            var currentSequence = sequence.ToList();
-            var move = new Move(source, destination);
-            currentSequence.Add(move);
-
-            validMoves.Add(new ValidMove(destination, currentSequence));
-            Traverse(playerId, destination, state, ref validMoves, currentSequence, currentLocationsTaken);
         }
     }
 
