@@ -984,6 +984,70 @@ this.ScenarioInitialize(scenarioInfo);
             }
             this.ScenarioCleanup();
         }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Player X requests the valid moves for a king piece with a ton of possible moves")]
+        public void PlayerXRequestsTheValidMovesForAKingPieceWithATonOfPossibleMoves()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player X requests the valid moves for a king piece with a ton of possible moves", null, tagsOfScenario, argumentsOfScenario, featureTags);
+#line 354
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            if ((TagHelper.ContainsIgnoreTag(tagsOfScenario) || TagHelper.ContainsIgnoreTag(featureTags)))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 355
+  testRunner.Given("the following board with players O and X and player O is moving", @"     |   |   |   |   |   |   |   .
+     |   |   |   |   |   |   |   .
+     | O |   | O |   | O |   |   .
+     |   |   |   |   |   |   |   .
+     | O |   | O |   | O |   |   .
+     |   |   |   |   |   |   |   .
+     | O |   | O |   | O |   |   .
+  X$ |   |   |   |   |   |   |  ", ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+#line 366
+  testRunner.When("player X requests the valid moves for location \'7,0\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+                TechTalk.SpecFlow.Table table25 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Destination",
+                            "MoveSequence"});
+                table25.AddRow(new string[] {
+                            "5,2",
+                            "7,0 > 5,2"});
+                table25.AddRow(new string[] {
+                            "3,0",
+                            "7,0 > 5,2 > 3,0"});
+                table25.AddRow(new string[] {
+                            "1,2",
+                            "7,0 > 5,2 > 3,0 > 1,2"});
+                table25.AddRow(new string[] {
+                            "3,4",
+                            "7,0 > 5,2 > 3,0 > 1,2 > 3,4"});
+                table25.AddRow(new string[] {
+                            "1,6",
+                            "7,0 > 5,2 > 3,0 > 1,2 > 3,4 > 1,6"});
+                table25.AddRow(new string[] {
+                            "5,2",
+                            "7,0 > 5,2 > 3,0 > 1,2 > 3,4 > 5,2"});
+                table25.AddRow(new string[] {
+                            "7,4",
+                            "7,0 > 5,2 > 3,0 > 1,2 > 3,4 > 5,2 > 7,4"});
+                table25.AddRow(new string[] {
+                            "7,4",
+                            "7,0 > 5,2 > 3,0 > 1,2 > 3,4 > 5,2 > 7,4 > 5,6"});
+#line 367
+  testRunner.Then("the following moves should be available", ((string)(null)), table25, "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
     }
 }
 #pragma warning restore

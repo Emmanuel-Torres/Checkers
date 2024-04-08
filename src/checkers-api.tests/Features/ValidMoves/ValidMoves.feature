@@ -350,3 +350,28 @@ Scenario: Player X requests the valid moves for a king piece with two double jum
   | 3,5         | 7,5 > 5,3 > 3,5             |
   | 5,7         | 7,5 > 5,3 > 3,5 > 5,7       |
   | 7,5         | 7,5 > 5,3 > 3,5 > 5,7 > 7,5 |
+
+# NOTE: I tried doing this by hand, but im going to trust that this works lol.
+# Scenario: Player X requests the valid moves for a king piece with a ton of possible moves
+#   Given the following board with players O and X and player O is moving
+#   """
+#        |   |   |   |   |   |   |   .
+#        |   |   |   |   |   |   |   .
+#        | O |   | O |   | O |   |   .
+#        |   |   |   |   |   |   |   .
+#        | O |   | O |   | O |   |   .
+#        |   |   |   |   |   |   |   .
+#        | O |   | O |   | O |   |   .
+#     X$ |   |   |   |   |   |   |  
+#   """
+#   When player X requests the valid moves for location '7,0'
+#   Then the following moves should be available
+#   | Destination | MoveSequence                                              |
+#   | 5,2         | 7,0 > 5,2                                                 |
+#   | 3,0         | 7,0 > 5,2 > 3,0                                           |
+#   | 1,2         | 7,0 > 5,2 > 3,0 > 1,2                                     |
+#   | 3,4         | 7,0 > 5,2 > 3,0 > 1,2 > 3,4                               |
+#   | 1,6         | 7,0 > 5,2 > 3,0 > 1,2 > 3,4 > 1,6                        |
+#   | 5,2         | 7,0 > 5,2 > 3,0 > 1,2 > 3,4 > 5,2                        |
+#   | 7,4         | 7,0 > 5,2 > 3,0 > 1,2 > 3,4 > 5,2 > 7,4                  |
+#   | 7,4         | 7,0 > 5,2 > 3,0 > 1,2 > 3,4 > 5,2 > 7,4 > 5,6 |
