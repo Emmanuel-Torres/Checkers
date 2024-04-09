@@ -1,0 +1,32 @@
+.container {
+  margin: 2rem;
+  color: white;
+}
+
+.container a {
+  color: white;
+}
+
+.main a {
+  text-decoration: none;
+}
+
+.play-button {
+  background-color: var(--primary-color);
+  padding: 0.5rem;
+  border-radius: 5px;
+}
+
+.resources {
+  margin-top: 2rem;
+}
+
+.resources h2 {
+    font-size: x-large;
+}
+
+.resources ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}

@@ -3,24 +3,30 @@ import Square from "../../../models/game/square";
 import styles from "./SquareComponent.module.css"
 import PieceComponent from "../piece/PieceComponent";
 import ValidMoveIndicatorComponent from "../valid-move-indicator/ValidMoveIndicatorComponent";
+import Piece from "../../../models/game/piece";
 
 type Props = {
-    square: Square;
-    isValidMoveLocation: boolean;
+    color: string;
+    pieceColor?: string;
+    pieceState?: string;
     isReversed: boolean;
-    isSelected: boolean;
-    onSquareClicked: (square: Square) => void;
+    isHighlighted: boolean;
+    isValidMoveLocation: boolean;
+    onSquareClicked: () => void;
 }
 
 const SquareComponent: FC<Props> = (props): JSX.Element => {
-    const squareStyle = styles.square + " " + styles[`bg-${props.square.color}`] + (props.isReversed ? " " + styles['square-reversed'] : "") + (props.isSelected ? " " + styles['square-selected'] : "");
+    const colorStyle = " " + styles[`bg-${props.color}`];
+    const reversedStyle = props.isReversed ? " " + styles['square-reversed'] : "";
+    const highlightedStyle = props.isHighlighted ? " " + styles['square-highlighted'] : "";
+    const squareStyle = styles.square +  colorStyle + reversedStyle + highlightedStyle;
 
     return (
         <>
-            <div className={squareStyle} onClick={() => props.onSquareClicked(props.square)}>
+            <div className={squareStyle} onClick={props.onSquareClicked}>
                 {props.isValidMoveLocation &&
                     <ValidMoveIndicatorComponent />}
-                {props.square.isOccupied && <PieceComponent color={props.square.piece!.color} state={props.square.piece!.state}/>}
+                {props.pieceColor && <PieceComponent color={props.pieceColor!} state={props.pieceState!}/>}
             </div>
         </>
     )

@@ -2,30 +2,17 @@ namespace checkers_api.Models.GameModels;
 
 public class Location
 {
-    public int Row { get; }
-    public int Column { get; }
+    public int row { get; }
+    public int column { get; }
 
     public Location(int row, int column)
     {
-        Row = row;
-        Column = column;
+        this.row = row;
+        this.column = column;
     }
 
-    public override bool Equals(object? obj)
+    public override string ToString()
     {
-        if ((obj == null) || !this.GetType().Equals(obj.GetType()))
-        {
-            return false;
-        }
-        else
-        {
-            Location l = (Location)obj;
-            return (Column == l.Column) && (Row == l.Row);
-        }
-    }
-
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(Row, Column);
+        return $"{row},{column}";
     }
 }

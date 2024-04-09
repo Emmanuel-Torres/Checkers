@@ -1,0 +1,44 @@
+.container {
+  width: fit-content;
+  height: fit-content;
+  border: 2px solid gray;
+  border-radius: 15px;
+  color: white;
+}
+
+.container h2 {
+  text-align: center;
+}
+
+.header {
+  margin: 0;
+  border-bottom: 2px solid gray;
+  padding: 1rem;
+}
+
+.form {
+  padding: 1rem;
+}
+
+.form-label,
+.form-input,
+.form-button {
+  display: block;
+  margin-bottom: .5rem;
+}
+
+.form-input {
+  background-color: transparent;
+  border: gray solid 2px;
+  border-radius: 5px;
+  color: white;
+}
+
+.form-button {
+  color: white;
+  background-color: var(--primary-color);
+  border-radius: 5px;
+  border-color: transparent;
+  margin: auto;
+  margin-top: 1rem;
+}

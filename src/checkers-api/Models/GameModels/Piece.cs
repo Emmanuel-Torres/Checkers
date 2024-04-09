@@ -2,13 +2,13 @@ namespace checkers_api.Models.GameModels;
 
 public class Piece
 {
-    public Color Color { get; }
     public string OwnerId { get; }
     public PieceState State { get; private set; }
 
-    public Piece(Color color, string ownerId)
+    public Piece(string ownerId)
     {
-        Color = color;
+        ArgumentNullException.ThrowIfNull(ownerId);
+
         OwnerId = ownerId;
         State = PieceState.Regular;
     }
@@ -16,5 +16,15 @@ public class Piece
     public void KingPiece()
     {
         State = PieceState.King;
+    }
+
+    public override string ToString()
+    {
+        if (State == PieceState.King)
+        {
+            return OwnerId + "$";
+        }
+
+        return OwnerId;
     }
 }

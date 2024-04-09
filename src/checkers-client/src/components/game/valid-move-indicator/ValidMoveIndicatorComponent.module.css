@@ -1,4 +1,31 @@
 .valid-move {
+  width: 40%;
+  height: 40%;
+  border-radius: 100%;
+  margin: auto;
+  background: rgb(186, 186, 186);
+  background: linear-gradient(
+    45deg,
+    rgba(186, 186, 186, 1) 0%,
+    rgba(255, 255, 255, 1) 100%
+  );
+
+  animation: pulse 2s infinite;
+}
+/* 
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.10);
+  }
+  100% {
+    transform: scale(1);
+  }
+} */
+
+/* .valid-move {
   aspect-ratio: 1/1;
   border-radius: 100%;
   margin: 30%;
@@ -60,4 +87,4 @@
   100% {
     transform: scale(1);
   }
-}
+} */

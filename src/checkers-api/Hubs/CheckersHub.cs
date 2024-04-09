@@ -1,7 +1,6 @@
 using checkers_api.Models.GameModels;
+using checkers_api.Models.Requests;
 using checkers_api.Services;
-using checkers_api.Services.GameManager;
-using checkers_api.Services.Matchmaking;
 using Microsoft.AspNetCore.SignalR;
 
 namespace checkers_api.Hubs;
@@ -9,15 +8,12 @@ namespace checkers_api.Hubs;
 public class CheckersHub : Hub<ICheckersHub>
 {
     private readonly ILogger<CheckersHub> _logger;
-    private readonly IGameManager _gameService;
-    private readonly IMatchmakingService _matchmakingService;
-    public CheckersHub(ILogger<CheckersHub> logger, IGameManager gameService, IMatchmakingService matchmakingService)
+    private readonly IRoomManager _roomManager;
+
+    public CheckersHub(ILogger<CheckersHub> logger, IRoomManager roomManager)
     {
         _logger = logger;
-        _gameService = gameService;
-        _matchmakingService = matchmakingService;
-
-        _matchmakingService.OnPlayersMatched = StartGameAsync;
+        _roomManager = roomManager;
     }
 
     public override async Task OnConnectedAsync()
@@ -26,6 +22,7 @@ public class CheckersHub : Hub<ICheckersHub>
         await base.OnConnectedAsync();
     }
 
+    // TODO: How to properly handle player disconnects when they are in a room/game
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
         if (exception is not null)
@@ -40,130 +37,103 @@ public class CheckersHub : Hub<ICheckersHub>
         await base.OnDisconnectedAsync(exception);
     }
 
-    public async Task FindGameAsync()
+    public async Task CreateRoomAsync(string name, RoomOptions? options = null)
     {
+        _logger.LogInformation("Creating new room");
         try
         {
-            _logger.LogDebug("[{location}]: Player {connectionId} requested matchmaking", nameof(CheckersHub), Context.ConnectionId);
-
-            await _matchmakingService.StartMatchmakingAsync(new Player(Context.ConnectionId, "Guest"));
-            await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "You are matchmaking");
-
-            _logger.LogDebug("[{location}]: Player {connectionId} is matchmaking successfully", nameof(CheckersHub), Context.ConnectionId);
+            var roomOwner = new Player(Context.ConnectionId, name);
+            var roomInfo = _roomManager.CreateRoom(roomOwner, options?.RoomId);
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomInfo.RoomId);
+            await Clients.Client(Context.ConnectionId).SendPlayerInfoAsync(roomInfo.RoomOwner, true);
+            await Clients.Client(Context.ConnectionId).SendRoomInfoAsync(roomInfo);
         }
         catch (Exception ex)
         {
-            _logger.LogError("[{location}]: Matchmaking failed for player {connectionId}. Ex: {ex}", nameof(CheckersHub), Context.ConnectionId, ex);
-            await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "Matchmaking failed");
+            //TODO: Better error handling logic and better logging message
+            _logger.LogError(ex.Message);
         }
     }
 
-    public async Task MakeMoveAsync(MoveRequest moveRequest)
+    public async Task JoinRoomAsync(string roomId, string name)
     {
+        _logger.LogInformation("Joining room");
         try
         {
-            _logger.LogDebug("[{location}]: Player {connectionId} made a move request from ({sRow}, {sCol}) to ({dRow}, {dCol})",
-                nameof(CheckersHub), Context.ConnectionId, moveRequest.Source.Row, moveRequest.Source.Column, moveRequest.Destination.Row, moveRequest.Destination.Column);
-
-            var res = _gameService.MakeMove(Context.ConnectionId, moveRequest);
-            if (res.IsGameOver)
-            {
-                _logger.LogInformation("[{location}]: Move request from player {connectionId} successfully won the game", nameof(CheckersHub), Context.ConnectionId);
-                await EndGameAsync(res.GameId);
-                return;
-            }
-            if (res.WasMoveSuccessful)
-            {
-                _logger.LogDebug("[{location}]: Move request from player {connectionId} was successful", nameof(CheckersHub), Context.ConnectionId);
-                await Clients.Client(Context.ConnectionId).MoveSuccessfulAsync(res.Board);
-                return;
-            }
-
-            await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "Move was not successful");
+            var roomGuest = new Player(Context.ConnectionId, name);
+            var roomInfo = _roomManager.JoinRoom(roomId, roomGuest);
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomInfo.RoomId);
+            await Clients.Client(Context.ConnectionId).SendPlayerInfoAsync(roomInfo.RoomGuest!, false);
+            await Clients.Group(roomInfo.RoomId).SendRoomInfoAsync(roomInfo);
         }
         catch (Exception ex)
         {
-            _logger.LogError("[{location}]: Could not make move. Ex: {ex}", nameof(CheckersHub), ex);
-            await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "Something went wrong when making your move");
+            //TODO: Better error handling logic and better logging message
+            _logger.LogError(ex.Message);
         }
     }
 
-    public async Task MoveCompletedAsync()
+    public async Task StartGameAsync()
     {
+        _logger.LogInformation("Starting Game");
         try
         {
-            var game = _gameService.GetGameByPlayerId(Context.ConnectionId);
-            if (game is null)
-            {
-                throw new Exception("Player is not in a game");
-            }
-            var currentTurn = game.Players.First(p => p.PlayerId != Context.ConnectionId);
-
-            _logger.LogDebug("[{location}]: Player {p1} is done moving. Passing turn to {p2}", nameof(CheckersHub), Context.ConnectionId, currentTurn.PlayerId);
-            await Clients.Client(currentTurn.PlayerId).YourTurnToMoveAsync(game.Board);
+            var gameInfo = _roomManager.StartGame(Context.ConnectionId);
+            _logger.LogInformation("Created game for room {roomId}", gameInfo.RoomId);
+            await Clients.Group(gameInfo.RoomId).SendGameInfoAsync(gameInfo);
         }
         catch (Exception ex)
         {
-            _logger.LogError("[{location}]: Could complete move for player {connectionId}. Ex: {ex}", nameof(CheckersHub), Context.ConnectionId, ex);
+            _logger.LogError(ex.Message);
+            // _logger.LogError("[{location}]: Could not start game for players {p1} and {p2}. Ex: {ex}", nameof(CheckersHub), p1.PlayerId, p2.PlayerId, ex);
         }
     }
 
-    public async Task GetValidMovesAsync(Location source)
-    {
+    public async Task GetValidMovesAsync(Location source) {
+        _logger.LogInformation("Getting valid moves for player {playerId}", Context.ConnectionId);
         try
         {
-            _logger.LogDebug("[{location}]: Getting valid locations for ({row}, {column})", nameof(CheckersHub), source.Row, source.Column);
-            var res = _gameService.GetValidMoves(Context.ConnectionId, source);
-            _logger.LogDebug("[{location}]: Found {count} valid locations for ({row}, {column})", nameof(CheckersHub), res.Count(), source.Row, source.Column);
-
-            await Clients.Client(Context.ConnectionId).SendValidMoveLocationsAsync(res);
+            var moves = _roomManager.GetValidMoves(Context.ConnectionId, source);
+            await Clients.Client(Context.ConnectionId).SendValidMovesAsync(source, moves);
         }
         catch (Exception ex)
         {
-            _logger.LogError("[{location}]: Could not get valid moves for source ({column}, {row}). Ex: {ex}", nameof(CheckersHub), source.Column, source.Row, ex);
+            _logger.LogError(ex.Message);
         }
     }
 
-    private async Task StartGameAsync(Player p1, Player p2)
+    public async Task MakeMoveAsync(IEnumerable<Move> moves)
     {
+        _logger.LogInformation("Received move request from player {playerId}", Context.ConnectionId);
         try
         {
-            _logger.LogInformation("[{location}]: Starting game for players {p1} and {p2}", nameof(CheckersHub), p1.PlayerId, p2.PlayerId);
-
-            var gameId = _gameService.StartGame(p1, p2);
-            var game = _gameService.GetGameByGameId(gameId);
-
-            foreach (var p in game!.Players)
-            {
-                var color = p.PlayerId == p1.PlayerId ? Color.Black : Color.White;
-                await Clients.Client(p.PlayerId).SendMessageAsync("server", "You were successfully matchmade");
-                await Clients.Client(p.PlayerId).SendJoinConfirmationAsync(p.Name, color, game.Board);
-            }
-
-            await Clients.Client(p1.PlayerId).YourTurnToMoveAsync(game.Board);
+            var gameInfo = _roomManager.MakeMove(Context.ConnectionId, new MoveRequest(moves));
+            await Clients.Group(gameInfo.RoomId).SendGameInfoAsync(gameInfo);
         }
         catch (Exception ex)
         {
-            _logger.LogError("[{location}]: Could not start game for players {p1} and {p2}. Ex: {ex}", nameof(CheckersHub), p1.PlayerId, p2.PlayerId, ex);
+            _logger.LogError(ex.Message);
+            // _logger.LogError("[{location}]: Could not make move. Ex: {ex}", nameof(CheckersHub), ex);
+            // await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "Something went wrong when making your move");
         }
     }
 
-    private async Task EndGameAsync(string gameId)
+    public async Task KickGuestPlayer()
     {
         try
         {
-            _logger.LogDebug("[{location}]: Ending game {id}", nameof(CheckersHub), gameId);
-            var results = _gameService.TerminateGame(gameId);
-            foreach (var p in results.Players)
+            var (roomInfo, kickedPlayer) = _roomManager.KickGuestPlayer(Context.ConnectionId);
+            if (kickedPlayer is not null)
             {
-                await Clients.Client(p.PlayerId).GameOverAsync(results.Winner.Name, results.Board);
+                await Groups.RemoveFromGroupAsync(kickedPlayer.PlayerId, roomInfo.RoomId);
+                await Clients.Group(roomInfo.RoomId).SendRoomInfoAsync(roomInfo);
             }
-
-            _logger.LogInformation("[{location}]: Game {id} was successfully terminated. Winner {connectionId}", nameof(CheckersHub), gameId, results.Winner.PlayerId);
         }
         catch (Exception ex)
         {
-            _logger.LogError("[{location}]: Could not end game properly. Ex: {ex}", nameof(CheckersHub), ex);
+            _logger.LogError(ex.Message);
+            // _logger.LogError("[{location}]: Could not make move. Ex: {ex}", nameof(CheckersHub), ex);
+            // await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "Something went wrong when making your move");
         }
     }
 }
