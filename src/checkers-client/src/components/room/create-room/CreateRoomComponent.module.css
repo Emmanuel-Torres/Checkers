@@ -3,6 +3,11 @@
   height: fit-content;
   border: 2px solid gray;
   border-radius: 15px;
+  color: white;
+}
+
+.container h2 {
+  text-align: center;
 }
 
 .header {
@@ -30,7 +35,10 @@
 }
 
 .form-button {
-  background-color: white;
-  color: black;
+  color: white;
+  background-color: var(--primary-color);
   border-radius: 5px;
+  border-color: transparent;
+  margin: auto;
+  margin-top: 1rem;
 }

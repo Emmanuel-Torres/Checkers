@@ -5,6 +5,10 @@
   border-radius: 15px;
 }
 
+.container h2 {
+  text-align: center;
+}
+
 .header {
   margin: 0;
   border-bottom: 2px solid gray;
@@ -30,7 +34,10 @@
 }
 
 .form-button {
-  background-color: white;
-  color: black;
+  color: white;
+  background-color: var(--primary-color);
   border-radius: 5px;
+  border-color: transparent;
+  margin: auto;
+  margin-top: 1rem;
 }
