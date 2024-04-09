@@ -22,7 +22,7 @@ const CreateRoomComponent: FC<Props> = (props): JSX.Element => {
             <h2 className={styles.header}>Create Room</h2>
             <form className={styles.form} onSubmit={submitFormHandler}>
                 <label className={styles['form-label']}>Name</label>
-                <input className={styles['form-input']} type='text' id='name' value={name} onChange={nameChangedHandler} />
+                <input className={styles['form-input']} type='text' id='name' placeholder='e.g. Sally' value={name} onChange={nameChangedHandler} />
                 <button className={styles['form-button']} type='submit'>Create Room</button>
             </form>
         </div>

@@ -1,23 +1,36 @@
 .container {
-    width: fit-content;
-    border: 2px solid black;
-    border-radius: 15px;
-  }
-  
-  .header {
-    margin: 0;
-    border-bottom: 2px solid black;
-    padding: 1rem;
-  }
-  
-  .form {
-    padding: 1rem;
-  }
-  
-  .form-label,
-  .form-input,
-  .form-button {
-    display: block;
-    margin-bottom: .5rem;
-  }
-  
+  width: fit-content;
+  height: fit-content;
+  border: 2px solid gray;
+  border-radius: 15px;
+}
+
+.header {
+  margin: 0;
+  border-bottom: 2px solid gray;
+  padding: 1rem;
+}
+
+.form {
+  padding: 1rem;
+}
+
+.form-label,
+.form-input,
+.form-button {
+  display: block;
+  margin-bottom: .5rem;
+}
+
+.form-input {
+  background-color: transparent;
+  border: gray solid 2px;
+  border-radius: 5px;
+  color: white;
+}
+
+.form-button {
+  background-color: white;
+  color: black;
+  border-radius: 5px;
+}

@@ -7,7 +7,7 @@ import Square from "../models/game/square";
 import HubMethods from "../models/helper/hub-methods";
 import PlayerIndicatorComponent from "../components/game/player-indicator/PlayerIndicatorComponent";
 import RoomInfo from "../models/room/roomInfo";
-import JoinView from "./JoinView";
+import JoinView from "./Join/JoinView";
 import RoomView from "../components/room/room-info/RoomInfoComponent";
 import GameInfo from "../models/game/gameInfo";
 import Player from "../models/game/player";

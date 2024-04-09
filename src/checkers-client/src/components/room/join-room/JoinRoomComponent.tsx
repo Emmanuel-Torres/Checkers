@@ -27,9 +27,9 @@ const JoinRoomComponent: FC<Props> = (props): JSX.Element => {
             <h2 className={styles.header}>Join Room</h2>
             <form className={styles.form} onSubmit={submitFormHandler}>
                 <label className={styles['form-label']}>Name</label>
-                <input className={styles['form-input']} type='text' id='name' value={name} onChange={nameChangedHandler} />
+                <input className={styles['form-input']} type='text' id='name' placeholder='e.g. Sally' value={name} onChange={nameChangedHandler} />
                 <label className={styles['form-label']}>Room Id</label>
-                <input className={styles['form-input']} type='text' id='room-code' value={roomId} onChange={roomIdChangedHandler} />
+                <input className={styles['form-input']} type='text' id='room-code' placeholder='e.g. AB123' value={roomId} onChange={roomIdChangedHandler} />
                 <button className={styles['form-button']} type='submit'>Join Room</button>
             </form>
         </div>
