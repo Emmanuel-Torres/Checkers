@@ -1,7 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-import Navbar from "./components/ui/Navbar";
 import DemoView from "./views/Demo/DemoView";
-import GameView from "./views/GameView";
+import RoomView from "./views/Room/RoomView";
 import HomeView from "./views/Home/HomeView";
 
 function App() {
@@ -10,7 +9,7 @@ function App() {
       {/* <Navbar /> */}
       <Routes>
         <Route path="/" element={<HomeView />} />
-        <Route path="/game" element={<GameView />} />
+        <Route path="/room" element={<RoomView />} />
         <Route path="/demo" element={<DemoView />} />
       </Routes>
     </div>

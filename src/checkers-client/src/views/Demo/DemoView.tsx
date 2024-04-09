@@ -6,7 +6,7 @@ import PlayerIndicatorComponent from "../../components/game/player-indicator/Pla
 import styles from "./DemoView.module.css";
 import JoinRoomComponent from "../../components/room/join-room/JoinRoomComponent";
 import CreateRoomComponent from "../../components/room/create-room/CreateRoomComponent";
-import RoomView from "../../components/room/room-info/RoomInfoComponent";
+import RoomInfoComponent from "../../components/room/room-info/RoomInfoComponent";
 import RoomInfo from "../../models/room/roomInfo";
 import Player from "../../models/game/player";
 import PieceComponent from "../../components/game/piece/PieceComponent";
@@ -55,7 +55,7 @@ const DemoView: FC = (): JSX.Element => {
 
   return (
     <div>
-      <RoomView roomInfo={room} />
+      {/* <RoomInfoComponent roomInfo={room} /> */}
       <PlayerIndicatorComponent gameInfo={gameInfo} player={player}/>
       <BoardComponent currentTurnId={currentTurn} yourId={currentTurn} board={gameInfo.board} isReversed={isReversed} validMoves={moves} getValidMoves={() =>{}} makeMove={(moves: Move[]) => {}}/>
     </div>

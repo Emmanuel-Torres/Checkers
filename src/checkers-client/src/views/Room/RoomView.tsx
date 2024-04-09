@@ -1,19 +1,19 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { FC, useEffect, useState } from "react";
-import BoardComponent from "../components/game/board/BoardComponent";
-import Location from "../models/game/location";
-import Move from "../models/game/move";
-import Square from "../models/game/square";
-import HubMethods from "../models/helper/hub-methods";
-import PlayerIndicatorComponent from "../components/game/player-indicator/PlayerIndicatorComponent";
-import RoomInfo from "../models/room/roomInfo";
-import JoinView from "./Join/JoinView";
-import RoomView from "../components/room/room-info/RoomInfoComponent";
-import GameInfo from "../models/game/gameInfo";
-import Player from "../models/game/player";
-import ValidMove from "../models/game/validMove";
 
-const GameView: FC = (): JSX.Element => {
+import BoardComponent from "../../components/game/board/BoardComponent";
+import Location from "../../models/game/location";
+import Move from "../../models/game/move";
+import HubMethods from "../../models/helper/hub-methods";
+import PlayerIndicatorComponent from "../../components/game/player-indicator/PlayerIndicatorComponent";
+import RoomInfo from "../../models/room/roomInfo";
+import JoinView from "../Join/JoinView";
+import RoomInfoComponent from "../../components/room/room-info/RoomInfoComponent";
+import GameInfo from "../../models/game/gameInfo";
+import Player from "../../models/game/player";
+import ValidMove from "../../models/game/validMove";
+
+const RoomView: FC = (): JSX.Element => {
     const [connection, setConnection] = useState<HubConnection>();
     const [player, setPlayer] = useState<Player>();
     const [isRoomOwner, setIsRoomOwner] = useState<boolean>(false);
@@ -22,6 +22,7 @@ const GameView: FC = (): JSX.Element => {
     const [validMoves, setValidMoves] = useState<ValidMove[]>([]);
 
     useEffect(() => {
+        console.log(connection);
         const newConnection = new HubConnectionBuilder()
             .withUrl("/hubs/checkers")
             .withAutomaticReconnect()
@@ -115,25 +116,17 @@ const GameView: FC = (): JSX.Element => {
             console.error(e);
         }
     }
-    // const makeMove = async (moveRequest: MoveRequest) => {
-    //     try {
-    //         if (yourTurn && !isGameOver) {
-    //             await connection?.send(HubMethods.makeMove, moveRequest);
-    //         }
-    //     }
-    //     catch (e) {
-    //         console.error(e);
-    //     }
-    // }
+
     return (
         <>
             {!roomInfo && <JoinView onCreateRoom={createRoom} onJoinRoom={joinRoom} />}
-            {roomInfo && <RoomView roomInfo={roomInfo} />}
-            {roomInfo?.roomGuest && !gameInfo && <button type="button" onClick={startGame}>Start Game</button>}
-            {gameInfo && !gameInfo.winner && <PlayerIndicatorComponent player={player!} gameInfo={gameInfo}/>}
+            {roomInfo && <RoomInfoComponent roomInfo={roomInfo} gameInfo={gameInfo} />}
+            {roomInfo?.roomGuest && !gameInfo && <button  onClick={startGame}>Start Game</button>}
+            {gameInfo && <PlayerIndicatorComponent player={player!} gameInfo={gameInfo} />}
+            {gameInfo && gameInfo.winner && <button onClick={startGame}>Start New Game</button>}
             {gameInfo && <BoardComponent currentTurnId={gameInfo.nextPlayerTurn?.playerId} yourId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} validMoves={validMoves} getValidMoves={getValidMoves} makeMove={makeMove} />}
         </>
     )
 }
 
-export default GameView;
+export default RoomView;

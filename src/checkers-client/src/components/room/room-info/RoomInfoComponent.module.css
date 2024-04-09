@@ -74,6 +74,25 @@
   margin-left: 0.5rem;
 }
 
+.placeholder {
+  margin-top: auto;
+  background: linear-gradient(90deg, rgb(56, 56, 56) 0%, rgb(75, 75, 75) 10%, rgb(53, 53, 53) 20%);
+  border-radius: 5px;
+  background-size: 200%;
+  width: 50%;
+  height: 90%;
+  animation: loading 2s linear infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 100% 0
+  }
+  100% {
+    background-position: -100% 0
+  }
+}
+
 @media screen and (min-width: 600px) {
   .icon {
     height: 2.5rem;

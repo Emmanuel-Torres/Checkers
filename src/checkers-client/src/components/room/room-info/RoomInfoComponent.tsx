@@ -2,13 +2,14 @@ import { FC, useState } from 'react';
 import RoomInfo from "../../../models/room/roomInfo";
 import styles from "./RoomInfoComponent.module.css"
 import crownIcon from "../../../assets/crown-icon.svg"
-import SpinnerComponent from '../../effects/spinner/SpinnerComponent';
+import GameInfo from '../../../models/game/gameInfo';
 
 type Props = {
     roomInfo: RoomInfo;
+    gameInfo?: GameInfo;
 }
 
-const RoomView: FC<Props> = (props): JSX.Element => {
+const RoomInfoComponent: FC<Props> = (props): JSX.Element => {
     const [tooltipText, setTooltipText] = useState<string>("Click to copy")
     const guestStyle = props.roomInfo.roomGuest === undefined ? "waiting" : "";
 
@@ -25,11 +26,9 @@ const RoomView: FC<Props> = (props): JSX.Element => {
         </div>
         <h3 className={styles["room-id"]}>Room Id</h3>
         <h2 className={styles.room} onClick={roomIdClicked}>{props.roomInfo.roomId}<span className={styles["tooltip-text"]}>{tooltipText}</span></h2>
-        <div className={styles.guest}>
-            <h2 className={styles[guestStyle]}>{props.roomInfo.roomGuest?.name ?? "Waiting"}</h2>
-            {!props.roomInfo.roomGuest && <SpinnerComponent />}
-        </div>
+        {props.roomInfo.roomGuest && <h2 className={styles.guest}>{props.roomInfo.roomGuest?.name}</h2>}
+        {!props.roomInfo.roomGuest && <div className={styles.placeholder} />}
     </div>
 }
 
-export default RoomView;
+export default RoomInfoComponent;

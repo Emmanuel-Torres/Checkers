@@ -1,7 +1,5 @@
 import { FC } from "react";
 import styles from "./PlayerIndicatorComponent.module.css";
-import PieceComponent from "../piece/PieceComponent";
-import SpinnerComponent from "../../effects/spinner/SpinnerComponent";
 import GameInfo from "../../../models/game/gameInfo";
 import Player from "../../../models/game/player";
 

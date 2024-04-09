@@ -8,7 +8,7 @@ const HomeView: FC = (): JSX.Element => {
             <div className={styles.main}>
                 <h1>Checkers Online</h1>
                 <p>Ready to challenge your friends? This Checkers Online project lets you play checkers against your friends in real time!</p>
-                <Link to="/game" className={styles["play-button"]}>Play Now!</Link>
+                <Link to="/room" className={styles["play-button"]}>Play Now!</Link>
             </div>
             <div className={styles.resources}>
                 <h2>Resources</h2>
