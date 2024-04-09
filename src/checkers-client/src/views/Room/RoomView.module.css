@@ -1,0 +1,12 @@
+.container .button {
+    display: flex;
+}
+
+.button {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: transparent;
+  border-radius: 5px;
+  margin: auto;
+  font-size: 1.25rem;
+}

@@ -1,6 +1,5 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { FC, useEffect, useState } from "react";
-
 import BoardComponent from "../../components/game/board/BoardComponent";
 import Location from "../../models/game/location";
 import Move from "../../models/game/move";
@@ -12,6 +11,7 @@ import RoomInfoComponent from "../../components/room/room-info/RoomInfoComponent
 import GameInfo from "../../models/game/gameInfo";
 import Player from "../../models/game/player";
 import ValidMove from "../../models/game/validMove";
+import styles from "./RoomView.module.css"
 
 const RoomView: FC = (): JSX.Element => {
     const [connection, setConnection] = useState<HubConnection>();
@@ -118,14 +118,14 @@ const RoomView: FC = (): JSX.Element => {
     }
 
     return (
-        <>
+        <div className={styles.container}>
             {!roomInfo && <JoinView onCreateRoom={createRoom} onJoinRoom={joinRoom} />}
             {roomInfo && <RoomInfoComponent roomInfo={roomInfo} gameInfo={gameInfo} />}
-            {roomInfo?.roomGuest && !gameInfo && <button  onClick={startGame}>Start Game</button>}
+            {roomInfo?.roomGuest && !gameInfo && <button className={styles.button} onClick={startGame}>Start Game</button>}
+            {roomInfo?.roomGuest && gameInfo && gameInfo.winner && <button className={styles.button} onClick={startGame}>Start New Game</button>}
             {gameInfo && <PlayerIndicatorComponent player={player!} gameInfo={gameInfo} />}
-            {gameInfo && gameInfo.winner && <button onClick={startGame}>Start New Game</button>}
             {gameInfo && <BoardComponent currentTurnId={gameInfo.nextPlayerTurn?.playerId} yourId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} validMoves={validMoves} getValidMoves={getValidMoves} makeMove={makeMove} />}
-        </>
+        </div>
     )
 }
 
