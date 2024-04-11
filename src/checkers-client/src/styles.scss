@@ -3,15 +3,22 @@
   --background-color: rgb(44, 44, 44);
 }
 
+html,body {
+  position: fixed;
+  overflow: hidden;
+}
+
 body {
   height: 100%;
   background-color: var(--background-color);
   color: white;
+  overflow: hidden;
 }
 
 html {
   font-size: 100%;
   overflow-y: hidden;
+  overscroll-behavior: none;
 }
 
 input:-webkit-autofill,
