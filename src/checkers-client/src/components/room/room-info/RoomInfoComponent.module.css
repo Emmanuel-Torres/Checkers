@@ -9,15 +9,15 @@
 
 .container h2,
 .container h3 {
-  margin: 0;
+  margin-bottom: 0;
 }
 
 .container h2 {
   font-size: 1rem;
 }
 
-.guest h2 {
-  margin-right: 0.5rem;
+.guest {
+  margin-left: 0.5rem;
 }
 
 .icon {
@@ -76,6 +76,7 @@
 
 .placeholder {
   margin-top: auto;
+  margin-left: 0.5rem;
   background: linear-gradient(90deg, rgb(56, 56, 56) 0%, rgb(75, 75, 75) 10%, rgb(53, 53, 53) 20%);
   border-radius: 5px;
   background-size: 200%;

@@ -1,5 +1,6 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { FC, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import BoardComponent from "../../components/game/board/BoardComponent";
 import Location from "../../models/game/location";
 import Move from "../../models/game/move";
@@ -12,6 +13,8 @@ import GameInfo from "../../models/game/gameInfo";
 import Player from "../../models/game/player";
 import ValidMove from "../../models/game/validMove";
 import styles from "./RoomView.module.css"
+import backIcon from "../../assets/back-icon.svg"
+import exitIcon from "../../assets/exit-icon.svg"
 
 const RoomView: FC = (): JSX.Element => {
     const [connection, setConnection] = useState<HubConnection>();
@@ -117,12 +120,22 @@ const RoomView: FC = (): JSX.Element => {
         }
     }
 
+    const exitGame = () => {
+        if (window.confirm("Do you want to leave the room")) {
+
+        } else {
+
+        }
+    }
+
     return (
         <div className={styles.container}>
+            {!roomInfo && <Link to="/" className={styles.back}><img src={backIcon} alt="back" draggable="false"/></Link>}
             {!roomInfo && <JoinView onCreateRoom={createRoom} onJoinRoom={joinRoom} />}
+            {/* {roomInfo && <button className={styles.exit} onClick={exitGame}><img src={exitIcon} alt="back" draggable="false"/></button>} */}
             {roomInfo && <RoomInfoComponent roomInfo={roomInfo} gameInfo={gameInfo} />}
-            {roomInfo?.roomGuest && !gameInfo && <button className={styles.button} onClick={startGame}>Start Game</button>}
-            {roomInfo?.roomGuest && gameInfo && gameInfo.winner && <button className={styles.button} onClick={startGame}>Start New Game</button>}
+            {roomInfo?.roomGuest && isRoomOwner && !gameInfo && <button className={styles.button} onClick={startGame}>Start Game</button>}
+            {roomInfo?.roomGuest && isRoomOwner && gameInfo && gameInfo.winner && <button className={styles.button} onClick={startGame}>Start New Game</button>}
             {gameInfo && <PlayerIndicatorComponent player={player!} gameInfo={gameInfo} />}
             {gameInfo && <BoardComponent currentTurnId={gameInfo.nextPlayerTurn?.playerId} yourId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} validMoves={validMoves} getValidMoves={getValidMoves} makeMove={makeMove} />}
         </div>

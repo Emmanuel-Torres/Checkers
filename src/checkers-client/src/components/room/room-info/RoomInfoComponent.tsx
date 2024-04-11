@@ -10,8 +10,7 @@ type Props = {
 }
 
 const RoomInfoComponent: FC<Props> = (props): JSX.Element => {
-    const [tooltipText, setTooltipText] = useState<string>("Click to copy")
-    const guestStyle = props.roomInfo.roomGuest === undefined ? "waiting" : "";
+    const [tooltipText, setTooltipText] = useState<string>("Click to copy");
 
     const roomIdClicked = () => {
         navigator.clipboard.writeText(props.roomInfo.roomId);

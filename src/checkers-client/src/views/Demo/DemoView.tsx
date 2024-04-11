@@ -11,6 +11,7 @@ import RoomInfo from "../../models/room/roomInfo";
 import Player from "../../models/game/player";
 import PieceComponent from "../../components/game/piece/PieceComponent";
 import ValidMove from "../../models/game/validMove";
+import ModalComponent from "../../components/ui/ModalComponent";
 
 const DemoView: FC = (): JSX.Element => {
   // const room = new RoomInfo('AB123', new Player("p1", "Emmanuel"), new Player("p2", "Sally"));
@@ -56,8 +57,9 @@ const DemoView: FC = (): JSX.Element => {
   return (
     <div>
       {/* <RoomInfoComponent roomInfo={room} /> */}
-      <PlayerIndicatorComponent gameInfo={gameInfo} player={player}/>
-      <BoardComponent currentTurnId={currentTurn} yourId={currentTurn} board={gameInfo.board} isReversed={isReversed} validMoves={moves} getValidMoves={() =>{}} makeMove={(moves: Move[]) => {}}/>
+      {/* <PlayerIndicatorComponent gameInfo={gameInfo} player={player}/>
+      <BoardComponent currentTurnId={currentTurn} yourId={currentTurn} board={gameInfo.board} isReversed={isReversed} validMoves={moves} getValidMoves={() =>{}} makeMove={(moves: Move[]) => {}}/> */}
+      <ModalComponent title="Demo Modal" message="This is a test" actionLabel="Ok" action={() => {}}/>
     </div>
   );
 };
