@@ -6,7 +6,6 @@ import HomeView from "./views/Home/HomeView";
 function App() {
   return (
     <div className="App">
-      {/* <Navbar /> */}
       <Routes>
         <Route path="/" element={<HomeView />} />
         <Route path="/room" element={<RoomView />} />
