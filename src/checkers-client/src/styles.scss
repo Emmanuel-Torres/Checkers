@@ -3,12 +3,14 @@
   --background-color: rgb(44, 44, 44);
 }
 
-html,body {
+html,
+body {
   position: fixed;
   overflow: hidden;
 }
 
 body {
+  width: 100%;
   height: 100%;
   background-color: var(--background-color);
   color: white;
