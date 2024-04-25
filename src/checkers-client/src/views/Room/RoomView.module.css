@@ -29,3 +29,23 @@
   top: 0px;
   right: 0px;
 }
+
+@media screen and (max-width: 600px) {
+  .back,
+  .exit {
+    padding: 0;
+    width: fit-content;
+  }
+
+  .exit {
+    margin: .25rem 0;
+  }
+
+  .back img {
+    width: 2rem;
+  }
+
+  .exit img {
+    width: 1.5rem;
+  }
+}

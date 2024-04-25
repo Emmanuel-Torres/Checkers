@@ -34,6 +34,7 @@ public class CheckersHub : Hub<ICheckersHub>
             _logger.LogDebug("[{location}]: Player {connectionId} disconnected from the server", nameof(CheckersHub), Context.ConnectionId);
         }
 
+        await RemoveRoomAndDisconnectPlayersAsync(Context.ConnectionId);
         await base.OnDisconnectedAsync(exception);
     }
 
@@ -89,7 +90,8 @@ public class CheckersHub : Hub<ICheckersHub>
         }
     }
 
-    public async Task GetValidMovesAsync(Location source) {
+    public async Task GetValidMovesAsync(Location source)
+    {
         _logger.LogInformation("Getting valid moves for player {playerId}", Context.ConnectionId);
         try
         {
@@ -118,6 +120,11 @@ public class CheckersHub : Hub<ICheckersHub>
         }
     }
 
+    public async Task LeaveRoomAsync()
+    {
+        await RemoveRoomAndDisconnectPlayersAsync(Context.ConnectionId);
+    }
+
     public async Task KickGuestPlayer()
     {
         try
@@ -134,6 +141,28 @@ public class CheckersHub : Hub<ICheckersHub>
             _logger.LogError(ex.Message);
             // _logger.LogError("[{location}]: Could not make move. Ex: {ex}", nameof(CheckersHub), ex);
             // await Clients.Client(Context.ConnectionId).SendMessageAsync("server", "Something went wrong when making your move");
+        }
+    }
+
+    private async Task RemoveRoomAndDisconnectPlayersAsync(string disconnectedPlayerId)
+    {
+        var roomId = _roomManager.GetRoomIdByPlayerId(disconnectedPlayerId);
+        if (roomId is not null)
+        {
+            var roomInfo = _roomManager.RemoveRoom(roomId)!;
+
+            Player disconnectedPlayer = disconnectedPlayerId == roomInfo.RoomGuest?.PlayerId ? roomInfo.RoomGuest : roomInfo.RoomOwner;
+            Player? remainingPlayer = disconnectedPlayerId == roomInfo.RoomOwner.PlayerId ? roomInfo.RoomGuest : roomInfo.RoomOwner;
+
+            if (remainingPlayer is not null)
+            {
+                await Clients.Client(remainingPlayer.PlayerId).SendPlayerDisconnectedAsync(disconnectedPlayer, false);
+            }
+
+            await Clients.Client(disconnectedPlayer.PlayerId).SendPlayerDisconnectedAsync(disconnectedPlayer, true);
+            
+            await Groups.RemoveFromGroupAsync(disconnectedPlayer.PlayerId, roomInfo.RoomId);
+            await Groups.RemoveFromGroupAsync(remainingPlayer?.PlayerId ?? "", roomInfo.RoomId);
         }
     }
 }
