@@ -33,6 +33,10 @@
   color: white;
 }
 
+.form-input:focus {
+  outline: none !important;
+}
+
 .form-button {
   color: white;
   background-color: var(--primary-color);
@@ -40,4 +44,11 @@
   border-color: transparent;
   margin: auto;
   margin-top: 1rem;
+}
+
+.validation-error {
+  color: red;
+  margin: 0;
+  text-wrap: wrap;
+  font-size: .75rem;
 }
