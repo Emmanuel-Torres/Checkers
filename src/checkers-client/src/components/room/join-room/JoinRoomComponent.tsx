@@ -23,7 +23,7 @@ const JoinRoomComponent: FC<Props> = (props): JSX.Element => {
     }
 
     const roomIdChangedHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setRoomId(event.target.value);
+        setRoomId(event.target.value.toUpperCase());
     }
 
     const submitFormHandler = (event: FormEvent) => {
@@ -36,8 +36,13 @@ const JoinRoomComponent: FC<Props> = (props): JSX.Element => {
             return;
         }
 
+        console.log(roomId);
+
         props.onJoinRoom(roomId, name);
     }
+
+    const roomIdStyles = styles['form-input'] + " " + styles['room-id'];
+
     return <>
         <div className={styles.container}>
             <h2 className={styles.header}>Join Room</h2>
@@ -46,7 +51,7 @@ const JoinRoomComponent: FC<Props> = (props): JSX.Element => {
                 <input className={styles['form-input']} type='text' id='name' placeholder='e.g. Sally' value={name} onChange={nameChangedHandler} onBlur={() => setIsNameTouched(true)}/>
                 {isNameFieldInvalid && <p className={styles['validation-error']}>*At least 1 character long</p>}
                 <label className={styles['form-label']}>Room Id</label>
-                <input className={styles['form-input']} type='text' id='room-code' placeholder='e.g. AB123' value={roomId} onChange={roomIdChangedHandler} onBlur={() => setIsRoomIdTouched(true)}/>
+                <input className={roomIdStyles} type='text' id='room-code' placeholder='e.g. AB123' value={roomId} onChange={roomIdChangedHandler} onBlur={() => setIsRoomIdTouched(true)}/>
                 {isRoomIdFieldInvalid && <p className={styles['validation-error']}>*Must be 5 characters long</p>}
                 <button className={styles['form-button']} type='submit'>Join Room</button>
             </form>

@@ -52,3 +52,7 @@
   text-wrap: wrap;
   font-size: .75rem;
 }
+
+.room-id {
+  text-transform: uppercase;
+}
