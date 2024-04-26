@@ -57,6 +57,7 @@ public class RoomManager : IRoomManager
 
     public RoomInfo? RemoveRoom(string roomId)
     {
+        _logger.LogInformation("Removing room {roomId}", roomId);
         if (!_rooms.ContainsKey(roomId))
         {
             return null;
@@ -131,17 +132,17 @@ public class RoomManager : IRoomManager
         return _playerRoom.ContainsKey(playerId);
     }
 
+    public string? GetRoomIdByPlayerId(string playerId)
+    {
+        _playerRoom.TryGetValue(playerId, out var roomId);
+        return roomId;
+    }
+
     private void ValidateRoomExists(string roomId, string action)
     {
         if (!_rooms.ContainsKey(roomId))
         {
             throw new InvalidOperationException($"Cannot complete action <{action}> because room does not exist");
         }
-    }
-
-    private string? GetRoomIdByPlayerId(string playerId)
-    {
-        _playerRoom.TryGetValue(playerId, out var roomId);
-        return roomId;
     }
 }

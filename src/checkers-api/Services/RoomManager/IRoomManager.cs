@@ -15,4 +15,5 @@ public interface IRoomManager
     public (RoomInfo roomInfo, Player? kickedPlayer) KickGuestPlayer(string requestorId);
     public RoomInfo? GetRoomInfo(string roomId);
     public bool PlayerExists(string playerId);
+    public string? GetRoomIdByPlayerId(string playerId);
 }

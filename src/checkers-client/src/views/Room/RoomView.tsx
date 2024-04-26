@@ -36,8 +36,6 @@ const RoomView: FC = (): JSX.Element => {
 
     useEffect(() => {
         if (connection) {
-            console.log("connecting...");
-
             connection
                 .start()
                 .then(() => {
@@ -47,13 +45,11 @@ const RoomView: FC = (): JSX.Element => {
                 });
 
             connection.on(HubMethods.sendPlayerInfo, (player: Player, isRoomOwner: boolean) => {
-                console.log(player.playerId);
                 setPlayer(player);
                 setIsRoomOwner(isRoomOwner);
             });
 
             connection.on(HubMethods.sendRoomInfo, (roomInfo: RoomInfo) => {
-                console.log(roomInfo);
                 setRoomInfo(roomInfo);
             });
 
@@ -63,15 +59,26 @@ const RoomView: FC = (): JSX.Element => {
             });
 
             connection.on(HubMethods.sendValidMoves, (source: Location, validMoves: ValidMove[]) => {
-                console.log("valid moves for:" + source);
                 setValidMoves(validMoves);
+            });
+
+            connection.on(HubMethods.sendPlayerDisconnected, (disconnectedPlayer: Player, youDisconnected: boolean) => {
+                if (youDisconnected) {
+                    window.alert(`You disconnected from room`);
+                } else {
+                    window.alert(`Player ${disconnectedPlayer.name} disconnected from the game`);
+                }
+
+                setRoomInfo(undefined);
+                setGameInfo(undefined);
+                setIsRoomOwner(false);
+                setValidMoves([]);
             });
         }
     }, [connection])
 
     const createRoom = async (name: string) => {
         try {
-            console.log("creating room");
             await connection?.send(HubMethods.createRoom, name, null);
         }
         catch (e) {
@@ -81,7 +88,6 @@ const RoomView: FC = (): JSX.Element => {
 
     const joinRoom = async (roomId: string, name: string) => {
         try {
-            console.log("creating room");
             await connection?.send(HubMethods.joinRoom, roomId, name);
         }
         catch (e) {
@@ -91,7 +97,6 @@ const RoomView: FC = (): JSX.Element => {
 
     const startGame = async () => {
         try {
-            console.log("starting game");
             await connection?.send(HubMethods.startGame);
         }
         catch (e) {
@@ -101,7 +106,6 @@ const RoomView: FC = (): JSX.Element => {
 
     const getValidMoves = async (source: Location) => {
         try {
-            console.log("getting valid moves");
             await connection?.send(HubMethods.getValidMoves, source);
         }
         catch (e) {
@@ -111,8 +115,6 @@ const RoomView: FC = (): JSX.Element => {
 
     const makeMove = async (moves: Move[]) => {
         try {
-            console.log("making move");
-            console.log(moves);
             await connection?.send(HubMethods.makeMove, moves)
         }
         catch (e) {
@@ -120,19 +122,20 @@ const RoomView: FC = (): JSX.Element => {
         }
     }
 
-    const exitGame = () => {
-        if (window.confirm("Do you want to leave the room")) {
-
-        } else {
-
+    const exitGame = async () => {
+        try {
+            await connection?.send(HubMethods.leaveRoom);
+        }
+        catch (e) {
+            console.error(e);
         }
     }
 
     return (
         <div className={styles.container}>
-            {!roomInfo && <Link to="/" className={styles.back}><img src={backIcon} alt="back" draggable="false"/></Link>}
+            {!roomInfo && <Link to="/" className={styles.back}><img src={backIcon} alt="back" draggable="false" /></Link>}
             {!roomInfo && <JoinView onCreateRoom={createRoom} onJoinRoom={joinRoom} />}
-            {/* {roomInfo && <button className={styles.exit} onClick={exitGame}><img src={exitIcon} alt="back" draggable="false"/></button>} */}
+            {roomInfo && <button className={styles.exit} onClick={exitGame}><img src={exitIcon} alt="back" draggable="false" /></button>}
             {roomInfo && <RoomInfoComponent roomInfo={roomInfo} gameInfo={gameInfo} />}
             {roomInfo?.roomGuest && isRoomOwner && !gameInfo && <button className={styles.button} onClick={startGame}>Start Game</button>}
             {roomInfo?.roomGuest && isRoomOwner && gameInfo && gameInfo.winner && <button className={styles.button} onClick={startGame}>Start New Game</button>}

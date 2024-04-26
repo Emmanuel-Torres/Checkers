@@ -121,4 +121,8 @@
     border-color: black;
     transition: 0.5s;
   }
+
+  .placeholder {
+    width: 10rem;
+  }
 }

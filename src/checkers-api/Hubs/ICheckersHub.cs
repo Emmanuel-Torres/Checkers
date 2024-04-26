@@ -12,6 +12,7 @@ public interface ICheckersHub
     public Task StartGameAsync();
     public Task GetValidMovesAsync(Location source);
     public Task MakeMoveAsync(MoveRequest request);
+    public Task LeaveRoomAsync();
     public Task KickGuestPlayer();
 
     //Client methods
@@ -19,4 +20,5 @@ public interface ICheckersHub
     public Task SendGameInfoAsync(GameInfo gameInfo);
     public Task SendPlayerInfoAsync(Player player, bool roomOwner);
     public Task SendValidMovesAsync(Location source, IEnumerable<ValidMove> validMoves);
+    public Task SendPlayerDisconnectedAsync(Player player, bool youDisconnected);
 }
