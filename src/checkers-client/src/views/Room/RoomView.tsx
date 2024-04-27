@@ -136,9 +136,7 @@ const RoomView: FC = (): JSX.Element => {
             {!roomInfo && <Link to="/" className={styles.back}><img src={backIcon} alt="back" draggable="false" /></Link>}
             {!roomInfo && <JoinView onCreateRoom={createRoom} onJoinRoom={joinRoom} />}
             {roomInfo && <button className={styles.exit} onClick={exitGame}><img src={exitIcon} alt="back" draggable="false" /></button>}
-            {roomInfo && <RoomInfoComponent roomInfo={roomInfo} gameInfo={gameInfo} />}
-            {roomInfo?.roomGuest && isRoomOwner && !gameInfo && <button className={styles.button} onClick={startGame}>Start Game</button>}
-            {roomInfo?.roomGuest && isRoomOwner && gameInfo && gameInfo.winner && <button className={styles.button} onClick={startGame}>Start New Game</button>}
+            {roomInfo && <RoomInfoComponent roomInfo={roomInfo} gameInfo={gameInfo} isRoomOwner={isRoomOwner} onStartGame={startGame}/>}
             {gameInfo && <PlayerIndicatorComponent player={player!} gameInfo={gameInfo} />}
             {gameInfo && <BoardComponent currentTurnId={gameInfo.nextPlayerTurn?.playerId} yourId={player?.playerId!} board={gameInfo.board} isReversed={isRoomOwner} validMoves={validMoves} getValidMoves={getValidMoves} makeMove={makeMove} />}
         </div>

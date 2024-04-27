@@ -9,15 +9,16 @@ type Props = {
 };
 
 const PlayerIndicatorComponent: FC<Props> = (props): JSX.Element => {
+  const gameEnded = props.gameInfo.winner;
+  const yourTurn = !gameEnded && props.gameInfo.nextPlayerTurn.playerId === props.player?.playerId;
+
   return (
     <div className={styles.container}>
-      {props.gameInfo.winner && 
+      {gameEnded && 
           <h2>{props.gameInfo.winner?.name} won</h2>}
-      {!props.gameInfo.winner &&
-        props.gameInfo.nextPlayerTurn.playerId === props.player?.playerId && 
+      {yourTurn && 
           <h2>Your Turn</h2>}
-      {!props.gameInfo.winner &&
-        props.gameInfo.nextPlayerTurn.playerId !== props.player?.playerId && 
+      {!yourTurn && 
           <h2 className={styles["opponent-Text"]}>{props.gameInfo.nextPlayerTurn.name} is moving</h2>}
     </div>
   );

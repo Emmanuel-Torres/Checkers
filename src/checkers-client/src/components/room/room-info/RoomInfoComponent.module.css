@@ -85,6 +85,34 @@
   animation: loading 2s linear infinite;
 }
 
+.instructions {
+  margin: 1rem 5rem;
+}
+
+.instructions ol {
+  margin: 0;
+  padding-left: 1rem; 
+}
+
+.waiting {
+  margin: 1rem 5rem;
+  text-align: center;
+}
+
+.button {
+  display: flex;
+  border-color: transparent;;
+  grid-column-start: 1;
+  grid-column-end: 4;
+  margin-top: 2rem;
+  color: white;
+  margin: auto;
+  background-color: var(--primary-color);
+  border-radius: 5px;
+  font-size: 1.25rem;
+}
+
+
 @keyframes loading {
   0% {
     background-position: 100% 0
