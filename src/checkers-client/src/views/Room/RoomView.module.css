@@ -4,6 +4,7 @@
 
 .back,
 .exit {
+  border: none;
   background-color: transparent;
   margin: 1rem;
   position: absolute;
