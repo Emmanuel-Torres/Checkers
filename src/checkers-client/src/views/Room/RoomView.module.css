@@ -2,24 +2,9 @@
   height: 100vh;
 }
 
-.container .button {
-  display: flex;
-}
-
-.container button {
-  border-color: transparent;
-}
-
-.button {
-  color: white;
-  margin: auto;
-  background-color: var(--primary-color);
-  border-radius: 5px;
-  font-size: 1.25rem;
-}
-
 .back,
 .exit {
+  border: none;
   background-color: transparent;
   margin: 1rem;
   position: absolute;
